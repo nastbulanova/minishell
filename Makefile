@@ -14,7 +14,11 @@ CFLAGS = -Wall -Wextra -Werror -g -Iinc -fsanitize=address,undefined
 
 LINKS = -lreadline -L$(LIBFT_PATH)lib -lft
 
-SRCS = ${SRC_DIR}/main.c
+SRCS =	${SRC_DIR}/main.c \
+		${SRC_DIR}/signals/signals.c \
+	#	${SRC_DIR}/lexer/lexer.c ${SRC_DIR}/lexer/lexer_utils.c ${SRC_DIR}/lexer/lexer_token_utils.c \
+	#	${SRC_DIR}/parser/parser.c 
+
 
 OBJS = ${patsubst ${SRC_DIR}/%.c, ${OBJ_DIR}/%.o, ${SRCS}}
 
@@ -25,7 +29,6 @@ ${NAME} : ${OBJS} | $(BIN_DIR)
 
 $(OBJ_DIR)/%.o:	$(SRC_DIR)/%.c
 				make libs
-				printf "Compiling $(NAME) objects... %-33.33s\r" $(notdir $@)
 				@mkdir -p $(dir $@)
 				$(CC) $(CFLAGS) -c $< -o $@
 

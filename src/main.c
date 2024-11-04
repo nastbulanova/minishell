@@ -8,6 +8,7 @@ void main_loop(char **envp)
 	char *input;
     while (TRUE)
     {
+        set_state_signal_handlers(MAIN);
         input = readline("minishell> ");
 		if (!input)
         {
@@ -34,7 +35,6 @@ int	main(int argc, char **argv, char **envp)
 		ft_putendl_fd("No environment variables found. Exiting.", STDERR_FILENO);
         return (1);
     }
-    //setup_signal_handling();
     main_loop(envp);
 	return (0);
 }
