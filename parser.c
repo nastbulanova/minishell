@@ -32,6 +32,27 @@ void	group_init(t_token  **token_head)
 		current = current->next;
 	}
 }
+char	**list_path(char **env)
+{
+	char	*tmp;
+	char	**list;
+	int		i;
+
+	i = -1;
+	list = NULL;
+	while (env[++i])
+	{
+		if (!ft_strncmp(env[i], "PATH=", 5))
+		{
+			tmp = ft_strnstr(env[i], "PATH=", 5);
+			list = ft_split(tmp, ':');
+			if (!list)
+				return (NULL);
+			break ;
+		}
+	}
+	return (list);
+}
 
 char	*find_path(char **env, char *cmd)
 {
@@ -95,33 +116,63 @@ void	check_context(t_minishell *data, t_token **token, int *i)
 	}
 }
 
-char	*open_field(t_token *token)
+char	*open_field(t_minishell *data, t_token *token)
 {
 	int		i;
 	int		j;
 	char	*str;
 	char	*name;
-	int		len;
+	char	*result;
+	int		start;
+	char	*var_value;
 
 	i = 0;
 	str = token->start;
+	result = "";
+	var_value = NULL;
+	start = 0;
 	while (i < token->len)
 	{
-		if (str[i] == '$')//////////////////        $? can be here! - will be added
+		if (str[i] == '$')//////////////////        $? can be here? - will be added
 		{
 			j = i + 1;
 			while (str[j] != ' ')
 				j++;
-			name = ft_substr(str, i, j - i);
-
+			name = ft_substr(str, i + 1, j - i);
+			var_value = env_var_replace(data, name);
+			if (var_value)
+				result = ft_strjoin(result, ft_strjoin(ft_substr(str, start, i), var_value));
+			else
+				result = ft_strjoin(result, ft_substr(str, start, i));
+			i = j + 1;
+			start = i;
+			free(var_value);
+			free(name);
 		}
+		else
+			i++;
 	}
-
+	if (ft_strlen(result) == 0)
+		return(ft_substr(token->start, 0, token->len));
+	else
+		return(ft_strjoin(result, ft_substr(str, j + 1, i)))
 }
 
-char	*env_var_replace()
+char	*env_var_replace(t_minishell *data, char *name)
 {
+	char	*tmp;
+	int		i;
+	int		len;
 
+	i = -1;
+	name = ft_strjoin(name, '=');
+	len = ft_strlen(name);
+	while (data->env[++i])
+	{
+		if (!ft_strcmp(data->env[i], name, len))
+			return(ft_strnstr(data->env[i], name, len));
+	}
+	return (NULL);
 }
 
 int	opt_count(t_token *token)
@@ -162,7 +213,7 @@ void	opt_check(t_minishell *data, t_token *token)
 		else if (tmp->type == 3)
 			data->exec_data->opt[i] = ft_substr(token->start, 0, token->len);
 		else
-			data->exec_data->opt[i] = open_field(token);
+			data->exec_data->opt[i] = open_field(data, token);
 		token = token->next;
 		i++;
 	}
