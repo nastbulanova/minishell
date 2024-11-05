@@ -64,6 +64,7 @@ t_exec_data	*cmd_check(t_token *token, char **env)
 	char	*cmd;
 	char	*cmd_with_path;
 
+	//////////////////////////////////////////////////////// here will be builtin handling
 	cmd = ft_substr(token->start, 0, token->len);
 	if (!access(cmd, 0))
 		return(cmd);
@@ -93,6 +94,53 @@ void	check_context(t_minishell *data, t_token **token, int *i)
 		(*i)++;
 	}
 }
+
+char	*open_field(t_token *token)
+{
+	int		i;
+	int		j;
+	char	*str;
+	char	*name;
+	int		len;
+
+	i = 0;
+	str = token->start;
+	while (i < token->len)
+	{
+		if (str[i] == '$')//////////////////        $? can be here! - will be added
+		{
+			j = i + 1;
+			while (str[j] != ' ')
+				j++;
+			name = ft_substr(str, i, j - i);
+
+		}
+	}
+
+}
+
+char	*env_var_replace()
+{
+
+}
+
+int	opt_count(t_token *token)
+{
+	t_token	*tmp;
+	int		count;
+
+	tmp = token;
+	count = 0;
+	while (tmp)
+	{
+		if (!(tmp->type >= 1 && tmp->type <= 4))
+			break ;
+		count++;
+		tmp = tmp->next;
+	}
+	return (count);
+}
+
 void	opt_check(t_minishell *data, t_token *token)
 {
 	t_token	*tmp;
@@ -100,23 +148,23 @@ void	opt_check(t_minishell *data, t_token *token)
 	int		i;
 
 	tmp = token;
-	count = 0;
-	while (tmp)
-	{
-		if (!(tmp->type == 1 || tmp->type == 3 || tmp->type == 4))
-			break ;
-		count++;
-		tmp = tmp->next;
-	}
+	count = opt_count(token);
 	data->exec_data->opt = (char **)malloc((count + 1) * sizeof(char *));
 	//if (!data->exec_data->opt)
 	///////////////////////////////////////////////////////////////////////	error
-	tmp = token;
 	i = 0;
 	while (i < count)
 	{
-		data->exec_data->opt[i] = ft_substr(token->start, 0, token->len);
+		if (tmp->type == 1)
+			data->exec_data->opt[i] = ft_substr(token->start, 0, token->len);
+		else if (tmp->type == 2)
+			data->exec_data->opt[i] = env_var_replace();///////////////////////////// handle env_var
+		else if (tmp->type == 3)
+			data->exec_data->opt[i] = ft_substr(token->start, 0, token->len);
+		else
+			data->exec_data->opt[i] = open_field(token);
 		token = token->next;
+		i++;
 	}
 }
 
@@ -131,7 +179,7 @@ int	parser(t_minishell *data)
 	print_token(data->token_head);/////////////////////////
 	token = data->token_head;
 	i = 0;
-	while (token)/// add something for spaces
+	while (token)
 	{
 		if (i == 0)
 		{
@@ -145,7 +193,7 @@ int	parser(t_minishell *data)
 		}
 		if (i == 1)
 		{
-			if (token->type == 1 || token->type == 3 || token->type == 4)
+			if (token->type >= 1 && token->type <= 4)
 			{
 				//while 
 				//opt & args until another token->type to char**

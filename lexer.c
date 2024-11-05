@@ -3,7 +3,7 @@
 /*
 token types
 1 word
-2 space
+2 env_var
 3 field ' '
 4 exp_field " "
 5 redir_out >
@@ -21,15 +21,15 @@ t_token	*while_sequence(t_token *token_head, char *line, int (*func)(int), int *
 
 	start = **i;
 	len = 0;
-	while (line[**i] != '\0' && func(line[**i]))
+	while (func(line[**i]))
 	{
 		len++;
 		(**i)++;
 	}
 	if (func == ft_iswordchar)
 		type = 1;
-	//if (func == ft_isspace)
-	//	type = 2;
+	if (func == ft_isenvvar)
+		type = 2;
 	return (token_create(token_head, &(line[start]), len, type));
 }
 
@@ -39,9 +39,9 @@ t_token	*find_field(t_token *token_head, char *line, int (*func)(int), int **i)
 	int	len;
 	int	secondquote;
 
-	start = **i;
 	(**i)++;
-	len = 2;
+	start = **i;
+	len = 0;
 	secondquote = 0;
 	while (line[**i] != '\0')
 	{
@@ -82,18 +82,22 @@ t_token	*check_char(t_token *token_head, char *line, int *i)
 {
 	if (ft_iswordchar(line[*i]))
 		token_head = while_sequence(token_head, line, ft_iswordchar, &i);
-	if (ft_isspace(line[*i]))
-		i++;
-		//token_head = while_sequence(token_head, line, ft_isspace, &i);
-	if (line[*i] == '\'')
+	else if (ft_isspace(line[*i]))
+		(*i)++;
+	else if (line[*i] == '$')
+	{
+		(*i)++;
+		token_head = while_sequence(token_head, line, ft_isenvvar, &i);
+	}
+	else if (line[*i] == '\'')
 		token_head = find_field(token_head, line, ft_isquote, &i);
-	if (line[*i] == '\"')
+	else if (line[*i] == '\"')
 		token_head = find_field(token_head, line, ft_isdblquote, &i);
-	if (line[*i] == '>')
+	else if (line[*i] == '>')
 		token_head = find_redir(token_head, line, '>', &i);
-	if (line[*i] == '<')
+	else if (line[*i] == '<')
 		token_head = find_redir(token_head, line, '<', &i);
-	if (line[*i] == '|')
+	else if (line[*i] == '|')
 	{
 		token_head = token_create(token_head, &(line[*i]), 1, 9);
 		(*i)++;

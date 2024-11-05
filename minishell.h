@@ -60,6 +60,7 @@ int	ft_isspace(int c);
 int	ft_iswordchar(int c);
 int	ft_isquote(int c);
 int	ft_isdblquote(int c);
+int ft_isenvvar(int c);
 
 //parser
 int	parser(t_minishell *data);

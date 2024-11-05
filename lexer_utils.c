@@ -19,3 +19,8 @@ int ft_isdblquote(int c)
 {
 	return (c == 34);
 }
+
+int ft_isenvvar(int c)
+{
+	return (ft_isalpha(c) || c == '_');
+}
