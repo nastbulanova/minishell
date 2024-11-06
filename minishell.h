@@ -35,7 +35,6 @@ typedef struct	s_exec_data
 	char	*infile;
 	char	*new_outfile;
 	char	*exist_outfile;
-
 }				t_exec_data;
 
 typedef struct s_minishell
@@ -46,6 +45,15 @@ typedef struct s_minishell
 
 }				t_minishell;
 
+typedef	struct	s_exp_field
+{
+	int			i;
+	int			j;
+	int			start;
+	char		*result;
+	char		*str;
+	t_minishell	*data;
+}				t_exp_field;
 
 
 //lexer
@@ -56,14 +64,20 @@ t_token	*token_head_init(t_token *token_head);
 t_token	*token_create(t_token *head, char *start, int len, int type);
 
 //lexer_utils
-int	ft_isspace(int c);
-int	ft_iswordchar(int c);
-int	ft_isquote(int c);
-int	ft_isdblquote(int c);
-int ft_isenvvar(int c);
+int		ft_isspace(int c);
+int		ft_iswordchar(int c);
+int		ft_isquote(int c);
+int		ft_isdblquote(int c);
+int 	ft_isenvvar(int c);
 
 //parser
-int	parser(t_minishell *data);
+int		parser(t_minishell *data);
+char	*cmd_check(t_token *token, char **env);
+void	opt_check(t_minishell **data, t_token **token);
+char	*open_field(t_minishell *data, t_token *token);
+char	*env_var_replace(t_minishell *data, char *name);
+void	redir_check(t_minishell **data, t_token **token);
+
 
 //for test
 void    print_token(t_token *token);

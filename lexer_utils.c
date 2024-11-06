@@ -7,7 +7,7 @@ int	ft_isspace(int c)
 
 int ft_iswordchar(int c)
 {
-	return (ft_isprint(c) && !ft_isspace(c) && c != '>' && c != '<' && c != '\'' && c != '\"' && c != '|');
+	return (ft_isprint(c) && !ft_isspace(c) && c != '>' && c != '<' && c != '\'' && c != '\"' && c != '|' && c != '$');
 }
 
 int ft_isquote(int c)

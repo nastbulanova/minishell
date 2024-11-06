@@ -116,6 +116,5 @@ t_token	*lexer(char *line)
 	token_head = token_head_init(token_head);
 	while (line[i] != '\0')
 		token_head = check_char(token_head, line, &i);
-	print_token(token_head);
 	return(token_head);
 }

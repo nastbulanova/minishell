@@ -1,6 +1,7 @@
 NAME = minishell
 
-SRCS = for_test.c lexer.c lexer_utils.c lexer_token_utils.c
+SRCS = for_test.c lexer.c lexer_utils.c lexer_token_utils.c parser.c parser_cmd_utils.c\
+	parser_exp_field_utils.c parser_opt_utils.c parser_redir_utils.c
 OBJS = $(SRCS:.c=.o)
 
 CC = cc
