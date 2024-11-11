@@ -38,3 +38,43 @@ void	redir_check(t_minishell **data, t_token **token)
 		printf("redir type exist_out filename %s", (*data)->exec_data->exist_outfile);
 	}
 }
+
+int	line_read(char *delim, int file)
+{
+	char	*line;
+
+	line = readline("heredoc> ");
+	if (!line)
+		return (-1);
+	line = ft_strjoin(line, "\n");
+	if (!ft_strncmp(line, delim, ft_strlen(delim)))
+		return (free(line), -1);
+	write(file, &line, ft_strlen(line));
+	free(line);
+	return (1);
+}
+
+void	here_doc_start(t_minishell	**data, t_token **token) 
+{
+	char	*delim;
+	int		file;
+	int		go;
+
+	if ((*token)->next)
+		*token = (*token)->next;
+	//else
+		////////////////////////// error_func "parse error near '\n'"
+	delim = ft_strjoin(ft_substr((*token)->start, 0, (*token)->len), "\n");
+	file = open("here_doc", O_WRONLY | O_CREAT | O_APPEND, 0644);
+	/*if (!file) 
+	{
+		//////////////////////////// error_func()
+		free(delim);
+		return ;
+	}*/
+	go = 1;
+	while (go)
+		go = line_read(delim, file);
+	free(delim);
+	close(file);
+}

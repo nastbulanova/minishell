@@ -11,6 +11,7 @@ token types
 7 redir_append >>
 8 redir here_doc <<
 9 pipe
+10 $? ///////////////////////////to add
 */
 
 t_token	*while_sequence(t_token *token_head, char *line, int (*func)(int), int **i)

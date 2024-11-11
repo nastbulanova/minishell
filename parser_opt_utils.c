@@ -39,7 +39,7 @@ void	opt_check(t_minishell **data, t_token **token)
 			(*data)->exec_data->opt[i] = ft_substr(tmp->start, 0, tmp->len);
 		else
 			(*data)->exec_data->opt[i] = open_field(*data, *token);
-		tmp = tmp->next;
+		tmp = tmp->next;// check exist of tmp->next
         printf("opt %d %s\n", i, (*data)->exec_data->opt[i]);//////////////////////////to delete
 		i++;
 	}

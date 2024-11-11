@@ -41,10 +41,9 @@ void	check_context(t_minishell *data, t_token **token, int *i)
 	(void)data;/////////////////////////////////////////////////////
 	if (*token)
 	{
-		if (!(*token)->next)///////////////////////what about next group?
+		if (!(*token)->next)
 		{
 			//do_cmd(data->exec_data);//////////////////piping, redir, execve
-			printf("\nparsing finished\n");/////////////////////////////to delete
 			exit(0);////////////////////////////////////////////////////to delete
 		}
 		else if ((*token)->next->group > (*token)->group)
@@ -52,9 +51,9 @@ void	check_context(t_minishell *data, t_token **token, int *i)
 			//do_cmd(data->exec_data);//////////////////piping, redir, execve
 			exit(0);////////////////////////////////////////////////////to delete
 			(*token) = (*token)->next;
-			*i = 0;
+			*i = START;
 		}
-		else
+		else if (i == START)
 		{
 			(*token) = (*token)->next;
 			(*i)++;
@@ -63,6 +62,35 @@ void	check_context(t_minishell *data, t_token **token, int *i)
 	else
 		//do_cmd(data->exec_data);//////////////////piping, redir, execve
 		exit(0);
+}
+
+void	parse_start(int *i)
+{
+	if (token->type == 1)
+	{
+		data->exec_data->cmd = cmd_check(token, data->env);
+		*i = AFTERCMD;
+	}
+	else if (token->type >= 1 && token->type <= 4)
+		opt_check(&data, &token);//////// can be as a cmd - need to put result as a command
+	else if (token->type >= 5 || token->type <=7)
+		redir_check(&data, &token);
+	else if (token->type == 8)
+		here_doc_start(&data, &token);
+	else if (token->type == 9)
+		data->exec_data->is_pipe = 1;
+}
+
+void	parse_after_cmd()
+{
+	if (token->type >= 1 && token->type <= 4)
+		opt_check(&data, &token);
+	else if (token->type >= 5 || token->type <=7)
+		redir_check(&data, &token);
+	else if (token->type == 8)
+		here_doc_start(&data, &token);
+	else if (token->type == 9)
+		data->exec_data->is_pipe = 1;
 }
 
 int	parser(t_minishell *data)
@@ -77,43 +105,11 @@ int	parser(t_minishell *data)
 	i = 0;
 	while (token)
 	{
-		if (i == 0)//// omg here can be env_var! but it will be interpreted like cmd
-		{////////////// actually here can be anything. fuck
-			if (token->type == 1)
-			{
-				data->exec_data->cmd = cmd_check(token, data->env);
-				check_context(data, &token, &i);
-				//printf("\nwhat we got:%s\n", exec_data->cmd);//////////////to delete
-			}
-			//else
-			//	
-		}
-		if (i == 1)
-		{
-			if (token->type >= 1 && token->type <= 4)
-			{
-				opt_check(&data, &token);
-				check_context(data, &token, &i);
-			}
-			else if (token->type >= 5 || token->type <=7)
-			{
-				redir_check(&data, &token);
-				check_context(data, &token, &i);
-			}/*
-			else if (token->type == 8)
-			{
-				// find a filename, put to struct here_doc
-				check_context(data, &token, &i);
-			}*/
-			else if (token->type == 9)
-			{
-				data->exec_data->is_pipe = 1;
-				check_context(data, &token, &i);
-			}
-
-		}
-		/*if (i == 2)
-		{
+		if (i == START)
+			parse_start();
+		else if (i == AFTERCMD)
+			parse_after_cmd();
+		else if (i = AFTEROPT)
 			if (token->type == 5)
 			{
 				// find a filename, put to struct new_outfile 

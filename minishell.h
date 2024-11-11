@@ -14,6 +14,11 @@
 # include <readline/history.h>
 # include "libs/libft/libft.h"
 
+# define START 0
+# define AFTERCMD 1
+# define AFTEROPT 2
+
+
 typedef struct	s_token
 {
 	char			*start;
