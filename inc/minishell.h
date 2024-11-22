@@ -11,6 +11,7 @@
 # include <sys/types.h>
 # include <errno.h>
 # include "mini_signals.h"
+# include "builtins.h"
 # include "../libs/libft/include/libft.h"
 # include <readline/history.h>
 # include <readline/readline.h>

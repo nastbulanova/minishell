@@ -6,6 +6,8 @@ void main_loop(char **envp)
     (void)envp;
 
 	char *input;
+    int i;
+
     while (TRUE)
     {
         set_state_signal_handlers(MAIN);
@@ -15,7 +17,20 @@ void main_loop(char **envp)
             printf("exit\n");
             break;
         }
-		printf("You entered: %s\n", input);
+        char **split = NULL; 
+        split = ft_split(input, ' ');
+        if (split)
+        {
+            if (split[0] && ft_strncmp("echo", split[0], 4) == 0)
+                cmd_echo(split);
+            i = 0;
+            while (split[i])
+            {
+                free(split[i]);
+                i++;
+            }
+            free(split);
+        }   
 		free(input);
     }
 }
