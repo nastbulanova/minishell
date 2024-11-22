@@ -2,6 +2,7 @@
 
 int cmd_echo(char** str)
 {
+	
 	int i;
 	int non_flag;
 	int n_option;
