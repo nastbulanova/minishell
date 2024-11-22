@@ -4,7 +4,6 @@
 # include <signal.h>
 
 
-
 enum e_signal_state
 {
     MAIN,
