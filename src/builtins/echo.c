@@ -1,38 +1,43 @@
-#include "../inc/minishell.h"
+#include "../inc/builtins.h"
 
-int cmd_echo(char** str)
+static void print_string(char **str, int i, int *non_flag_args, int fd_out)
 {
-	
+	ft_putstr_fd(str[i], fd_out);
+	(*non_flag_args)++;
+	if (str[i + 1])
+		write(fd_out, " ", 1);
+}
+static int is_flag_lower_n(char *str)
+{
+	return (ft_strncmp("-n", str, 3) == 0);
+}
+static int is_flag(char *str)
+{
+	return (!ft_strncmp("-E", str, 3)
+		|| !ft_strncmp("-e", str, 3)
+		|| !ft_strncmp("-n", str, 3));
+}
+int cmd_echo(char** str, int fd_out, t_minishell *shell)
+{
 	int i;
-	int non_flag;
-	int n_option;
+	int non_flag_args;
+	int newline = TRUE;
 
-	non_flag = 0;
-	n_option = 0;
-	if (!str)
-	{
-		write(1, "\n", 1);
-		return (0);
-	}
-
+	non_flag_args = 0;
 	i = 1;
 	while (str[i])
 	{
-		if (!non_flag && (!ft_strncmp("-n", str[i], 2) || !ft_strncmp("-e", str[i], 2)))
+		if (!non_flag_args && is_flag(str[i]))
 		{
-			if (!ft_strncmp("-n", str[i], 2))
-				n_option++;
+			if (is_flag_lower_n(str[i]))
+				newline = FALSE;
 		}
 		else
-		{
-			ft_printf("%s", str[i]);
-			non_flag++;
-			if (str[i + 1])
-				write(1, " ", 1);
-		}
+			print_string(str, i, &non_flag_args, fd_out);
 		i++;
 	}
-	if (!n_option)
-		write(1, "\n", 1);
+	if (newline)
+		write(fd_out, "\n", 1);
+	shell->exit_code = 0;
 	return (0);
 }
