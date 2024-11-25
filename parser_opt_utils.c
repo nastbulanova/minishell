@@ -25,10 +25,11 @@ void	opt_check(t_minishell **data, t_token **token)
 
 	tmp = (*token);
 	count = opt_count(tmp);
-	(*data)->exec_data->opt = (char **)malloc((count + 1) * sizeof(char *));
+	(*data)->exec_data->opt = (char **)malloc((count + 2) * sizeof(char *));
 	//if (!data->exec_data->opt)
 	///////////////////////////////////////////////////////////////////////	error
-	i = 0;
+	(*data)->exec_data->opt[0] = (*data)->exec_data->cmd;
+	i = 1;
 	while (i < count)
 	{
 		if (tmp->type == 1)

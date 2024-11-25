@@ -64,21 +64,32 @@ void	check_context(t_minishell *data, t_token **token, int *i)
 		exit(0);
 }
 
-void	parse_start(int *i)
+void	parse_start(t_minishell **data, t_token **token, int *i)
 {
-	if (token->type == 1)
+	if ((*token)->type == 1)
 	{
-		data->exec_data->cmd = cmd_check(token, data->env);
+		(*data)->exec_data->cmd = cmd_check(*token, (*data)->env);
 		*i = AFTERCMD;
 	}
-	else if (token->type >= 1 && token->type <= 4)
-		opt_check(&data, &token);//////// can be as a cmd - need to put result as a command
-	else if (token->type >= 5 || token->type <=7)
-		redir_check(&data, &token);
-	else if (token->type == 8)
-		here_doc_start(&data, &token);
-	else if (token->type == 9)
-		data->exec_data->is_pipe = 1;
+	else if ((*token)->type == 2)
+	{
+		env_var_replace(*data, ft_substr((*token)->start, 0, (*token)->len));
+	}
+	else if ((*token)->type >= 5 || (*token)->type <=7)
+	{
+		redir_check(data, token);
+		*i = START;
+	}
+	else if ((*token)->type == 8)
+	{
+		here_doc_start(&data, token);// fork
+		*i = START;
+	}
+	else if ((*token)->type == 9)
+	{
+		////////////////////////////////// error : syntax error near unexpected token `|'
+		*i = START;
+	}
 }
 
 void	parse_after_cmd()

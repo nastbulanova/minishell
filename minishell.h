@@ -12,7 +12,8 @@
 # include <errno.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "libs/libft/libft.h"
+# include <sys/stat.h>
+//# include "libs/libft/libft.h"
 
 # define START 0
 # define AFTERCMD 1
@@ -50,6 +51,17 @@ typedef struct s_minishell
 
 }				t_minishell;
 
+
+
+
+
+
+
+
+
+
+
+
 typedef	struct	s_exp_field
 {
 	int			i;
@@ -82,7 +94,7 @@ void	opt_check(t_minishell **data, t_token **token);
 char	*open_field(t_minishell *data, t_token *token);
 char	*env_var_replace(t_minishell *data, char *name);
 void	redir_check(t_minishell **data, t_token **token);
-
+void	here_doc_start(t_minishell	**data, t_token **token);
 
 //for test
 void    print_token(t_token *token);

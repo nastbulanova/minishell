@@ -8,7 +8,7 @@ char	*env_var_replace(t_minishell *data, char *name)
 	i = -1;
 	name = ft_strjoin(name, "=");
 	len = ft_strlen(name);
-	while (data->env[++i])
+	while (data->env[++i])/////////////////////////////////////////////////////change logic, have to be linked list
 	{
 		if (!ft_strncmp(data->env[i], name, len))
 			return(ft_substr(data->env[i], len, INT_MAX));
