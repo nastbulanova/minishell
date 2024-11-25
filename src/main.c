@@ -1,10 +1,25 @@
 #include "../inc/minishell.h"
+#include "../inc/builtins.h"
 
+t_minishell *init_shell()
+{
+    t_minishell *shell;
 
+    shell = malloc(sizeof(t_minishell));
+    if (!shell)
+        return (NULL);
+    shell->env = NULL;
+    shell->exec_data = NULL;
+    shell->exit_code = 0;
+    shell->token_head = NULL;
+    return (shell);
+}
 void main_loop(char **envp)
 {
     (void)envp;
+    t_minishell *shell;
 
+    shell = init_shell();
 	char *input;
     int i;
 
@@ -21,8 +36,10 @@ void main_loop(char **envp)
         split = ft_split(input, ' ');
         if (split)
         {
-            if (split[0] && ft_strncmp("echo", split[0], 4) == 0)
-                cmd_echo(split);
+            if (split[0] && ft_strncmp("echo", split[0], 5) == 0)
+                cmd_echo(split, STDOUT_FILENO, shell);
+            else if (split[0] && ft_strncmp("pwd", split[0], 5) == 0)
+                cmd_pwd(split, STDOUT_FILENO, shell);
             i = 0;
             while (split[i])
             {

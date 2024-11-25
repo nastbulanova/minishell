@@ -16,7 +16,7 @@ LINKS = -lreadline -L$(LIBFT_PATH)lib -lft
 
 SRCS =	${SRC_DIR}/main.c \
 		${SRC_DIR}/signals/signals.c \
-		${SRC_DIR}/builtins/echo.c \
+		${SRC_DIR}/builtins/echo.c ${SRC_DIR}/builtins/pwd.c \
 	#	${SRC_DIR}/lexer/lexer.c ${SRC_DIR}/lexer/lexer_utils.c ${SRC_DIR}/lexer/lexer_token_utils.c \
 	#	${SRC_DIR}/parser/parser.c 
 
@@ -29,7 +29,6 @@ ${NAME} : ${OBJS} | $(BIN_DIR)
 
 
 $(OBJ_DIR)/%.o:	$(SRC_DIR)/%.c
-				make libs
 				@mkdir -p $(dir $@)
 				$(CC) $(CFLAGS) -c $< -o $@
 

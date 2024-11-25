@@ -45,6 +45,7 @@ typedef struct s_minishell
 	t_token		*token_head;
 	t_exec_data	*exec_data;
 	char		**env;
+	int 		exit_code;
 
 }				t_minishell;
 
