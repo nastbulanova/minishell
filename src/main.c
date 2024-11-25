@@ -1,5 +1,6 @@
 #include "../inc/minishell.h"
-#include "../inc/builtins.h"
+# include "../inc/builtins.h"
+# include "../inc/env.h"
 
 t_minishell *init_shell()
 {
@@ -14,15 +15,14 @@ t_minishell *init_shell()
     shell->token_head = NULL;
     return (shell);
 }
-void main_loop(char **envp)
+void main_loop(t_env *env)
 {
-    (void)envp;
+    (void)env;
     t_minishell *shell;
-
-    shell = init_shell();
-	char *input;
+;	char *input;
     int i;
 
+    shell = init_shell();
     while (TRUE)
     {
         set_state_signal_handlers(MAIN);
@@ -39,7 +39,7 @@ void main_loop(char **envp)
             if (split[0] && ft_strncmp("echo", split[0], 5) == 0)
                 cmd_echo(split, STDOUT_FILENO, shell);
             else if (split[0] && ft_strncmp("pwd", split[0], 5) == 0)
-                cmd_pwd(split, STDOUT_FILENO, shell);
+                cmd_pwd(STDOUT_FILENO, shell);
             i = 0;
             while (split[i])
             {
@@ -56,7 +56,16 @@ void main_loop(char **envp)
 int	main(int argc, char **argv, char **envp)
 {
 	
-	(void)argv;
+	t_env *env;
+
+    //env = ft_calloc(1, sizeof(t_env));
+    env = NULL;
+    env_init(envp, &env);
+    env_print(env);
+    env_remove(&env, "SHELL");
+    env_print(env);
+    (void)argv;
+   
     if (argc != 1)
     {
 		ft_putendl_fd("Minishell takes no arguments. Exiting.", STDERR_FILENO);
@@ -67,6 +76,7 @@ int	main(int argc, char **argv, char **envp)
 		ft_putendl_fd("No environment variables found. Exiting.", STDERR_FILENO);
         return (1);
     }
-    main_loop(envp);
+    main_loop(env);
+    env_free(env);
 	return (0);
 }

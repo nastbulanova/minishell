@@ -11,10 +11,10 @@
 # include <sys/types.h>
 # include <errno.h>
 # include "mini_signals.h"
-# include "builtins.h"
 # include "../libs/libft/include/libft.h"
 # include <readline/history.h>
 # include <readline/readline.h>
+
 
 typedef struct	s_token
 {
@@ -44,10 +44,18 @@ typedef struct s_minishell
 {
 	t_token		*token_head;
 	t_exec_data	*exec_data;
-	char		**env;
+	char 		**env;
 	int 		exit_code;
 
 }				t_minishell;
+
+
+typedef struct s_env
+{
+    char *name;
+    char *value;
+    struct s_env *next;
+} t_env;
 
 
 
