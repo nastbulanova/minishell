@@ -29,5 +29,6 @@ void    print_token(t_token *token);
 //aux.c
 void error_exit(const char *error, const char *function_name);
 void *safe_malloc(size_t bytes, const char *function_name);
+void minishell_free(t_minishell *shell);
 
 #endif

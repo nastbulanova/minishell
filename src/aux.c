@@ -18,3 +18,9 @@ void error_exit(const char *error, const char *function_name)
     ft_printf(RB "%s (%s)\n" RST, error, function_name);
     exit(EXIT_FAILURE);
 }
+void minishell_free(t_minishell *shell)
+{
+    if (shell->env)
+        env_free(shell->env);
+    free(shell);
+}

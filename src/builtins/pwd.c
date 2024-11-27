@@ -18,6 +18,7 @@ int cmd_pwd(int fd_out, t_minishell *shell)
 	}
 	ft_putstr_fd(pwd, fd_out);
 	ft_putstr_fd("\n", fd_out);
+	free(pwd);
 	shell->exit_code = 0;
 	return (0);
 }

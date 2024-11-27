@@ -2,27 +2,27 @@
 # include "../inc/builtins.h"
 # include "../inc/env.h"
 
-t_minishell *init_shell()
+t_minishell *init_shell(t_env *env)
 {
     t_minishell *shell;
 
-    shell = malloc(sizeof(t_minishell));
-    if (!shell)
-        return (NULL);
-    shell->env = NULL;
+    shell = safe_malloc(sizeof(t_minishell), "init_shell in main.c");
+    shell->env = env;
     shell->exec_data = NULL;
     shell->exit_code = 0;
     shell->token_head = NULL;
+    
     return (shell);
 }
 void main_loop(t_env *env)
 {
     (void)env;
     t_minishell *shell;
-;	char *input;
+	char *input;
     int i;
 
-    shell = init_shell();
+    shell = init_shell(env);
+    //DEBUG ONLY env_print(shell->env);
     while (TRUE)
     {
         set_state_signal_handlers(MAIN);
@@ -38,7 +38,9 @@ void main_loop(t_env *env)
         {
             if (split[0] && ft_strncmp("echo", split[0], 5) == 0)
                 cmd_echo(split, STDOUT_FILENO, shell);
-            else if (split[0] && ft_strncmp("pwd", split[0], 5) == 0)
+            else if (split[0] && ft_strncmp("pwd", split[0], 4) == 0)
+                cmd_pwd(STDOUT_FILENO, shell);
+            else if (split[0] && ft_strncmp("cd", split[0], 3) == 0)
                 cmd_pwd(STDOUT_FILENO, shell);
             i = 0;
             while (split[i])
@@ -50,6 +52,8 @@ void main_loop(t_env *env)
         }   
 		free(input);
     }
+    if (shell)
+        minishell_free(shell);
 }
 
 
@@ -57,23 +61,20 @@ int	main(int argc, char **argv, char **envp)
 {
 	
 	t_env *env;
-
-    env = NULL;
     (void)argv;
 
+    env = NULL;
     if (argc != 1)
-    {
-		ft_putendl_fd("Minishell takes no arguments. Exiting.", STDERR_FILENO);
-        return (1);
-    }
+        error_exit(RB "Minishell takes no arguments. Exiting." RST, "main in main.c");
     if (!*envp)
     {
 		ft_putendl_fd(RB "No environment variables found." RST, STDOUT_FILENO);
         ft_putendl_fd(GB "Initializing defaults." RST, STDOUT_FILENO);
         env_init_default(&env);
-        env_print(env);
     }
+    
+    env_init(argv, envp, &env);
     main_loop(env);
-    env_free(env);
-	return (0);
+    
+    return (0);
 }

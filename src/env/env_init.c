@@ -1,66 +1,92 @@
 #include "../inc/minishell.h"
-
-
-static char *env_name_extract(char *str)
+static int array_size(char **split)
 {
-    char *name;
     int i;
 
     i = 0;
-    while(str[i] && str[i] != '=')
+    while (split[i])
         i++;
-    name = calloc(i + 1, sizeof(char));
-    if (!name)
-        return (NULL);
-    i = 0;
-    while(str[i] && str[i] != '=')
+
+    return (i);
+}
+static int relative_length(char **split)
+{
+    int result;
+    int split_size;
+    int i;
+
+    split_size = array_size(split);
+    result = 1;
+    i = 1;
+    while(i < split_size - 1)
     {
-        name[i] = str[i];
+        result += ft_strlen(split[i]) + 1;
         i++;
     }
-    return (name);
-}
-static char *env_value_extract(char *str)
-{
-    int string_len; 
-    int i;
-    int j;
-    char *value;
-
-    string_len = ft_strlen(str);
-    i = 0;
-    while(str[i] && str[i] != '=')
-        i++;
-    value = ft_calloc(string_len - i, sizeof(char));
-    if (!value)
-        return (NULL);
-    i++;
-    j = 0;
-    while(str[i])
-        value[j++] = str[i++];
-    return (value);
-}
-t_env *env_extract(char *str)
-{
-    char *equal_pos;
-    t_env *result;
-
-    equal_pos = ft_strchr(str, '=');
-    if (equal_pos == NULL || equal_pos == str)
-        return (NULL);
-    result = ft_calloc(1, sizeof(t_env));
-    if (!result)
-        return (NULL);
-    result->name = env_name_extract(str);
-    result->value = env_value_extract(str);
-   
     return (result);
+
 }
-void env_init(char **envp, t_env **env)
+static void update_shell_path(char *arg_path, t_env *env)
+{
+    char *pwd;
+    int pwd_len;
+    int relative_path_len;
+    int split_size;
+    char **split_relative_path;
+    char *absolutepath;
+    
+    if (arg_path[0] == '/')
+    {
+        env_update(env, arg_path);
+        return ;
+    }
+    pwd = NULL;
+    pwd = getcwd(pwd, 0);
+    if (!pwd)
+        error_exit("getcwd returned NULL", "get_absolute_path in env_init");
+    pwd_len = ft_strlen(pwd);
+    split_relative_path = ft_split(arg_path, '/');
+    split_size = array_size(split_relative_path);
+    relative_path_len = relative_length(split_relative_path);
+    absolutepath = ft_calloc(1, relative_path_len + pwd_len + 1);
+    int i = 0;
+    while (i < pwd_len)
+    {
+        absolutepath[i] = pwd[i];
+        i++;
+    }
+    i = 1;
+    int j = 0;
+    while (i < split_size - 1)
+    {
+        j = 0;
+        absolutepath[pwd_len] = '/';
+        pwd_len++;
+        while (split_relative_path[i][j])
+        {
+            absolutepath[pwd_len + j] = split_relative_path[i][j];
+            j++;
+        }
+        pwd_len += j;
+        i++;
+    }
+    i = 0;
+    while (split_relative_path[i])
+    {
+        free(split_relative_path[i]);
+        i++;
+    }
+    env_update(env, absolutepath);
+    free(absolutepath);
+    free(split_relative_path);
+    free(pwd);
+}
+
+void env_init(char **argv, char **envp, t_env **env)
 {
     int i;
     t_env *new;
-
+    t_env *name_shell;
     i = 0;
     while(envp[i])
     {
@@ -68,6 +94,13 @@ void env_init(char **envp, t_env **env)
         if (new)
             env_add(env, new);
         i++;
+    }
+    name_shell = env_retrieve(*env, "SHELL");
+    if (name_shell)
+    {
+        update_shell_path(argv[0], name_shell);
+        ft_printf(GB "Updated shell path\n" RST);
+        ft_printf(RB "%s\n" RST, name_shell->value);
     }
 }
 
@@ -79,9 +112,10 @@ void env_init_default(t_env **env)
 	pwd = getcwd(pwd, 0);
 	if (!pwd)
         error_exit("NULL pwd on env_init_default (env_init.c)", "env_init_default in env_init.c");
-    env_add(env, env_new("PWD", pwd));
-    env_add(env, env_new("SHELLVL", "0"));
-    env_add(env, env_new("_", "/usr/bin/env"));
+    env_add(env, env_create("PWD", pwd));
+    env_add(env, env_create("SHLVL", "1"));
+    env_add(env, env_create("_", "/usr/bin/env"));
+    free(pwd);
 
 }
 
