@@ -1,4 +1,4 @@
-#include "../inc/env.h"
+#include "../inc/minishell.h"
 
 void env_print(t_env *head)
 {
@@ -65,3 +65,13 @@ void env_remove(t_env **head, char *name)
     }
 }
 
+t_env *env_new(char *name, char *value)
+{
+    t_env *new;
+
+    new = safe_malloc(sizeof(t_env), "env_new in env_aux.c");
+    new->name = ft_strdup(name);
+    new->value = ft_strdup(value);
+    new->next = NULL;
+    return (new);
+}

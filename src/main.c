@@ -58,14 +58,9 @@ int	main(int argc, char **argv, char **envp)
 	
 	t_env *env;
 
-    //env = ft_calloc(1, sizeof(t_env));
     env = NULL;
-    env_init(envp, &env);
-    env_print(env);
-    env_remove(&env, "SHELL");
-    env_print(env);
     (void)argv;
-   
+
     if (argc != 1)
     {
 		ft_putendl_fd("Minishell takes no arguments. Exiting.", STDERR_FILENO);
@@ -73,8 +68,10 @@ int	main(int argc, char **argv, char **envp)
     }
     if (!*envp)
     {
-		ft_putendl_fd("No environment variables found. Exiting.", STDERR_FILENO);
-        return (1);
+		ft_putendl_fd(RB "No environment variables found." RST, STDOUT_FILENO);
+        ft_putendl_fd(GB "Initializing defaults." RST, STDOUT_FILENO);
+        env_init_default(&env);
+        env_print(env);
     }
     main_loop(env);
     env_free(env);

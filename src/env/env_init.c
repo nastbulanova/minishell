@@ -1,4 +1,4 @@
-#include "../inc/env.h"
+#include "../inc/minishell.h"
 
 
 static char *env_name_extract(char *str)
@@ -69,6 +69,20 @@ void env_init(char **envp, t_env **env)
             env_add(env, new);
         i++;
     }
+}
+
+void env_init_default(t_env **env)
+{
+    char *pwd;
+    
+    pwd = NULL;
+	pwd = getcwd(pwd, 0);
+	if (!pwd)
+        error_exit("NULL pwd on env_init_default (env_init.c)", "env_init_default in env_init.c");
+    env_add(env, env_new("PWD", pwd));
+    env_add(env, env_new("SHELLVL", "0"));
+    env_add(env, env_new("_", "/usr/bin/env"));
+
 }
 
 

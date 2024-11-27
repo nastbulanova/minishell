@@ -1,21 +1,11 @@
 #ifndef MINI_SIGNALS_H
 #define MINI_SIGNALS_H
 
+# include "defines.h"
+# include "structs.h"
 # include <signal.h>
 
 
-enum e_signal_state
-{
-    MAIN,
-    CHILD,
-    HERE_DOC
-};
-
-typedef struct s_shell_info
-{
-    int		exit_code;
-
-}t_shell_info;
 
 void            set_state_signal_handlers(enum e_signal_state state);
 void	        set_signal_main(struct sigaction sa);

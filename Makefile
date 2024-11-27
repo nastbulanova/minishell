@@ -14,7 +14,7 @@ CFLAGS = -Wall -Wextra -Werror -g -Iinc -fsanitize=address,undefined
 
 LINKS = -lreadline -L$(LIBFT_PATH)lib -lft
 
-SRCS =	${SRC_DIR}/main.c \
+SRCS =	${SRC_DIR}/main.c ${SRC_DIR}/aux.c\
 		${SRC_DIR}/signals/signals.c \
 		${SRC_DIR}/builtins/echo.c ${SRC_DIR}/builtins/pwd.c \
 		${SRC_DIR}/env/env_init.c ${SRC_DIR}/env/env_free.c ${SRC_DIR}/env/env_aux.c 				 \
