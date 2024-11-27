@@ -36,6 +36,7 @@ typedef struct	s_exec_data
 	char	*cmd;
 	char	**opt;
 	char	**env;
+	int		builtin;
 	int		is_pipe;
 	int		pipe[2];
 	char	*infile;
@@ -47,20 +48,17 @@ typedef struct s_minishell
 {
 	t_token		*token_head;
 	t_exec_data	*exec_data;
-	char		**env;
+	t_env		*env;
+
 
 }				t_minishell;
 
-
-
-
-
-
-
-
-
-
-
+typedef struct s_env
+{
+    char *name;
+    char *value;
+    struct s_env *next;
+}				t_env;
 
 typedef	struct	s_exp_field
 {
@@ -95,6 +93,10 @@ char	*open_field(t_minishell *data, t_token *token);
 char	*env_var_replace(t_minishell *data, char *name);
 void	redir_check(t_minishell **data, t_token **token);
 void	here_doc_start(t_minishell	**data, t_token **token);
+
+//exec_utils
+int		env_len(t_env *env);
+char	**env_list_to_array(t_env *env);
 
 //for test
 void    print_token(t_token *token);

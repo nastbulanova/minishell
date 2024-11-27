@@ -31,12 +31,12 @@ void	redir_check(t_minishell **data, t_token **token)
 	else if ((*token)->type == 6)
 	{
 		(*data)->exec_data->infile = file_name_check(*data, token);
-		printf("redir type infile filename %s", (*data)->exec_data->infile);
+		printf("redir type infile filename %s", (*data)->exec_data->infile);////////////// to delete
 	}	
 	else
 	{
 		(*data)->exec_data->exist_outfile = file_name_check(*data, token);
-		printf("redir type exist_out filename %s", (*data)->exec_data->exist_outfile);
+		printf("redir type exist_out filename %s", (*data)->exec_data->exist_outfile);////////////// to delete
 	}
 }
 

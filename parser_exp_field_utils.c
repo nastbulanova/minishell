@@ -5,6 +5,7 @@ char	*env_var_replace(t_minishell *data, char *name)
 	int		i;
 	int		len;
 
+char **env_list = data
 	i = -1;
 	name = ft_strjoin(name, "=");
 	len = ft_strlen(name);
@@ -16,7 +17,7 @@ char	*env_var_replace(t_minishell *data, char *name)
 	return (NULL);
 }
 
-void	env_var_add(t_exp_field **field, char *str)
+void	env_var_exp(t_exp_field **field, char *str)
 {
 	char    *name;
 	char    *var_value;
@@ -29,14 +30,14 @@ void	env_var_add(t_exp_field **field, char *str)
 	if (var_value)
 		(*field)->result = ft_strjoin((*field)->result, ft_strjoin(ft_substr(str, (*field)->start, (*field)->i), var_value));
 	else
-		(*field)->result = ft_strjoin((*field)->result, ft_substr(str, (*field)->start, (*field)->j));
+		(*field)->result = ft_strjoin((*field)->result, ft_substr(str, (*field)->start, (*field)->j));//////////////////////////
 	(*field)->i = (*field)->j;
 	(*field)->start = (*field)->i;
 	free(var_value);
 	free(name);
 }
 
-void	end_code_add(t_exp_field **field, char *str)
+void	end_code_exp(t_exp_field **field, char *str)
 {
 	//////////////////////////////////////////////////////////////////////////////now can't be finished
 	(void)str;
@@ -58,9 +59,9 @@ char	*open_field(t_minishell *data, t_token *token)
 	while (field->i < token->len)
 	{
 		if (str[field->i] == '$' && str[field->i + 1] == '?')
-			end_code_add(&field, str);
+			end_code_exp(&field, str);
 		else if (str[field->i] == '$')
-			env_var_add(&field, str);
+			env_var_exp(&field, str);
 		else
 			field->i++;
 	}
