@@ -61,13 +61,42 @@ char	*find_path(char **env, char *cmd)
 	return (NULL);
 }
 
+char	*is_builtin(t_token *token)
+{
+	char	*cmd;
+	if (!ft_strncmp(token->start, "echo", token->len))
+		cmd = ft_strdup("echo");
+	else if (!ft_strncmp(token->start, "cd", token->len))
+		cmd = ft_strdup("cd");
+	else if (!ft_strncmp(token->start, "pwd", token->len))
+		cmd = ft_strdup("pwd");
+	else if (!ft_strncmp(token->start, "export", token->len))
+		cmd = ft_strdup("export");
+	else if (!ft_strncmp(token->start, "unset", token->len))
+		cmd = ft_strdup("unset");
+	else if (!ft_strncmp(token->start, "env", token->len))
+		cmd = ft_strdup("env");
+	else if (!ft_strncmp(token->start, "exit", token->len))
+		cmd = ft_strdup("exit");
+	else
+		return(NULL);
+	//if (!cmd)
+	//error
+	//else
+	//return(cmd);
+}
+
 char	*cmd_check(t_token *token, char **env)
 {
 	char	*cmd;
 	char	*cmd_with_path;
 
-	//////////////////////////////////////////////////////// here will be builtin handling
+	cmd = is_builtin(token);
+	if (cmd)
+		return (cmd);
 	cmd = ft_substr(token->start, 0, token->len);
+	//if (!cmd)
+	//error
 	if (!access(cmd, 0))
 		return(cmd);
 	else if (!(*env))
