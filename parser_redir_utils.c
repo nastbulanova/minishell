@@ -55,19 +55,14 @@ int	line_read(char *delim, int file)
 	return (1);
 }
 
-void	here_doc_start(t_minishell	**data, t_token **token) 
+void	here_doc_process(t_minishell **data, t_token **token)
 {
 	char	*delim;
 	int		file;
 	int		go;
 
-//// it should be in a child procces ////////////////////////////////////////////////////////
-	if ((*token)->next)
-		*token = (*token)->next;
-	//else
-		////////////////////////// error_func "parse error near '\n'"
 	delim = ft_strjoin(ft_substr((*token)->start, 0, (*token)->len), "\n");
-	file = open("here_doc", O_WRONLY | O_CREAT | O_APPEND, 0644);
+	file = open("here_doc", O_WRONLY | O_CREAT | O_APPEND, 0644);////////what about many here_docs?
 	/*if (!file) 
 	{
 		//////////////////////////// error_func()
@@ -79,4 +74,27 @@ void	here_doc_start(t_minishell	**data, t_token **token)
 		go = line_read(delim, file);
 	free(delim);
 	close(file);
+}
+
+
+void	here_doc_start(t_minishell **data, t_token **token) 
+{
+	pid_t	pid;
+	int		status;
+
+	//set SIGCHLD
+	pid = fork();
+	//if (pid < 0)
+		//err_msg
+	if (!pid)
+	{
+		if ((*token)->next)
+			*token = (*token)->next;///////////////////////////////////////////////////check the type of token!
+		//else
+		////////////////////////// error_func "parse error near '\n'"
+		here_doc_process(data, token);
+	}
+	else
+		waitpid(-1, &status, 0);
+	//handling SIGCHLD
 }

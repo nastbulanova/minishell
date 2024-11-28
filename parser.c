@@ -82,12 +82,12 @@ void	parse_start(t_minishell **data, t_token **token, int *i)
 	}
 	else if ((*token)->type == 8)
 	{
-		here_doc_start(&data, token);// fork
+		here_doc_start(&data, token);
 		*i = START;
 	}
 	else if ((*token)->type == 9)
 	{
-		////////////////////////////////// error : syntax error near unexpected token `|'
+		////////////////////////////////// minishell : syntax error near unexpected token `|'
 		*i = START;
 	}
 }
