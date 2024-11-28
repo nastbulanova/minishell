@@ -55,10 +55,10 @@ typedef struct s_minishell
 
 typedef struct s_env
 {
-    char *name;
-    char *value;
-    struct s_env *next;
-}				t_env;
+    char 			*name;
+    char 			*value;
+    struct s_env	*next;
+}					t_env;
 
 typedef	struct	s_exp_field
 {
