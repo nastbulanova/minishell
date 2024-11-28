@@ -3,16 +3,14 @@
 char	*env_var_replace(t_minishell *data, char *name)
 {
 	int		i;
-	int		len;
+	t_env	*head;
 
-char **env_list = data
-	i = -1;
-	name = ft_strjoin(name, "=");
-	len = ft_strlen(name);
-	while (data->env[++i])/////////////////////////////////////////////////////change logic, have to be linked list
+	head = data->env;
+	while (head)
 	{
-		if (!ft_strncmp(data->env[i], name, len))
-			return(ft_substr(data->env[i], len, INT_MAX));
+		if (!ft_strncmp(head->name, name, ft_strlen(name) + 1))
+			return(head->value);
+		head = head->next;
 	}
 	return (NULL);
 }
@@ -30,7 +28,7 @@ void	env_var_exp(t_exp_field **field, char *str)
 	if (var_value)
 		(*field)->result = ft_strjoin((*field)->result, ft_strjoin(ft_substr(str, (*field)->start, (*field)->i), var_value));
 	else
-		(*field)->result = ft_strjoin((*field)->result, ft_substr(str, (*field)->start, (*field)->j));//////////////////////////
+		(*field)->result = ft_strjoin((*field)->result, ft_substr(str, (*field)->start, (*field)->j));
 	(*field)->i = (*field)->j;
 	(*field)->start = (*field)->i;
 	free(var_value);
