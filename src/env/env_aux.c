@@ -2,7 +2,6 @@
 
 void env_print(t_env *head)
 {
-    ft_printf("Printing env\n");
     if (!head)
         return ;
 
@@ -10,8 +9,8 @@ void env_print(t_env *head)
     {
         if (!head->name)
             ft_printf("Print NULL head found\n");
-        if (head->name && head->value)
-            printf("Print: %s=%s\n", head->name, head->value);
+        if (head->name && head->value && head->visible)
+            printf("%s=%s\n", head->name, head->value);
         head = head->next;
     }
 }

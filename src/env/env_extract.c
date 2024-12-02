@@ -53,6 +53,7 @@ t_env *env_extract(char *str)
         return (NULL);
     result->name = env_name_extract(str);
     result->value = env_value_extract(str);
+    result->visible = true;
    
     return (result);
 }

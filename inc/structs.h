@@ -47,6 +47,7 @@ typedef struct s_env
 {
     char *name;
     char *value;
+	bool visible;
     struct s_env *next;
 } t_env;
 

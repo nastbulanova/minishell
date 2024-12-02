@@ -15,6 +15,11 @@ void *safe_malloc(size_t bytes, const char *function_name)
 
 void error_exit(const char *error, const char *function_name)
 {
+    t_minishell *shell;
+
+    shell = get_shell(NULL);
+    env_free(shell->env);
+    free(shell);
     ft_printf(RB "%s (%s)\n" RST, error, function_name);
     exit(EXIT_FAILURE);
 }

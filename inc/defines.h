@@ -9,6 +9,7 @@
 # include <fcntl.h>
 # include <string.h>
 # include <sys/types.h>
+# include <stdbool.h>
 # include <errno.h>
 # include "../libs/libft/include/libft.h"
 # include <readline/history.h>

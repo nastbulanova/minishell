@@ -16,7 +16,7 @@ LINKS = -lreadline -L$(LIBFT_PATH)lib -lft
 
 SRCS =	${SRC_DIR}/main.c ${SRC_DIR}/aux.c\
 		${SRC_DIR}/signals/signals.c \
-		${SRC_DIR}/builtins/echo.c ${SRC_DIR}/builtins/pwd.c \
+		${SRC_DIR}/builtins/echo.c ${SRC_DIR}/builtins/pwd.c ${SRC_DIR}/builtins/cd.c \
 		${SRC_DIR}/env/env_init.c ${SRC_DIR}/env/env_free.c ${SRC_DIR}/env/env_aux.c ${SRC_DIR}/env/env_crud.c ${SRC_DIR}/env/env_extract.c				 \
 	#	${SRC_DIR}/lexer/lexer.c ${SRC_DIR}/lexer/lexer_utils.c ${SRC_DIR}/lexer/lexer_token_utils.c \
 	#	${SRC_DIR}/parser/parser.c 
@@ -25,8 +25,9 @@ SRCS =	${SRC_DIR}/main.c ${SRC_DIR}/aux.c\
 OBJS = ${patsubst ${SRC_DIR}/%.c, ${OBJ_DIR}/%.o, ${SRCS}}
 
 
-${NAME} : ${OBJS} | $(BIN_DIR)
-	$(CC) $(CFLAGS) $^ -o $@ $(LINKS)
+${NAME} :	${OBJS} | $(BIN_DIR)
+		make libs
+		$(CC) $(CFLAGS) $^ -o $@ $(LINKS)
 
 
 $(OBJ_DIR)/%.o:	$(SRC_DIR)/%.c
@@ -51,5 +52,6 @@ fclean: clean
 	make fclean -C $(LIBFT_PATH)
 	@echo "Cleaned up all generated files."
 
+re: fclean all
 
 .PHONY: all clean fclean re

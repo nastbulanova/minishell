@@ -25,6 +25,10 @@ void env_delete(t_env **head, char *name)
     {
         if (!ft_strncmp(current->name, name, str_len))
         {
+            if (!ft_strncmp(current->name, "OLDPWD", 7))
+            {
+                current->visible = false;
+            }
             if (previous)
                 previous->next = current->next;
             else    
@@ -46,6 +50,7 @@ t_env *env_create(char *name, char *value)
     new = safe_malloc(sizeof(t_env), "env_new in env_aux.c");
     new->name = ft_strdup(name);
     new->value = ft_strdup(value);
+    new->visible = true;
     new->next = NULL;
     return (new);
 }

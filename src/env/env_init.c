@@ -82,20 +82,23 @@ static void update_shell_path(char *arg_path, t_env *env)
     free(pwd);
 }
 
-void env_init(char **argv, char **envp, t_env **env)
+void env_init(char **argv, char **envp, t_minishell *shell)
 {
     int i;
     t_env *new;
     t_env *name_shell;
+    t_env **head;
+
+    head = &shell->env;
     i = 0;
     while(envp[i])
     {
         new = env_extract(envp[i]);
         if (new)
-            env_add(env, new);
+            env_add(head, new);
         i++;
     }
-    name_shell = env_retrieve(*env, "SHELL");
+    name_shell = env_retrieve(*head, "SHELL");
     if (name_shell)
     {
         update_shell_path(argv[0], name_shell);
@@ -104,14 +107,16 @@ void env_init(char **argv, char **envp, t_env **env)
     }
 }
 
-void env_init_default(t_env **env)
+void env_init_default(t_minishell *shell)
 {
     char *pwd;
-    
+    t_env **env;
+
     pwd = NULL;
 	pwd = getcwd(pwd, 0);
 	if (!pwd)
         error_exit("NULL pwd on env_init_default (env_init.c)", "env_init_default in env_init.c");
+    env = &shell->env;
     env_add(env, env_create("PWD", pwd));
     env_add(env, env_create("SHLVL", "1"));
     env_add(env, env_create("_", "/usr/bin/env"));

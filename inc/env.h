@@ -5,8 +5,8 @@
 # include "structs.h"
 
 //env_init.c
-void env_init(char **argv, char **envp, t_env **env);
-void env_init_default(t_env **env);
+void env_init(char **argv, char **envp, t_minishell *shell);
+void env_init_default(t_minishell *shell);
 t_env *env_extract(char *str);
 
 //env_free
