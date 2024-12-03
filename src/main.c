@@ -77,6 +77,7 @@ int	main(int argc, char **argv, char **envp)
     }
     
     env_init(argv, envp, shell);
+    display_splash_screen();
     main_loop(shell);
     
     return (0);

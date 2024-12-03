@@ -32,5 +32,6 @@ void *safe_malloc(size_t bytes, const char *function_name);
 void minishell_free(t_minishell *shell);
 
 t_minishell *get_shell(t_env *env);
+void display_splash_screen(void);
 
 #endif

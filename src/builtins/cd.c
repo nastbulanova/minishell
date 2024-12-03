@@ -108,7 +108,6 @@ int cd_one_arg(t_minishell *shell, char *working_arg)
 			cd_error_exit(working_arg);
 		env_update(oldpwd, pwd->value);
 		env_update(pwd, home->value);
-		free(swap);
 	}
 	else if (working_arg[0] == '.')
 		env_update(oldpwd, pwd->value);

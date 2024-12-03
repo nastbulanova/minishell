@@ -2,6 +2,25 @@
 # include "../inc/builtins.h"
 # include "../inc/env.h"
 
+void display_splash_screen(void)
+{
+    // Clear the screen using ANSI escape codes
+    printf("\033[H\033[J");
+
+    // ASCII art for the splash screen
+    
+    printf("=====================================================================\n");
+    printf("                    Welcome to akitsenk & joaomigu's\n");
+    printf("=====================================================================\n");
+    printf(RB "MM    MM IIIII NN   NN IIIII  SSSSS  HH   HH EEEEEEE LL      LL      \n");
+    printf("MMM  MMM  III  NNN  NN  III  SS      HH   HH EE      LL      LL      \n");
+    printf("MM MM MM  III  NN N NN  III   SSSSS  HHHHHHH EEEEE   LL      LL      \n");
+    printf("MM    MM  III  NN  NNN  III       SS HH   HH EE      LL      LL      \n");
+    printf("MM    MM IIIII NN   NN IIIII  SSSSS  HH   HH EEEEEEE LLLLLLL LLLLLLL \n" RST);
+    printf("=====================================================================\n");
+    printf("\n");
+}
+
 void *safe_malloc(size_t bytes, const char *function_name)
 {
     void *ret;
