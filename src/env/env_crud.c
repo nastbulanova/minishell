@@ -26,9 +26,7 @@ void env_delete(t_env **head, char *name)
         if (!ft_strncmp(current->name, name, str_len))
         {
             if (!ft_strncmp(current->name, "OLDPWD", 7))
-            {
                 current->visible = false;
-            }
             if (previous)
                 previous->next = current->next;
             else    

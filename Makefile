@@ -16,8 +16,9 @@ LINKS = -lreadline -L$(LIBFT_PATH)lib -lft
 
 SRCS =	${SRC_DIR}/main.c ${SRC_DIR}/aux.c\
 		${SRC_DIR}/signals/signals.c \
-		${SRC_DIR}/builtins/echo.c ${SRC_DIR}/builtins/pwd.c ${SRC_DIR}/builtins/cd.c \
-		${SRC_DIR}/env/env_init.c ${SRC_DIR}/env/env_free.c ${SRC_DIR}/env/env_aux.c ${SRC_DIR}/env/env_crud.c ${SRC_DIR}/env/env_extract.c				 \
+		${SRC_DIR}/builtins/echo.c ${SRC_DIR}/builtins/pwd.c \
+		${SRC_DIR}/builtins/cd/cd.c ${SRC_DIR}/builtins/cd/cd_aux.c ${SRC_DIR}/builtins/cd/cd_error_handler.c ${SRC_DIR}/builtins/cd/cd_one_arg.c		\
+		${SRC_DIR}/env/env_init.c ${SRC_DIR}/env/env_free.c ${SRC_DIR}/env/env_aux.c ${SRC_DIR}/env/env_crud.c ${SRC_DIR}/env/env_extract.c				\
 	#	${SRC_DIR}/lexer/lexer.c ${SRC_DIR}/lexer/lexer_utils.c ${SRC_DIR}/lexer/lexer_token_utils.c \
 	#	${SRC_DIR}/parser/parser.c 
 
