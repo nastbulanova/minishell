@@ -43,7 +43,7 @@ static void update_shell_path(char *arg_path, t_env *env)
     pwd = NULL;
     pwd = getcwd(pwd, 0);
     if (!pwd)
-        error_exit("getcwd returned NULL", "get_absolute_path in env_init");
+        error_exit("getcwd returned NULL", "update_shell_path in env_init");
     pwd_len = ft_strlen(pwd);
     split_relative_path = ft_split(arg_path, '/');
     split_size = array_size(split_relative_path);
@@ -102,8 +102,8 @@ void env_init(char **argv, char **envp, t_minishell *shell)
     if (name_shell)
     {
         update_shell_path(argv[0], name_shell);
-        ft_printf(GB "Updated shell path\n" RST);
-        ft_printf(RB "%s\n" RST, name_shell->value);
+        //DEBUG ft_printf(GB "Updated shell path\n" RST);
+        //DEBUG ft_printf(RB "%s\n" RST, name_shell->value);
     }
 }
 

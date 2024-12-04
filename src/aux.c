@@ -24,11 +24,11 @@ void display_splash_screen(void)
 void *safe_malloc(size_t bytes, const char *function_name)
 {
     void *ret;
-
+ 
     ret = malloc(bytes);
     if (!ret)
         error_exit("Error on memory allocation", function_name);
-    ft_memset(ret,0,bytes);
+    ft_memset(ret, 0,bytes);
     return (ret);
 }
 

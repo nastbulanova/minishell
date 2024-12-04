@@ -1,8 +1,8 @@
 #include "../inc/minishell.h"
-void cd_error_exit(char *path)
+void cd_error_exit(char *path, void * _errno) // you have to pass the errno
 {
 	ft_putstr_fd("cd: ", STDERR_FILENO);
-	ft_putstr_fd(strerror(errno), STDERR_FILENO);
+	ft_putstr_fd(strerror(_errno), STDERR_FILENO);
 	ft_putstr_fd(": ", STDERR_FILENO);
 	ft_putstr_fd(path, STDERR_FILENO);
     ft_putstr_fd("\n", STDERR_FILENO);
@@ -87,7 +87,7 @@ int cd_one_arg(t_minishell *shell, char *working_arg)
 		error_exit("OLDPWD not found", "cd_one_arg @ cd.c");
 	if (!pwd)
 		error_exit("PWD not found", "cd_one_arg @ cd.c");
-	if (working_arg[0] == '-')
+	if (working_arg[0] == '-')//and it only has a minus
 	{
 		errno = 0;
 		chdir(oldpwd->value);
