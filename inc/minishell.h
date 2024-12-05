@@ -44,6 +44,11 @@ int cd_no_args(t_minishell *shell);
 int cd_multiple_args(char **str);
 int cmd_cd(char **str, int fd_out, t_minishell *data);
 
+//export/exp_init.c
+void exp_init(t_minishell *data);
+//export/exp_aux.c
+void exp_print(t_minishell *data);
+
 t_minishell *get_shell(t_env *env);
 void display_splash_screen(void);
 

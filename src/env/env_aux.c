@@ -34,3 +34,14 @@ void env_add(t_env **head, t_env *new)
         tmp->next = new;   
     }
 }
+
+int array_len(char **split)
+{
+    int i;
+
+    i = 0;
+    while (split[i])
+        i++;
+
+    return (i);
+}

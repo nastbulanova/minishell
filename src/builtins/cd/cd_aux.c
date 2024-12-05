@@ -20,6 +20,7 @@ int array_size(char **split, char **working_arg)
 	}
 	return (result);
 }
+
 t_env *get_pwd(t_minishell *shell)
 {
 	t_env *result;

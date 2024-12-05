@@ -15,6 +15,7 @@ void env_free(t_env *head);
 //env_aux.c
 void env_add(t_env **head, t_env *new);
 void env_print(t_env *head);
+int array_len(char **split);
 
 //env_crud
 void env_delete(t_env **head, char *name);

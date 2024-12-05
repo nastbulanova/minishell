@@ -46,5 +46,7 @@ void minishell_free(t_minishell *shell)
 {
     if (shell->env)
         env_free(shell->env);
+    if (shell->exp)
+        env_free(shell->exp);
     free(shell);
 }

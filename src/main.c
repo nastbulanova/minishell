@@ -4,10 +4,10 @@
 
 t_minishell *get_shell(t_env *env)
 {
-    static t_minishell *shell;
+    static t_minishell *data;
     if (env)
-        shell->env = env;
-    return (shell);
+        data->env = env;
+    return (data);
 
 }
 t_minishell *init_shell()
@@ -16,18 +16,19 @@ t_minishell *init_shell()
 
     shell = safe_malloc(sizeof(t_minishell), "init_shell in main.c");
     shell->env = NULL;
+    shell->exp = NULL;
     shell->exec_data = NULL;
     shell->exit_code = 0;
     shell->token_head = NULL;
     
     return (shell);
 }
-void main_loop(t_minishell *shell)
+void main_loop(t_minishell *data)
 {
 	char *input;
     int i;
 
-    //DEBUG ONLY env_print(shell->env);
+    env_print(data->env);
     set_state_signal_handlers(MAIN);
     while (TRUE)
     {
@@ -42,11 +43,17 @@ void main_loop(t_minishell *shell)
         if (split)
         {
             if (split[0] && ft_strncmp("echo", split[0], 5) == 0)
-                cmd_echo(split, STDOUT_FILENO, shell);
+                cmd_echo(split, STDOUT_FILENO, data);
             else if (split[0] && ft_strncmp("pwd", split[0], 4) == 0)
-                cmd_pwd(STDOUT_FILENO, shell);
+                cmd_pwd(STDOUT_FILENO, data);
             else if (split[0] && ft_strncmp("cd", split[0], 3) == 0)
-                cmd_cd(split, STDOUT_FILENO, shell);
+                cmd_cd(split, STDOUT_FILENO, data);
+            else if (split[0] && ft_strncmp("env", split[0], 4) == 0)
+                env_print(data->env);
+            else if (split[0] && ft_strncmp("export", split[0], 7) == 0)
+                cmd_export(split, STDOUT_FILENO, data);
+            else if (split[0] && ft_strncmp("clear", split[0], 6) == 0)
+                printf("\033[H\033[J");
             i = 0;
             while (split[i])
             {
@@ -57,28 +64,29 @@ void main_loop(t_minishell *shell)
         }   
 		free(input);
     }
-    if (shell)
-        minishell_free(shell);
+    if (data)
+        minishell_free(data);
 }
 
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_minishell *shell;
+	t_minishell *data;
     (void)argv;
-    shell = init_shell(); 
+    data = init_shell(); 
     if (argc != 1)
         error_exit(RB "Minishell takes no arguments. Exiting." RST, "main in main.c");
     if (!*envp)
     {
 		ft_putendl_fd(RB "No environment variables found." RST, STDOUT_FILENO);
         ft_putendl_fd(GB "Initializing defaults." RST, STDOUT_FILENO);
-        env_init_default(shell);
+        env_init_default(data);
     }
     
-    env_init(argv, envp, shell);
+    env_init(argv, envp, data);
+    exp_init(data);
     display_splash_screen();
-    main_loop(shell);
+    main_loop(data);
     
     return (0);
 }

@@ -1,21 +1,12 @@
 #include "../inc/minishell.h"
-static int array_size(char **split)
-{
-    int i;
 
-    i = 0;
-    while (split[i])
-        i++;
-
-    return (i);
-}
 static int relative_length(char **split)
 {
     int result;
     int split_size;
     int i;
 
-    split_size = array_size(split);
+    split_size = array_len(split);
     result = 1;
     i = 1;
     while(i < split_size - 1)
@@ -46,7 +37,7 @@ static void update_shell_path(char *arg_path, t_env *env)
         error_exit("getcwd returned NULL", "update_shell_path in env_init");
     pwd_len = ft_strlen(pwd);
     split_relative_path = ft_split(arg_path, '/');
-    split_size = array_size(split_relative_path);
+    split_size = array_len(split_relative_path);
     relative_path_len = relative_length(split_relative_path);
     absolutepath = ft_calloc(1, relative_path_len + pwd_len + 1);
     int i = 0;
@@ -100,11 +91,7 @@ void env_init(char **argv, char **envp, t_minishell *shell)
     }
     name_shell = env_retrieve(*head, "SHELL");
     if (name_shell)
-    {
         update_shell_path(argv[0], name_shell);
-        //DEBUG ft_printf(GB "Updated shell path\n" RST);
-        //DEBUG ft_printf(RB "%s\n" RST, name_shell->value);
-    }
 }
 
 void env_init_default(t_minishell *shell)
