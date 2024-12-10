@@ -1,7 +1,7 @@
-#include "../inc/builtins.h"
+#include "../../inc/builtins.h"
 
 
-int cmd_pwd(int fd_out, t_minishell *shell)
+int cmd_pwd(t_minishell *data)
 {
 	char *pwd;
 	
@@ -13,12 +13,12 @@ int cmd_pwd(int fd_out, t_minishell *shell)
 		ft_putstr_fd("Error: ", STDERR_FILENO);
         ft_putstr_fd(strerror(errno), STDERR_FILENO);
         ft_putstr_fd("\n", STDERR_FILENO);
-        shell->exit_code = 1; 
+        data->exit_code = 1; 
         return (1);
 	}
-	ft_putstr_fd(pwd, fd_out);
-	ft_putstr_fd("\n", fd_out);
+	ft_putstr_fd(pwd, STDOUT_FILENO);
+	ft_putstr_fd("\n", STDOUT_FILENO);
 	free(pwd);
-	shell->exit_code = 0;
+	data->exit_code = 0;
 	return (0);
 }

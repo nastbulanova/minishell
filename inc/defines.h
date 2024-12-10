@@ -22,28 +22,28 @@ typedef struct	s_token t_token;
 typedef struct s_shell_info t_shell_info;
 
 //default color
-# define RST "\033[0m" 
+# define RST "\002\033[0m" 
 //RED Color (Bold)
-# define RN   "\033[0;31m" 
-# define RB   "\033[1;31m" 
+# define RN   "\001\033[0;31m" 
+# define RB   "\001\033[1;31m" 
 //GREEN Color (Bold)
-# define GN   "\033[0;32m"
-# define GB   "\033[1;32m"
+# define GN   "\001\033[0;32m"
+# define GB   "\001\033[1;32m"
 //YELLOW Color (Bold)
-# define YN   "\033[0;33m" 
-# define YB   "\033[1;33m" 
+# define YN   "\001\033[0;33m" 
+# define YB   "\001\033[1;33m" 
 //BLUE Color (Bold)
-# define BN   "\033[0;34m" 
-# define BB   "\033[1;34m" 
+# define BN   "\001\033[0;34m" 
+# define BB   "\001\033[1;34m" 
 //MAGENTA Color (Bold)
-# define MN   "\033[0;35m"
-# define MB   "\033[1;35m"
+# define MN   "\001\033[0;35m"
+# define MB   "\001\033[1;35m"
 //CYAN Color (Bold)
-# define CN   "\033[0;36m"
-# define CB   "\033[1;36m"
+# define CN   "\001\033[0;36m"
+# define CB   "\001\033[1;36m"
 //WHITE Color (Bold)
-# define WN   "\033[0;37m"
-# define WB   "\033[1;37m"
+# define WN   "\001\033[0;37m"
+# define WB   "\001\033[1;37m"
 
 typedef enum e_signal_state
 {

@@ -1,6 +1,6 @@
-#include "../inc/minishell.h"
+# include "../inc/minishell.h"
 # include "../inc/builtins.h"
-# include "../inc/env.h"
+
 
 t_minishell *get_shell(t_env *env)
 {
@@ -16,7 +16,6 @@ t_minishell *init_shell()
 
     shell = safe_malloc(sizeof(t_minishell), "init_shell in main.c");
     shell->env = NULL;
-    shell->exp = NULL;
     shell->exec_data = NULL;
     shell->exit_code = 0;
     shell->token_head = NULL;
@@ -28,7 +27,7 @@ void main_loop(t_minishell *data)
 	char *input;
     int i;
 
-    env_print(data->env);
+    //env_print(data->env);
     set_state_signal_handlers(MAIN);
     while (TRUE)
     {
@@ -43,15 +42,15 @@ void main_loop(t_minishell *data)
         if (split)
         {
             if (split[0] && ft_strncmp("echo", split[0], 5) == 0)
-                cmd_echo(split, STDOUT_FILENO, data);
+                cmd_echo(split, data);
             else if (split[0] && ft_strncmp("pwd", split[0], 4) == 0)
-                cmd_pwd(STDOUT_FILENO, data);
+                cmd_pwd(data);
             else if (split[0] && ft_strncmp("cd", split[0], 3) == 0)
-                cmd_cd(split, STDOUT_FILENO, data);
+                cmd_cd(split, data);
             else if (split[0] && ft_strncmp("env", split[0], 4) == 0)
                 env_print(data->env);
             else if (split[0] && ft_strncmp("export", split[0], 7) == 0)
-                cmd_export(split, STDOUT_FILENO, data);
+                cmd_export(split, data);
             else if (split[0] && ft_strncmp("clear", split[0], 6) == 0)
                 printf("\033[H\033[J");
             i = 0;
@@ -84,8 +83,7 @@ int	main(int argc, char **argv, char **envp)
     }
     
     env_init(argv, envp, data);
-    exp_init(data);
-    display_splash_screen();
+    //display_splash_screen();
     main_loop(data);
     
     return (0);

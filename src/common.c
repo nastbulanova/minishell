@@ -1,0 +1,16 @@
+#include "../inc/minishell.h"
+
+int c_strcmp(char *str_one, char *str_two)
+{
+    if (!str_one && !str_two)
+        return (1);
+    if (!str_one || !str_two)
+    {
+        if (str_one)
+            return (1);
+        if (str_two)
+            return (-1);
+    }
+    return (ft_strncmp(str_one, str_two, SIZE_MAX));
+}
+

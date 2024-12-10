@@ -7,10 +7,11 @@ void env_print(t_env *head)
 
     while (head)
     {
-        if (!head->name)
-            ft_printf("Print NULL head found\n");
-        if (head->name && head->value && head->visible)
-            printf("%s=%s\n", head->name, head->value);
+        if (head->name)
+        {
+            if (head->name && head->value && head->visible)
+                printf("%s=%s\n", head->name, head->value);
+        }
         head = head->next;
     }
 }
@@ -35,13 +36,3 @@ void env_add(t_env **head, t_env *new)
     }
 }
 
-int array_len(char **split)
-{
-    int i;
-
-    i = 0;
-    while (split[i])
-        i++;
-
-    return (i);
-}

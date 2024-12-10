@@ -39,42 +39,38 @@ int cd_home(t_env **pwd, t_env **oldpwd, t_env **home, char *working_arg)
 	return (exit_code);
 }
 
-int cd_remainder(t_env * oldpwd, t_env *pwd, int len, char *working_arg)
+int cd_remainder(t_env **oldpwd, t_env **pwd, char *working_arg)
 {
-
-	if (len == 1)
-	{
-		if (working_arg[0] == '.')
-			env_update(oldpwd, pwd->value);
-		else
-		{
-			errno = 0;
-			chdir(working_arg);
-			if (errno)
-				cd_error_exit(working_arg, errno);
-			return (1);
-		}
-	}
-	else 
+	if (working_arg[0] == '.')
+		env_update(*oldpwd, (*pwd)->value);
+	else
 	{
 		errno = 0;
 		chdir(working_arg);
 		if (errno)
+		{
 			cd_error_exit(working_arg, errno);
-		return (1);
+			return (1);
+		}
+		else
+		{
+			env_update(*oldpwd, (*pwd)->value);
+			env_update(*pwd, working_arg);
+		}
 	}
 	return (0);
 }
-int cd_one_arg(t_minishell *shell, char *working_arg)
+
+int cd_one_arg(t_minishell *data, char *working_arg)
 {
 	t_env *oldpwd;
 	t_env *pwd;
 	t_env *home;
 	int len;
 
-	home = env_retrieve(shell->env, "HOME");
-	oldpwd = env_retrieve(shell->env, "OLDPWD");
-	pwd = env_retrieve(shell->env, "PWD");
+	home = env_retrieve(data->env, "HOME");
+	oldpwd = env_retrieve(data->env, "OLDPWD");
+	pwd = env_retrieve(data->env, "PWD");
 	if (!oldpwd)
 		error_exit("OLDPWD not found", "cd_one_arg @ cd.c");
 	if (!pwd)
@@ -86,7 +82,7 @@ int cd_one_arg(t_minishell *shell, char *working_arg)
 	else if (working_arg[0] == '~' || working_arg[0] == '\0')
 		return(cd_home(&pwd, &oldpwd, &home, working_arg));
 	else
-		return(cd_remainder(oldpwd, pwd, len, working_arg));
+		return(cd_remainder(&oldpwd, &pwd, working_arg));
 	return (0);
 }
 

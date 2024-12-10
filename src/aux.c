@@ -1,6 +1,4 @@
-#include "../inc/minishell.h"
-# include "../inc/builtins.h"
-# include "../inc/env.h"
+#include  "../inc/minishell.h"
 
 void display_splash_screen(void)
 {
@@ -34,11 +32,11 @@ void *safe_malloc(size_t bytes, const char *function_name)
 
 void error_exit(const char *error, const char *function_name)
 {
-    t_minishell *shell;
+    t_minishell *data;
 
-    shell = get_shell(NULL);
-    env_free(shell->env);
-    free(shell);
+    data = get_shell(NULL);
+    env_free(data->env);
+    free(data);
     ft_printf(RB "%s (%s)\n" RST, error, function_name);
     exit(EXIT_FAILURE);
 }
@@ -46,7 +44,5 @@ void minishell_free(t_minishell *shell)
 {
     if (shell->env)
         env_free(shell->env);
-    if (shell->exp)
-        env_free(shell->exp);
     free(shell);
 }
