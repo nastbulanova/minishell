@@ -6,7 +6,13 @@ t_minishell *get_shell(t_env *env)
 {
     static t_minishell *data;
     if (env)
+    {
         data->env = env;
+        data = safe_malloc(sizeof(t_minishell), "init_shell in main.c");
+        data->exec_data = NULL;
+        data->exit_code = 0;
+        data->token_head = NULL;
+    }
     return (data);
 
 }
@@ -72,6 +78,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_minishell *data;
     (void)argv;
+
     data = init_shell(); 
     if (argc != 1)
         error_exit(RB "Minishell takes no arguments. Exiting." RST, "main in main.c");

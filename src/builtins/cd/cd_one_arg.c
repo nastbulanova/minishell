@@ -1,5 +1,14 @@
 #include "../../../inc/minishell.h"
 
+void free_partial_envs(t_env *oldpwd, t_env *pwd, t_env *home)
+{
+	if (oldpwd)
+		free(oldpwd);
+	if (pwd)
+		free(pwd);
+	if (home)
+		free(home);
+}
 int cd_minus(t_env *pwd, t_env *oldpwd, char *working_arg)
 {
 	char *swap;
@@ -66,18 +75,21 @@ int cd_one_arg(t_minishell *data, char *working_arg)
 	t_env *oldpwd;
 	t_env *pwd;
 	t_env *home;
-	int len;
 
 	home = env_retrieve(data->env, "HOME");
 	oldpwd = env_retrieve(data->env, "OLDPWD");
 	pwd = env_retrieve(data->env, "PWD");
 	if (!oldpwd)
+	{
+		free_partial_envs(home, oldpwd, pwd);
 		error_exit("OLDPWD not found", "cd_one_arg @ cd.c");
+	}
 	if (!pwd)
+	{
+		free_partial_envs(home, oldpwd, pwd);
 		error_exit("PWD not found", "cd_one_arg @ cd.c");
-	len = ft_strlen(working_arg);
-	
-	if (working_arg[0] == '-' && len == 1)
+	}
+	if (working_arg[0] == '-' && ft_strlen(working_arg) == 1)
 		return(cd_minus(pwd, oldpwd, working_arg));
 	else if (working_arg[0] == '~' || working_arg[0] == '\0')
 		return(cd_home(&pwd, &oldpwd, &home, working_arg));
