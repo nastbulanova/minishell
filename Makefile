@@ -18,9 +18,9 @@ SRCS =	${SRC_DIR}/main.c ${SRC_DIR}/aux.c ${SRC_DIR}/common.c\
 		${SRC_DIR}/signals/signals.c \
 		${SRC_DIR}/builtins/echo.c ${SRC_DIR}/builtins/pwd.c ${SRC_DIR}/builtins/common.c\
 		${SRC_DIR}/builtins/cd/cd.c ${SRC_DIR}/builtins/cd/cd_one_arg.c		\
-		${SRC_DIR}/builtins/export.c \
-		${SRC_DIR}/env/env_init.c ${SRC_DIR}/env/env_free.c ${SRC_DIR}/env/env_aux.c ${SRC_DIR}/env/env_crud.c ${SRC_DIR}/env/env_extract.c				\
-		${SRC_DIR}/export/exp_init.c ${SRC_DIR}/export/exp_aux.c				\
+		${SRC_DIR}/builtins/export/export.c ${SRC_DIR}/builtins/export/export_aux.c \
+		${SRC_DIR}/builtins/env/env_init.c ${SRC_DIR}/builtins/env/env_aux.c ${SRC_DIR}/builtins/env/env_path.c \
+		${SRC_DIR}/builtins/env/env_crud.c ${SRC_DIR}/builtins/env/env_extract.c				\
 	#	${SRC_DIR}/lexer/lexer.c ${SRC_DIR}/lexer/lexer_utils.c ${SRC_DIR}/lexer/lexer_token_utils.c \
 	#	${SRC_DIR}/parser/parser.c 
 

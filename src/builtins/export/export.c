@@ -1,4 +1,4 @@
-#include "../../inc/minishell.h"
+#include "../../../inc/minishell.h"
 
 int cmd_export(char** str, t_minishell *data)
 {

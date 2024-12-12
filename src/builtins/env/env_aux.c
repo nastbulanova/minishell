@@ -1,4 +1,4 @@
-#include "../inc/minishell.h"
+#include "../../../inc/minishell.h"
 
 void env_print(t_env *head)
 {
@@ -36,3 +36,21 @@ void env_add(t_env **head, t_env *new)
     }
 }
 
+void env_free(t_env *head)
+{
+    t_env *tmp;
+
+    if (!head)
+        return ;
+    tmp = head;
+    while(head)
+    {
+        tmp = head;
+        head = head->next;
+        if (tmp->name)
+            free(tmp->name);
+        if (tmp->value)
+            free(tmp->value);
+        free(tmp);
+    }
+}

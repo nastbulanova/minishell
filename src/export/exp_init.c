@@ -1,7 +1,0 @@
-#include "../../inc/minishell.h"
-
-
-
-
-
-

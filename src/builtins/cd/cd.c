@@ -1,4 +1,5 @@
 #include "../../../inc/minishell.h"
+
 void cd_error_exit(char *path, int _errno)
 {
 	ft_putstr_fd("cd: ", STDERR_FILENO);
@@ -64,6 +65,7 @@ int cd_multiple_args(char **str)
     ft_putstr_fd("\n", STDERR_FILENO);
 	return(1);
 }
+
 int cmd_cd(char **str, t_minishell *data)
 {
 	(void)str;

@@ -37,7 +37,7 @@ void error_exit(const char *error, const char *function_name)
     data = get_shell(NULL);
     env_free(data->env);
     free(data);
-    ft_printf(RB "%s (%s)\n" RST, error, function_name);
+    ft_printf(RB "%s (%s)\n" RST, error, function_name);//todo change to stderr
     exit(EXIT_FAILURE);
 }
 void minishell_free(t_minishell *shell)

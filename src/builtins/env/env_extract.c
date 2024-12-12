@@ -1,4 +1,4 @@
-#include "../inc/minishell.h"
+#include "../../../inc/minishell.h"
 
 
 static char *env_name_extract(char *str)
@@ -40,6 +40,7 @@ static char *env_value_extract(char *str)
         value[j++] = str[i++];
     return (value);
 }
+
 t_env *env_extract(char *str)
 {
     char *equal_pos;

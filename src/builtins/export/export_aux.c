@@ -1,4 +1,4 @@
-#include "../../inc/minishell.h"
+#include "../../../inc/minishell.h"
 
 static void sort_export_list_aux(t_env *current)
 {
@@ -15,7 +15,7 @@ static void sort_export_list_aux(t_env *current)
     current->next->value = value_tmp;
     current->next->visible = temp.visible;
 }
-void sort_export_list(t_env **head)
+static void sort_export_list(t_env **head)
 {
     t_env *current;
     int  swapped;
@@ -40,6 +40,22 @@ void sort_export_list(t_env **head)
             break;
     }
 }
+static t_env *copy_export(t_env *original)
+{
+    t_env *copy = NULL;
+    t_env *new_node = NULL;
+
+    while (original)
+    {
+        new_node = env_create(original->name, original->value);
+        new_node->visible = original->visible;
+        new_node->next = NULL;
+        env_add(&copy, new_node);
+        original = original->next;
+    }
+    return (copy);
+}
+
 void exp_print(t_minishell *data)
 {
     t_env   *head;
@@ -64,19 +80,4 @@ void exp_print(t_minishell *data)
     env_free(temp);
 }
 
-t_env *copy_export(t_env *original)
-{
-    t_env *copy = NULL;
-    t_env *new_node = NULL;
-
-    while (original)
-    {
-        new_node = env_create(original->name, original->value);
-        new_node->visible = original->visible;
-        new_node->next = NULL;
-        env_add(&copy, new_node);
-        original = original->next;
-    }
-    return (copy);
-}
 

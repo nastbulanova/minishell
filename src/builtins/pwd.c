@@ -1,4 +1,4 @@
-#include "../../inc/builtins.h"
+#include "../../inc/minishell.h"
 
 
 int cmd_pwd(t_minishell *data)

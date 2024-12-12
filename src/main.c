@@ -81,9 +81,9 @@ int	main(int argc, char **argv, char **envp)
         ft_putendl_fd(GB "Initializing defaults." RST, STDOUT_FILENO);
         env_init_default(data);
     }
-    
     env_init(argv, envp, data);
-    //display_splash_screen();
+    display_splash_screen();
+    ft_printf("%s\n", argv[0]);
     main_loop(data);
     
     return (0);
