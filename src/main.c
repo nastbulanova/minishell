@@ -2,13 +2,13 @@
 # include "../inc/builtins.h"
 
 
-t_minishell *get_shell(t_env *env)
+t_minishell *get_shell(bool init)
 {
     static t_minishell *data;
-    if (env)
+    if (init)
     {
-        data->env = env;
         data = safe_malloc(sizeof(t_minishell), "init_shell in main.c");
+        data->env = NULL;
         data->exec_data = NULL;
         data->exit_code = 0;
         data->token_head = NULL;
@@ -54,9 +54,11 @@ void main_loop(t_minishell *data)
             else if (split[0] && ft_strncmp("cd", split[0], 3) == 0)
                 cmd_cd(split, data);
             else if (split[0] && ft_strncmp("env", split[0], 4) == 0)
-                env_print(data->env);
+                cmd_env(data->env);
             else if (split[0] && ft_strncmp("export", split[0], 7) == 0)
                 cmd_export(split, data);
+            else if (split[0] && ft_strncmp("export", split[0], 7) == 0)
+                cmd_unset(split, data);
             else if (split[0] && ft_strncmp("clear", split[0], 6) == 0)
                 printf("\033[H\033[J");
             i = 0;
@@ -79,7 +81,7 @@ int	main(int argc, char **argv, char **envp)
 	t_minishell *data;
     (void)argv;
 
-    data = init_shell(); 
+    data = get_shell(true); 
     if (argc != 1)
         error_exit(RB "Minishell takes no arguments. Exiting." RST, "main in main.c");
     if (!*envp)

@@ -13,19 +13,22 @@ int cd_minus(t_env *pwd, t_env *oldpwd, char *working_arg)
 {
 	char *swap;
 	int exit_code;
-
+	(void)working_arg;
 	exit_code = 0;
 	errno = 0;
-	chdir(oldpwd->value);
-	if (errno)
+	if (oldpwd && pwd)
 	{
-		cd_error_exit(working_arg, errno);
-		exit_code = 1;
+		chdir(oldpwd->value);
+		if (errno)
+		{
+			cd_error_exit(oldpwd->value, errno);
+			exit_code = 1;
+		}
+		swap = ft_strdup(oldpwd->value);
+		env_update(oldpwd, pwd->value);
+		env_update(pwd, swap);
+		free(swap);
 	}
-	swap = ft_strdup(oldpwd->value);
-	env_update(oldpwd, pwd->value);
-	env_update(pwd, swap);
-	free(swap);
 	return (exit_code);
 }
 
@@ -34,7 +37,7 @@ int cd_home(t_env **pwd, t_env **oldpwd, t_env **home, char *working_arg)
 	int exit_code;
 
 	exit_code = 0;
-	if (!home)
+	if (!*home)
 		return (0);
 	errno = 0;
 	chdir((*home)->value);
@@ -43,14 +46,16 @@ int cd_home(t_env **pwd, t_env **oldpwd, t_env **home, char *working_arg)
 		cd_error_exit(working_arg, errno);
 		exit_code = 1;
 	}
-	env_update(*oldpwd, (*pwd)->value);
-	env_update(*pwd, (*home)->value);
+	if (*oldpwd)
+		env_update(*oldpwd, (*pwd)->value);
+	if (*pwd)
+		env_update(*pwd, (*home)->value);
 	return (exit_code);
 }
 
 int cd_remainder(t_env **oldpwd, t_env **pwd, char *working_arg)
 {
-	if (working_arg[0] == '.')
+	if (working_arg[0] == '.' && working_arg[1] != '.')
 		env_update(*oldpwd, (*pwd)->value);
 	else
 	{
@@ -63,8 +68,11 @@ int cd_remainder(t_env **oldpwd, t_env **pwd, char *working_arg)
 		}
 		else
 		{
-			env_update(*oldpwd, (*pwd)->value);
-			env_update(*pwd, working_arg);
+			if (*oldpwd && *pwd)
+			{
+				env_update(*oldpwd, (*pwd)->value);
+				env_update(*pwd, working_arg);
+			}
 		}
 	}
 	return (0);
@@ -79,16 +87,6 @@ int cd_one_arg(t_minishell *data, char *working_arg)
 	home = env_retrieve(data->env, "HOME");
 	oldpwd = env_retrieve(data->env, "OLDPWD");
 	pwd = env_retrieve(data->env, "PWD");
-	if (!oldpwd)
-	{
-		free_partial_envs(home, oldpwd, pwd);
-		error_exit("OLDPWD not found", "cd_one_arg @ cd.c");
-	}
-	if (!pwd)
-	{
-		free_partial_envs(home, oldpwd, pwd);
-		error_exit("PWD not found", "cd_one_arg @ cd.c");
-	}
 	if (working_arg[0] == '-' && ft_strlen(working_arg) == 1)
 		return(cd_minus(pwd, oldpwd, working_arg));
 	else if (working_arg[0] == '~' || working_arg[0] == '\0')

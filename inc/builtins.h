@@ -34,7 +34,8 @@ void exp_print(t_minishell *data);
 //export/export.c
 int cmd_export(char** str, t_minishell *data);
 
-
+//env/env.c
+int cmd_env(char** str, t_minishell *data);
 //env/env_init.c
 void env_init(char **argv, char **envp, t_minishell *shell);
 void env_init_default(t_minishell *shell);

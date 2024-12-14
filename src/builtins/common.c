@@ -71,7 +71,7 @@ char	**get_cmd_flags(char *command)
 	static char	*echo_flags[] = {"-n", "-e", "-E", NULL};
 	static char	*cd_flags[] = {"-L", "-P", NULL};
 	static char	*pwd_flags[] = {NULL};
-	static char	*export_flags[] = {NULL};
+	static char	*export_flags[] = {"-p"};
     static char	*unset_flags[] = {"-v", "-f", NULL};
 	static char	*env_flags[] = {NULL};
     static char	*exit_flags[] = {NULL};

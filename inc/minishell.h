@@ -40,7 +40,7 @@ void free_array(char **arr);
 
 
 
-t_minishell *get_shell(t_env *env);
+t_minishell *get_shell(bool init);
 void display_splash_screen(void);
 
 #endif
