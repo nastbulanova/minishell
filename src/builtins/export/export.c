@@ -1,4 +1,10 @@
 #include "../../../inc/minishell.h"
+
+void print_error_export()
+{
+	ft_putstr_fd("Input error export here", STDERR_FILENO);
+}
+
 void extract_name_value(char *line, char **name, char **value)
 {
 	char *p;
@@ -13,16 +19,16 @@ bool is_valid_variable_name(const char *name)
 	int i;
 
     if (!name || name[0] == '\0') 
-        return false;
+        return (false);
     if (!ft_isalpha(name[0]) && name[0] != '_')
-		return false;
+		return (false);
 	i = -1;
     while (name[++i])
 	{
         if (!ft_isalnum(name[i]) && name[i] != '_') 
-            return false;
+            return (false);
 	}
-    return true;
+    return (true);
 }
 void update_env(t_minishell *data, char *var_name, char* var_value)
 {
@@ -53,7 +59,7 @@ bool process_arg(char *arg, t_minishell *data)
 		else
 		{
 			var_name = ft_strdup(arg);
-			var_value = ft_strdup("");
+			var_value = NULL;
 		}
 		result = is_valid_variable_name(var_name);
 		if (result)
@@ -65,29 +71,26 @@ int cmd_export(char** args, t_minishell *data)
 {
 	int arg_count;
 	int first_arg;
-	bool allvalid;
+	int count_error;
 
+	count_error = 0;
 	arg_count = array_size(args) - 1;
 	if (arg_count == 0)
-	{
 		exp_print(data);
-		data->exit_code = 0;
-	}
 	else if (arg_count > 0)
 	{
 		first_arg = index_arg(args, get_cmd_flags(args[0]));
-		allvalid = true;
 		while (first_arg >= 0 && args[first_arg])
-		{
-			if (allvalid)
-				allvalid = process_arg(args[first_arg], data);
-			first_arg++;
+		{			
+			count_error += process_arg(args[first_arg], data);
+			if (count_error == 1)
+				print_error_export();
+		first_arg++;
 		}
-		if (allvalid)
-			data->exit_code = 0;
-		else
-			data->exit_code = 1;
 	}
-
+	if (!count_error)
+		data->exit_code = 0;
+	else
+		data->exit_code = 1;
 	return (0);
 }

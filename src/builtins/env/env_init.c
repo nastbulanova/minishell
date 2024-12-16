@@ -106,11 +106,12 @@ void env_init_default(char **argv, t_minishell *data)
 	if (!pwd)
         error_exit("NULL pwd on env_init_default (env_init.c)", "env_init_default in env_init.c");
     env = NULL;
+    name_shell = NULL;
+    name_ = NULL;
+    env_add(&env, env_create("OLDPWD", NULL));
     env_add(&env, env_create("PWD", pwd));
     env_add(&env, env_create("SHLVL", "1"));
     env_add(&env, env_create("_", "/usr/bin/env"));
-    env_add(&env, env_create("SHELL", "/usr/bin/env"));
-    name_shell = env_retrieve(env, "SHELL");
     name_ = env_retrieve(env, "_");
     update_shell_path(argv[0], name_shell, name_);
     data->env = env;

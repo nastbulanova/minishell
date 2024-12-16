@@ -6,9 +6,7 @@ int cmd_echo(char **args, t_minishell *data)
 	int first_arg;
 
 	newline = has_flag(args, "-n");
-
 	first_arg = index_arg(args, get_cmd_flags(args[0]));
-	printf("Newline %d, first_arg %d\n", newline, first_arg);
 	while (first_arg >= 0 && args[first_arg])
 	{
 		ft_putstr_fd(args[first_arg], STDOUT_FILENO);
