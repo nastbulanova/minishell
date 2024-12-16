@@ -1,5 +1,5 @@
 # include "../inc/minishell.h"
-# include "../inc/builtins.h"
+
 
 
 t_minishell *get_shell(bool init)
@@ -54,11 +54,11 @@ void main_loop(t_minishell *data)
             else if (split[0] && ft_strncmp("cd", split[0], 3) == 0)
                 cmd_cd(split, data);
             else if (split[0] && ft_strncmp("env", split[0], 4) == 0)
-                cmd_env(data->env);
+                cmd_env(split, data);
             else if (split[0] && ft_strncmp("export", split[0], 7) == 0)
                 cmd_export(split, data);
-            else if (split[0] && ft_strncmp("export", split[0], 7) == 0)
-                cmd_unset(split, data);
+            //else if (split[0] && ft_strncmp("export", split[0], 7) == 0)
+            //    cmd_unset(split, data);
             else if (split[0] && ft_strncmp("clear", split[0], 6) == 0)
                 printf("\033[H\033[J");
             i = 0;
@@ -88,11 +88,10 @@ int	main(int argc, char **argv, char **envp)
     {
 		ft_putendl_fd(RB "No environment variables found." RST, STDOUT_FILENO);
         ft_putendl_fd(GB "Initializing defaults." RST, STDOUT_FILENO);
-        env_init_default(data);
+        env_init_default(argv, data);
     }
     env_init(argv, envp, data);
     display_splash_screen();
-    ft_printf("%s\n", argv[0]);
     main_loop(data);
     
     return (0);

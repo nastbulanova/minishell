@@ -2,6 +2,7 @@
 void print_array(char **arr)
 {
     int i;
+    
     i = -1;
     while (arr[++i])
         ft_printf("'%s'\n", arr[i]);

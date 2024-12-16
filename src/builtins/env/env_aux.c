@@ -22,7 +22,7 @@ void env_add(t_env **head, t_env *new)
 
     if (!new || !head)
         return ;
-    if (!*head)
+    if (!head || !*head)
     {
         *head = new;
         return ;

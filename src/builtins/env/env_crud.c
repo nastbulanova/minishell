@@ -2,6 +2,8 @@
 
 void env_update(t_env *target, const char *new_value)
 {
+    if (!target)
+        return ;
     if (!new_value)
         return ;
     if (target->value)

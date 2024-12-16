@@ -46,9 +46,8 @@ char *final_path_one(char **sanitized_arg_path, char *pwd)
     }
     return (final_path);
 }
-static void update_shell_path(char *arg_path, t_env *env)
+static void update_shell_path(char *arg_path, t_env *env, t_env *env_)
 {
-    (void)env;
     char **sanitized_arg_path;
     char *final_path;
     char *pwd;
@@ -67,18 +66,20 @@ static void update_shell_path(char *arg_path, t_env *env)
     else
         final_path = ft_strdup(pwd);
     env_update(env, final_path);
+    env_update(env_, final_path);
     free(pwd);
     free(final_path);
 }
 
-void env_init(char **argv, char **envp, t_minishell *shell)
+void env_init(char **argv, char **envp, t_minishell *data)
 {
     int i;
     t_env *new;
     t_env *name_shell;
+    t_env *name_;
     t_env **head;
 
-    head = &shell->env;
+    head = &data->env;
     i = 0;
     while(envp[i])
     {
@@ -88,23 +89,31 @@ void env_init(char **argv, char **envp, t_minishell *shell)
         i++;
     }
     name_shell = env_retrieve(*head, "SHELL");
+    name_ = env_retrieve(*head, "_");
     if (name_shell)
-        update_shell_path(argv[0], name_shell);
+        update_shell_path(argv[0], name_shell, name_);
 }
 
-void env_init_default(t_minishell *data)
+void env_init_default(char **argv, t_minishell *data)
 {
     char *pwd;
-    t_env **env;
+    t_env *env;
+    t_env *name_shell;
+    t_env *name_;
 
     pwd = NULL;
 	pwd = getcwd(pwd, 0);
 	if (!pwd)
         error_exit("NULL pwd on env_init_default (env_init.c)", "env_init_default in env_init.c");
-    env = &data->env;
-    env_add(env, env_create("PWD", pwd));
-    env_add(env, env_create("SHLVL", "1"));
-    env_add(env, env_create("_", "/usr/bin/env"));
+    env = NULL;
+    env_add(&env, env_create("PWD", pwd));
+    env_add(&env, env_create("SHLVL", "1"));
+    env_add(&env, env_create("_", "/usr/bin/env"));
+    env_add(&env, env_create("SHELL", "/usr/bin/env"));
+    name_shell = env_retrieve(env, "SHELL");
+    name_ = env_retrieve(env, "_");
+    update_shell_path(argv[0], name_shell, name_);
+    data->env = env;
     free(pwd);
 }
 

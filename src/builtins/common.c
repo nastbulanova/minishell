@@ -1,30 +1,51 @@
 #include "../../inc/minishell.h"
 
+bool is_multiple_flag(char *arg, char **flags)
+{
+    int     i;
+    char    *p;
+
+    if (arg[0] == '-')
+    {
+        i = 0;
+        while(flags[i])
+        {
+            p = ft_strchr(arg, flags[i][0]);
+            if (!p)
+                return (false);
+            i++;
+        }
+    }
+    else
+        return  (false);
+    return (true);
+}
+
 int index_arg(char **args, char **flags)
 {
     int i; 
     int j;
     int is_flag;
-
+   
     if (!args || !args[0])
         return (-1);
-    i = 1;
-    while (args[i]) 
+    i = 0;
+    while (args[++i]) 
     {
         is_flag = 0;
-        j = 0;
-        while(flags && flags[j])
+        if (ft_strlen(args[i]) == 1)
+            is_flag = 1;
+        j = -1;
+        while(flags && flags[++j]&& !is_flag)
         {
-            if (!c_strcmp(args[i], flags[j]))
+            if (c_strcmp(args[i], flags[j]) == 0 || is_multiple_flag(args[i], flags))
             {
                 is_flag = 1;
                 break;
             }
-            j++;
         }
         if (!is_flag)
             return (i);
-        i++;
     }
     return (-1);
 }
@@ -60,7 +81,7 @@ bool has_flag(char **args, char *flag)
     i = -1;
     while (++i < first_arg)
     {
-        if (!c_strcmp(flag, args[i]))
+        if (!c_strcmp(flag, args[i]) || ft_strchr(args[i], flag[1]))
             return (true);
     }
     return (false);
@@ -71,7 +92,7 @@ char	**get_cmd_flags(char *command)
 	static char	*echo_flags[] = {"-n", "-e", "-E", NULL};
 	static char	*cd_flags[] = {"-L", "-P", NULL};
 	static char	*pwd_flags[] = {NULL};
-	static char	*export_flags[] = {"-p"};
+	static char	*export_flags[] = {"-p", NULL};
     static char	*unset_flags[] = {"-v", "-f", NULL};
 	static char	*env_flags[] = {NULL};
     static char	*exit_flags[] = {NULL};

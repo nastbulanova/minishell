@@ -38,7 +38,7 @@ int cmd_export(char** str, t_minishell *data);
 int cmd_env(char** str, t_minishell *data);
 //env/env_init.c
 void env_init(char **argv, char **envp, t_minishell *shell);
-void env_init_default(t_minishell *shell);
+void env_init_default(char **argv, t_minishell *data);
 char *final_path_one(char **sanitized_arg_path, char *pwd);
 char **sanitize_arg_path(char **split_arg_path);
 char *get_path_from_single_array(char **split);
