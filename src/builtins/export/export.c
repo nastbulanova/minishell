@@ -1,8 +1,11 @@
 #include "../../../inc/minishell.h"
 
-void print_error_export()
+void print_error_export(char *arg)
 {
-	ft_putstr_fd("Input error export here", STDERR_FILENO);
+	//export: `1VAR': not a valid identifier
+	ft_putstr_fd("export: `", STDERR_FILENO);
+	ft_putstr_fd(arg, STDERR_FILENO);
+	ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
 }
 
 void extract_name_value(char *line, char **name, char **value)
@@ -40,7 +43,16 @@ void update_env(t_minishell *data, char *var_name, char* var_value)
 	else
 		env_add(&data->env, env_create(var_name, var_value));
 	free(var_name);
+	var_name = NULL;
 	free(var_value);
+	var_value = NULL;
+}
+void free_name_value(char *name, char* value)
+{
+	if (name)
+		free(name);
+	if(value)
+		free(value);
 }
 bool process_arg(char *arg, t_minishell *data)
 {
@@ -64,6 +76,8 @@ bool process_arg(char *arg, t_minishell *data)
 		result = is_valid_variable_name(var_name);
 		if (result)
 			update_env(data, var_name, var_value);
+		else
+			free_name_value(var_name, var_value);
 	}
 	return (result);
 }
@@ -82,13 +96,15 @@ int cmd_export(char** args, t_minishell *data)
 		first_arg = index_arg(args, get_cmd_flags(args[0]));
 		while (first_arg >= 0 && args[first_arg])
 		{			
-			count_error += process_arg(args[first_arg], data);
-			if (count_error == 1)
-				print_error_export();
+			if (!process_arg(args[first_arg], data) && !count_error)
+			{
+				count_error++;
+				print_error_export(args[first_arg]);
+			}	
 		first_arg++;
 		}
 	}
-	if (!count_error)
+	if (count_error == 0)
 		data->exit_code = 0;
 	else
 		data->exit_code = 1;

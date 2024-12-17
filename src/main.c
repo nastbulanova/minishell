@@ -91,7 +91,7 @@ int	main(int argc, char **argv, char **envp)
         env_init_default(argv, data);
     }
     env_init(argv, envp, data);
-    display_splash_screen();
+    //display_splash_screen();
     main_loop(data);
     
     return (0);
