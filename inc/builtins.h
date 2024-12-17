@@ -28,11 +28,15 @@ int cd_no_args(t_minishell *shell);
 int cd_multiple_args(char **str);
 int cmd_cd(char **str, t_minishell *data);
 
-
-//export/exp_aux.c
+//export/exp_print.c
 void exp_print(t_minishell *data);
+//export/exp_aux.c
+void update_env(t_minishell *data, char *var_name, char* var_value);
+void print_error_export(char *arg);
+void extract_name_value(char *line, char **name, char **value);
 //export/export.c
 int cmd_export(char** str, t_minishell *data);
+
 
 //env/env.c
 int cmd_env(char** str, t_minishell *data);
@@ -41,20 +45,21 @@ void env_init(char **argv, char **envp, t_minishell *shell);
 void env_init_default(char **argv, t_minishell *data);
 char *final_path_one(char **sanitized_arg_path, char *pwd);
 char **sanitize_arg_path(char **split_arg_path);
-char *get_path_from_single_array(char **split);
-char *get_path_from_arrays(char **split_pwd, char **split_arg);
 
-
+//env/env_extract.c
 t_env *env_extract(char *str);
 
-//env_free
-void env_free(t_env *head);
+//env/env_path.c
+char *get_path_from_single_array(char **split);
+char *get_path_from_arrays(char **split_pwd, char **split_arg);
 
 //env_aux.c
 void env_add(t_env **head, t_env *new);
 void env_print(t_env *head);
+void shlvl_init(t_env *head);
+void env_free(t_env *head);
 
-//env_crud
+//env/env_crud
 void env_delete(t_env **head, char *name);
 t_env *env_retrieve(t_env *head, char *name);
 t_env *env_create(char *name, char *value);
