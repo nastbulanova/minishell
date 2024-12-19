@@ -39,6 +39,7 @@ typedef struct s_minishell
 	t_exec_data	*exec_data;
 	t_env 		*env;
 	int 		exit_code;
+	char 		*prompt;
 
 }				t_minishell;
 

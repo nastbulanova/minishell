@@ -12,6 +12,7 @@ t_minishell *get_shell(bool init)
         data->exec_data = NULL;
         data->exit_code = 0;
         data->token_head = NULL;
+        data->prompt = NULL;
     }
     return (data);
 
@@ -94,7 +95,7 @@ int	main(int argc, char **argv, char **envp)
         env_init_default(argv, data);
     }
     env_init(argv, envp, data);
-    //display_splash_screen();
+    display_splash_screen();
     main_loop(data);
     
     return (0);
