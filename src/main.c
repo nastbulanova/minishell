@@ -33,7 +33,6 @@ void main_loop(t_minishell *data)
 	char *input;
     int i;
 
-    //env_print(data->env);
     set_state_signal_handlers(MAIN);
     while (TRUE)
     {
@@ -47,19 +46,21 @@ void main_loop(t_minishell *data)
         split = ft_split(input, ' ');
         if (split)
         {
-            if (split[0] && ft_strncmp("echo", split[0], 5) == 0)
+            if (split[0] && c_strcmp("echo", split[0]) == 0)
                 cmd_echo(split, data);
-            else if (split[0] && ft_strncmp("pwd", split[0], 4) == 0)
+            else if (split[0] && c_strcmp("pwd", split[0]) == 0)
                 cmd_pwd(data);
-            else if (split[0] && ft_strncmp("cd", split[0], 3) == 0)
+            else if (split[0] && c_strcmp("cd", split[0]) == 0)
                 cmd_cd(split, data);
-            else if (split[0] && ft_strncmp("env", split[0], 4) == 0)
+            else if (split[0] && c_strcmp("env", split[0]) == 0)
                 cmd_env(split, data);
-            else if (split[0] && ft_strncmp("export", split[0], 7) == 0)
+            else if (split[0] && c_strcmp("export", split[0]) == 0)
                 cmd_export(split, data);
-            //else if (split[0] && ft_strncmp("export", split[0], 7) == 0)
-            //    cmd_unset(split, data);
-            else if (split[0] && ft_strncmp("clear", split[0], 6) == 0)
+            else if (split[0] && c_strcmp("unset", split[0]) == 0)
+                cmd_unset(split, data);
+            else if (split[0] && c_strcmp("exit", split[0]) == 0)
+                cmd_exit(split, data);
+            else if (split[0] && c_strcmp("clear", split[0]) == 0)
                 printf("\033[H\033[J");
             i = 0;
             while (split[i])

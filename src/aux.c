@@ -35,16 +35,13 @@ void error_exit(const char *error, const char *function_name)
     t_minishell *data;
 
     data = get_shell(NULL);
-    if (!data)
-    {
-        ft_printf("Data is null\n");
-        return ;
-    }
-    if (data->env)
-        env_free(data->env);
-    if (data)
-        free(data);
     ft_printf(RB "%s (%s)\n" RST, error, function_name);//todo change to stderr
+    if (data)
+    {
+        if (data->env)
+            env_free(data->env);
+        free(data);
+    }
     exit(EXIT_FAILURE);
 }
 void minishell_free(t_minishell *shell)
