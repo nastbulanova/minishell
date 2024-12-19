@@ -34,7 +34,11 @@ int		cd_multiple_args(char **str);
 int		cmd_cd(char **str, t_minishell *data);
 
 // builtins/export
-// export/exp_aux.c
+// export/export_aux.c
+void    extract_name_value(char *line, char **name, char **value);
+void    update_env(t_minishell *data, char *var_name, char* var_value);
+void    print_error_export(char *arg);
+//export/export_print.c
 void	exp_print(t_minishell *data);
 // export/export.c
 int		cmd_export(char **str, t_minishell *data);
@@ -56,6 +60,7 @@ t_env	*env_extract(char *str);
 void	env_add(t_env **head, t_env *new);
 void	env_print(t_env *head);
 void	env_free(t_env *head);
+void shlvl_init(t_env *head);
 // envenv_crud
 void	env_delete(t_env **head, char *name);
 t_env	*env_retrieve(t_env *head, char *name);

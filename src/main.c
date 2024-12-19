@@ -25,7 +25,6 @@ t_minishell *init_shell()
     shell->exec_data = NULL;
     shell->exit_code = 0;
     shell->token_head = NULL;
-    
     return (shell);
 }
 void main_loop(t_minishell *data)
@@ -42,6 +41,8 @@ void main_loop(t_minishell *data)
             printf("exit\n");
             break;
         }
+        else
+            add_history(input);
         char **split = NULL; 
         split = ft_split(input, ' ');
         if (split)
@@ -74,6 +75,7 @@ void main_loop(t_minishell *data)
     }
     if (data)
         minishell_free(data);
+    
 }
 
 

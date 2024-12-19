@@ -36,17 +36,16 @@ void error_exit(const char *error, const char *function_name)
 
     data = get_shell(NULL);
     ft_printf(RB "%s (%s)\n" RST, error, function_name);//todo change to stderr
+    minishell_free(data);
+    exit(EXIT_FAILURE);
+}
+void minishell_free(t_minishell *data)
+{
     if (data)
     {
         if (data->env)
             env_free(data->env);
         free(data);
     }
-    exit(EXIT_FAILURE);
-}
-void minishell_free(t_minishell *shell)
-{
-    if (shell->env)
-        env_free(shell->env);
-    free(shell);
+    clear_history();
 }
