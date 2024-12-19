@@ -1,20 +1,6 @@
 #include "../../../inc/minishell.h"
 
-void print_error_export()
-{
-	ft_putstr_fd("Input error export here", STDERR_FILENO);
-}
-
-void extract_name_value(char *line, char **name, char **value)
-{
-	char *p;
-
-	p = ft_strchr(line, '=');
-	*name = ft_substr(line, 0, p - line);
-	*value = ft_substr(line, p - line + 1, ft_strlen(p + 1));
-}
-
-bool is_valid_variable_name(const char *name) 
+static bool is_valid_variable_name(const char *name) 
 {
 	int i;
 
@@ -30,19 +16,15 @@ bool is_valid_variable_name(const char *name)
 	}
     return (true);
 }
-void update_env(t_minishell *data, char *var_name, char* var_value)
-{
-	t_env *exist;
 
-	exist = env_retrieve(data->env, var_name);
-	if (exist)
-		env_update(exist, var_value);
-	else
-		env_add(&data->env, env_create(var_name, var_value));
-	free(var_name);
-	free(var_value);
+static void free_name_value(char *name, char* value)
+{
+	if (name)
+		free(name);
+	if(value)
+		free(value);
 }
-bool process_arg(char *arg, t_minishell *data)
+static bool process_arg(char *arg, t_minishell *data)
 {
 	char *var_name;
 	char *var_value;
@@ -64,8 +46,18 @@ bool process_arg(char *arg, t_minishell *data)
 		result = is_valid_variable_name(var_name);
 		if (result)
 			update_env(data, var_name, var_value);
+		else
+			free_name_value(var_name, var_value);
 	}
 	return (result);
+}
+
+static void set_process_exit(t_minishell *data, int count_error)
+{
+	if (count_error == 0)
+		data->exit_code = 0;
+	else
+		data->exit_code = 1;
 }
 int cmd_export(char** args, t_minishell *data)
 {
@@ -82,15 +74,14 @@ int cmd_export(char** args, t_minishell *data)
 		first_arg = index_arg(args, get_cmd_flags(args[0]));
 		while (first_arg >= 0 && args[first_arg])
 		{			
-			count_error += process_arg(args[first_arg], data);
-			if (count_error == 1)
-				print_error_export();
+			if (!process_arg(args[first_arg], data) && !count_error)
+			{
+				count_error++;
+				print_error_export(args[first_arg]);
+			}	
 		first_arg++;
 		}
 	}
-	if (!count_error)
-		data->exit_code = 0;
-	else
-		data->exit_code = 1;
+	set_process_exit(data, count_error);
 	return (0);
 }
