@@ -57,7 +57,7 @@ static void handle_more(char **args, t_minishell *data)
 	else
 	{
 		ft_putstr_fd("exit\n", STDERR_FILENO);
-		ft_putstr_fd("bash: exit: too many arguments\n", STDERR_FILENO);
+		ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);
 		data->exit_code = 1;
 	}
 }
