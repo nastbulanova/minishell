@@ -6,11 +6,14 @@ void built_left_prompt(char *prompt, char *user, char *local)
 
     i = 0;
     j = 0;
-    while (user[j])
+    if (user)
     {
-        prompt[i] = user[j];
-        j++;
-        i++;
+        while (user[j])
+        {
+            prompt[i] = user[j];
+            j++;
+            i++;
+        }
     }
     prompt[i] = '@';
     i++;

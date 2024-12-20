@@ -12,7 +12,10 @@ int cmd_unset(char **args, t_minishell *data)
 	{
 		to_delete = env_retrieve(data->env, args[first_arg]);
 		if (to_delete)
+		{
 			env_delete(&head, to_delete->name);
+			to_delete = NULL;
+		}
 		first_arg++;
 	}
 	data->exit_code = 0;

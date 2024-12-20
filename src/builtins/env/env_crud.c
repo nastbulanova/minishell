@@ -25,7 +25,7 @@ void env_delete(t_env **head, char *name)
     current = *head; 
     while(current)
     {
-        if (!c_strcmp(current->name, name))
+        if (current->name && !c_strcmp(current->name, name))
         {
             if (!c_strcmp(current->name, "OLDPWD"))
                 current->visible = false;
