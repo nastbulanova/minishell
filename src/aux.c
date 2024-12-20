@@ -43,6 +43,8 @@ void minishell_free(t_minishell *data)
 {
     if (data)
     {
+        if (data->prompt)
+            free(data->prompt);
         if (data->env)
             env_free(data->env);
         free(data);

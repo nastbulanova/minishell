@@ -43,18 +43,5 @@ void minishell_exit(char *msg, t_minishell *data)
     minishell_free(data);
     exit((unsigned char)exit_status);
 }
-/*
-void minishell_prompt(t_minishell *data)
-{
-    char *pwd;
-    char *final_prompt;
-    t_env *user_name;
-    t_env *hostname;
-    pwd = NULL;
-    if (data->prompt)
-        free(data->prompt);
-    pwd = getcwd(pwd, 0);
-    user_name = env_retrieve(data->env, "USER");
-    hostname = env_retrieve(data->env, "SESSION_MANAGER");
-}
-*/
+
+

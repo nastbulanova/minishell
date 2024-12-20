@@ -8,7 +8,6 @@ int cmd_unset(char **args, t_minishell *data)
 
 	head = data->env;
 	first_arg = index_arg(args, get_cmd_flags(args[0]));
-	printf("First Arg: %d %s\n", first_arg, args[first_arg]);
 	while (first_arg >= 0 && args[first_arg])
 	{
 		to_delete = env_retrieve(data->env, args[first_arg]);

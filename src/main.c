@@ -36,7 +36,9 @@ void main_loop(t_minishell *data)
     set_state_signal_handlers(MAIN);
     while (TRUE)
     {
-        input = readline("minishell> ");
+        update_prompt(data);
+        //ft_printf(data->prompt);
+        input = readline(data->prompt);
 		if (!input)
         {
             printf("exit\n");

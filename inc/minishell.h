@@ -36,7 +36,12 @@ void print_array(char **arr);
 void free_array(char **arr);
 void minishell_exit(char *msg, t_minishell *data);
 
-
+//prompt
+//prompt_aux.c
+char *extract_host(char *session_manager);
+void built_left_prompt(char *prompt, char *user, char *local);
+//prompt.c
+void update_prompt(t_minishell *data);
 
 
 
