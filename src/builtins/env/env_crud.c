@@ -42,8 +42,8 @@ void env_delete(t_env **head, char *name)
         {
             if (previous)
                 previous->next = current->next;
-            else    
-                *head = current->next;
+            else 
+                *head = current->next; 
             delete_aux(current);
             return ;
         }
