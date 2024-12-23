@@ -39,7 +39,7 @@ void error_exit(const char *error, const char *function_name)
     ft_putstr_fd((char *)error, STDERR_FILENO);
     ft_putstr_fd(" ", STDERR_FILENO);
     ft_putstr_fd((char *)function_name, STDERR_FILENO);
-    ft_putstr_fd(RST, STDERR_FILENO);
+    ft_putstr_fd("\n" RST, STDERR_FILENO);
     minishell_free(data);
     exit(EXIT_FAILURE);
 }

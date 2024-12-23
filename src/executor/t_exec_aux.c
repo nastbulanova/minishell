@@ -35,7 +35,12 @@ void t_extended_exec_data_print(t_extended_exec_data *data, bool no_env, bool no
                 printf("    %s ", current->opt[i]);
         }
         else
-            printf("(null)");
+        {
+            if (!no_op)
+                printf("Disable print");
+            else
+                printf("(null)");
+        }
         printf("\n");
         printf("Environment: ");
         if (current->env && no_env)
@@ -45,7 +50,12 @@ void t_extended_exec_data_print(t_extended_exec_data *data, bool no_env, bool no
                 printf("    %s ", current->env[i]);
         }
         else
-            printf("(null)");
+        {
+            if (!no_env)
+                printf("Disable print");
+            else
+                printf("(null)");
+        }
         printf("\n");
         printf("Pipe Input: %d\n", current->is_pipe_input);
         printf("Pipe Output: %d\n", current->is_pipe_output);
