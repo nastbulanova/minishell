@@ -8,17 +8,18 @@ void print_array(char **arr)
         ft_printf("'%s'\n", arr[i]);
 }
 
-void free_array(char **arr)
+void free_array(char **arr, char *temp)
 {
     int i;
 
     i = -1;
-    if (arr)
-    {
-        while (arr[++i])
-            free(arr[i]);
-        free(arr);
-    }
+    if (temp)
+        free(temp);
+    if (!arr || !*arr)
+        return;
+    while (arr[++i])
+        free(arr[i]);
+    free(arr);
 }
 int c_strcmp(char *str_one, char *str_two)
 {

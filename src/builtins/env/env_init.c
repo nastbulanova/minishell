@@ -30,22 +30,26 @@ char **sanitize_arg_path(char **split_arg_path)
     return(new_split);
 }
 
-char *final_path_one(char **sanitized_arg_path, char *pwd)
+static void shlvl_init(t_env *head)
 {
-    char *final_path;
-    char **split_pwd;
+    t_env *lvl_shell;
+    char *shell_lvl;
+    int current_lvl;;
 
-    final_path = NULL;
-    if (c_strcmp(sanitized_arg_path[0], "home") == 0)
-        final_path = get_path_from_single_array(sanitized_arg_path);
-    else
+    lvl_shell = env_retrieve(head, "SHLVL");
+    if (lvl_shell)
     {
-        split_pwd = ft_split(pwd, '/');
-        final_path = get_path_from_arrays(split_pwd, sanitized_arg_path);
-        free_array(split_pwd);
+        current_lvl = ft_atoi(lvl_shell->value);
+        if (current_lvl < 0)
+            current_lvl = 0;
+        shell_lvl = ft_itoa(current_lvl + 1);
+        env_update(lvl_shell, shell_lvl);
+        free(shell_lvl);
     }
-    return (final_path);
+    else
+        env_add(&head, env_create("SHLVL", "1"));
 }
+
 static void update_shell_path(char *arg_path, t_env *env, t_env *env_)
 {
     char **sanitized_arg_path;
@@ -70,7 +74,6 @@ static void update_shell_path(char *arg_path, t_env *env, t_env *env_)
     free(pwd);
     free(final_path);
 }
-
 
 void env_init(char **argv, char **envp, t_minishell *data)
 {

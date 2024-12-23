@@ -1,23 +1,46 @@
 #include "../../../inc/minishell.h"
 
-void shlvl_init(t_env *head)
+size_t	env_len(t_env *env)
 {
-    t_env *lvl_shell;
-    char *shell_lvl;
-    int current_lvl;;
+	size_t	count;
+	t_env	*head;
 
-    lvl_shell = env_retrieve(head, "SHLVL");
-    if (lvl_shell)
+	count = 0;
+	while (head)
+	{
+		count++;
+		head = head->next;
+	}
+	return (count);
+}
+
+char	**env_to_array(t_env *env)
+{
+	char	**list;
+    char    *temp;
+    int     i;
+
+    list = safe_malloc(sizeof (char*) * (env_len(env) + 1), "env_to_array @ env_aux.c");
+	i = 0;
+    while (env)
     {
-        current_lvl = ft_atoi(lvl_shell->value);
-        if (current_lvl < 0)
-            current_lvl = 0;
-        shell_lvl = ft_itoa(current_lvl + 1);
-        env_update(lvl_shell, shell_lvl);
-        free(shell_lvl);
+        temp = ft_strjoin(env->name, "=");
+        if (!temp)
+        {
+            free_array(list, temp);
+            error_exit("Malloc error!", "env_to_array @ env_aux.c");
+        }
+        list[i] = ft_strjoin(temp, env->value);
+        if (!list[i] || !temp)
+        {
+            free_array(list, temp);
+            error_exit("Malloc error!", "env_to_array @ env_aux.c");
+        }
+        free(temp);
+        env = env->next;
+        i++;
     }
-    else
-        env_add(&head, env_create("SHLVL", "1"));
+	return (list);
 }
 
 void env_print(t_env *head)

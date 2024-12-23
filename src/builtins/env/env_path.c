@@ -84,7 +84,22 @@ char *get_path_from_single_array(char **split)
     return (result);
 }
 
+char *final_path_one(char **sanitized_arg_path, char *pwd)
+{
+    char *final_path;
+    char **split_pwd;
 
+    final_path = NULL;
+    if (c_strcmp(sanitized_arg_path[0], "home") == 0)
+        final_path = get_path_from_single_array(sanitized_arg_path);
+    else
+    {
+        split_pwd = ft_split(pwd, '/');
+        final_path = get_path_from_arrays(split_pwd, sanitized_arg_path);
+        free_array(split_pwd);
+    }
+    return (final_path);
+}
 
 
 

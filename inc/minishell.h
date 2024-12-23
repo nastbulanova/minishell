@@ -34,7 +34,7 @@ void minishell_free(t_minishell *shell);
 //common.c
 int c_strcmp(char *str_one, char *str_two);
 void print_array(char **arr);
-void free_array(char **arr);
+void free_array(char **arr, char *temp);
 void minishell_exit(char *msg, t_minishell *data);
 
 //prompt

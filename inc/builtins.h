@@ -47,20 +47,22 @@ int		cmd_export(char **str, t_minishell *data);
 // env/env.c
 int		cmd_env(char **str, t_minishell *data);
 // env/env_init.c
+
 void	env_init(char **argv, char **envp, t_minishell *shell);
 void	env_init_default(char **argv, t_minishell *data);
-char	*final_path_one(char **sanitized_arg_path, char *pwd);
 char	**sanitize_arg_path(char **split_arg_path);
 // env/env_path.c
+char	*final_path_one(char **sanitized_arg_path, char *pwd);
 char	*get_path_from_single_array(char **split);
 char	*get_path_from_arrays(char **split_pwd, char **split_arg);
 // env/env_extract.c
 t_env	*env_extract(char *str);
 // env/env_aux.c
+size_t	env_len(t_env *env);
+char	**env_to_array(t_env *env);
 void	env_add(t_env **head, t_env *new);
 void	env_print(t_env *head);
 void	env_free(t_env *head);
-void shlvl_init(t_env *head);
 // envenv_crud
 void	env_delete(t_env **head, char *name);
 t_env	*env_retrieve(t_env *head, char *name);
