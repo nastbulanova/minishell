@@ -14,6 +14,19 @@ void env_update(t_env *target, const char *new_value)
     if (!target->value && new_value)
         error_exit(RB "" RST, "env_update in env_crud.c");
 }
+
+static void delete_aux(t_env *current)
+{
+    if (current)
+    {
+        if(current->name)
+            free(current->name);
+        if (current->value)
+            free(current->value);
+        free(current);
+    }
+    
+}
 void env_delete(t_env **head, char *name)
 {
     t_env *current;
@@ -25,17 +38,13 @@ void env_delete(t_env **head, char *name)
     current = *head; 
     while(current)
     {
-        if (current->name && !c_strcmp(current->name, name))
+        if (current->name && c_strcmp(current->name, name) == 0)
         {
-            if (!c_strcmp(current->name, "OLDPWD"))
-                current->visible = false;
             if (previous)
                 previous->next = current->next;
             else    
                 *head = current->next;
-            free(current->name);
-            free(current->value);
-            free(current);  
+            delete_aux(current);
             return ;
         }
         previous = current;
