@@ -52,5 +52,22 @@ typedef struct s_env
     struct s_env *next;
 } t_env;
 
+typedef struct s_extended_exec_data
+{
+    char    *cmd;         
+    char	**opt;
+	char    **env;   
+    int     is_pipe_input;  
+    int     is_pipe_output; 
+    int     pipe[2];        
+    char    *infile;        
+    char    *outfile;       
+    int     append_output;  
+    int     infile_fd;      
+    int     outfile_fd;     
+    int     exit_status;      
+    bool     is_builtin;    
+	struct s_extended_exec_data *next;  
+} t_extended_exec_data;
 
 #endif

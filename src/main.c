@@ -30,54 +30,34 @@ t_minishell *init_shell()
 }
 void main_loop(t_minishell *data)
 {
-	char *input;
-    int i;
-
+    char *input;
+    t_extended_exec_data *command_list; 
     set_state_signal_handlers(MAIN);
     while (TRUE)
     {
         update_prompt(data);
-        input = readline(ft_strdup(data->prompt));
-		if (!input)
+        input = readline(data->prompt);
+        if (!input)
         {
             printf("exit\n");
             break;
         }
-        else
+
+        if (*input) 
             add_history(input);
-        char **split = NULL; 
-        split = ft_split(input, ' ');
-        if (split)
+
+        command_list = mock_parser(input, data);
+
+        if (command_list)
         {
-            if (split[0] && c_strcmp("echo", split[0]) == 0)
-                cmd_echo(split, data);
-            else if (split[0] && c_strcmp("pwd", split[0]) == 0)
-                cmd_pwd(data);
-            else if (split[0] && c_strcmp("cd", split[0]) == 0)
-                cmd_cd(split, data);
-            else if (split[0] && c_strcmp("env", split[0]) == 0)
-                cmd_env(split, data);
-            else if (split[0] && c_strcmp("export", split[0]) == 0)
-                cmd_export(split, data);
-            else if (split[0] && c_strcmp("unset", split[0]) == 0)
-                cmd_unset(split, data);
-            else if (split[0] && c_strcmp("exit", split[0]) == 0)
-                cmd_exit(split, data);
-            else if (split[0] && c_strcmp("clear", split[0]) == 0)
-                printf("\033[H\033[J");
-            i = 0;
-            while (split[i])
-            {
-                free(split[i]);
-                i++;
-            }
-            free(split);
-        }   
-		free(input);
+            
+            execute_commands(command_list, data);
+            t_extended_exec_data_free(command_list);
+        }
+        free(input);
     }
     if (data)
         minishell_free(data);
-    
 }
 
 

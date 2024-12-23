@@ -5,6 +5,7 @@
 # include "structs.h"
 # include "mini_signals.h"
 # include "builtins.h"
+# include "executor.h"
 
 //lexer
 t_token	*lexer(char *line);
