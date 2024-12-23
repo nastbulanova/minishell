@@ -37,7 +37,6 @@ void main_loop(t_minishell *data)
     while (TRUE)
     {
         update_prompt(data);
-        //ft_printf(data->prompt);
         input = readline(ft_strdup(data->prompt));
 		if (!input)
         {
