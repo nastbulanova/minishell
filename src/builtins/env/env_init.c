@@ -26,7 +26,7 @@ char **sanitize_arg_path(char **split_arg_path)
             index++;
         }
     }
-    free_array(split_arg_path);
+    free_array(split_arg_path, NULL);
     return(new_split);
 }
 
@@ -65,7 +65,7 @@ static void update_shell_path(char *arg_path, t_env *env, t_env *env_)
     {
         sanitized_arg_path = sanitize_arg_path(ft_split(arg_path, '/'));
         final_path = final_path_one(sanitized_arg_path, pwd);
-        free_array(sanitized_arg_path);
+        free_array(sanitized_arg_path, NULL);
     }
     else
         final_path = ft_strdup(pwd);

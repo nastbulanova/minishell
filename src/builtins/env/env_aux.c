@@ -3,13 +3,12 @@
 size_t	env_len(t_env *env)
 {
 	size_t	count;
-	t_env	*head;
 
 	count = 0;
-	while (head)
+	while (env)
 	{
 		count++;
-		head = head->next;
+		env = env->next;
 	}
 	return (count);
 }

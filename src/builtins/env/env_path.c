@@ -96,7 +96,7 @@ char *final_path_one(char **sanitized_arg_path, char *pwd)
     {
         split_pwd = ft_split(pwd, '/');
         final_path = get_path_from_arrays(split_pwd, sanitized_arg_path);
-        free_array(split_pwd);
+        free_array(split_pwd, NULL);
     }
     return (final_path);
 }

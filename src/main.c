@@ -42,15 +42,11 @@ void main_loop(t_minishell *data)
             printf("exit\n");
             break;
         }
-
         if (*input) 
             add_history(input);
-
         command_list = mock_parser(input, data);
-
         if (command_list)
         {
-            
             execute_commands(command_list, data);
             t_extended_exec_data_free(command_list);
         }
