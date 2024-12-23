@@ -35,7 +35,11 @@ void error_exit(const char *error, const char *function_name)
     t_minishell *data;
 
     data = get_shell(NULL);
-    ft_printf(RB "%s (%s)\n" RST, error, function_name);//todo change to stderr
+    ft_putstr_fd(RB "", STDERR_FILENO);
+    ft_putstr_fd((char *)error, STDERR_FILENO);
+    ft_putstr_fd(" ", STDERR_FILENO);
+    ft_putstr_fd((char *)function_name, STDERR_FILENO);
+    ft_putstr_fd(RST, STDERR_FILENO);
     minishell_free(data);
     exit(EXIT_FAILURE);
 }
