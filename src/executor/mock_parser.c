@@ -52,7 +52,7 @@ void execute_commands(t_extended_exec_data *commands, t_minishell *data)
             if (pid == 0) // Child process
             {
                 execve(current->cmd, current->opt, current->env);
-                perror("execvp");
+                perror("execve");
                 exit(1);
             }
             else if (pid > 0) // Parent process
