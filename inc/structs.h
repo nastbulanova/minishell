@@ -33,6 +33,7 @@ typedef struct	s_exec_data
 
 }				t_exec_data;
 
+
 typedef struct s_minishell
 {
 	t_token		*token_head;
@@ -57,17 +58,15 @@ typedef struct s_extended_exec_data
     char    *cmd;         
     char	**opt;
 	char    **env;   
-    int     is_pipe_input;  
-    int     is_pipe_output; 
     int     pipe[2];        
     char    *infile;        
     char    *outfile;       
-    int     append_output;  
-    int     infile_fd;      
-    int     outfile_fd;     
+    int     append_output;     
     int     exit_status;      
-    bool     is_builtin;    
+    bool    is_builtin;  
+    char    *here_doc_terminator;
 	struct s_extended_exec_data *next;  
 } t_extended_exec_data;
+
 
 #endif

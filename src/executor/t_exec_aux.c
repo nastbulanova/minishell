@@ -1,6 +1,26 @@
 #include "../../inc/minishell.h"
 
 
+void close_pipe(int *pipe_fd)
+{
+    if (pipe_fd[0] >= 0) 
+        close(pipe_fd[0]);
+    if (pipe_fd[1] >= 0) 
+        close(pipe_fd[1]); 
+}
+
+void t_extended_exec_data_init(t_extended_exec_data *exec_data)
+{
+    exec_data->cmd = NULL;
+    exec_data->opt = NULL;
+    exec_data->env = NULL;
+    exec_data->is_builtin = false;
+    exec_data->append_output = false;
+    exec_data->exit_status = 0;
+    exec_data->infile = NULL;
+    exec_data->outfile = NULL;
+    exec_data->here_doc_terminator = NULL;
+}
 
 void t_extended_exec_data_free(t_extended_exec_data *commands)
 {
@@ -9,69 +29,21 @@ void t_extended_exec_data_free(t_extended_exec_data *commands)
     {
         temp = commands;
         commands = commands->next;
-        free(temp->cmd);
-        free(temp->opt);
-        free(temp->env);
-        free(temp->infile);
-        free(temp->outfile);
+        if (temp->cmd)
+            free(temp->cmd);
+        if (temp->opt)
+            free(temp->opt);
+        if (temp->env)
+            free(temp->env);
+        if (temp->infile)
+            free(temp->infile);
+        if (temp->outfile)
+            free(temp->outfile);
+        if (temp->here_doc_terminator)
+            free(temp->here_doc_terminator);
+        close_pipe(temp->pipe);
         free(temp);
     }
 }
 
-void t_extended_exec_data_print(t_extended_exec_data *data, bool no_env, bool no_op)
-{
-    t_extended_exec_data *current = data;
-    
-    int i;
-    while (current != NULL)
-    {
-        printf("Command: %s\n", current->cmd);
-        
-        printf("Options: ");
-        if (current->opt && no_op)
-        {
-            i = -1;
-            while (current->opt[++i])
-                printf("    %s ", current->opt[i]);
-        }
-        else
-        {
-            if (!no_op)
-                printf("Disable print");
-            else
-                printf("(null)");
-        }
-        printf("\n");
-        printf("Environment: ");
-        if (current->env && no_env)
-        {
-            i = -1;
-            while (current->env[++i])
-                printf("    %s ", current->env[i]);
-        }
-        else
-        {
-            if (!no_env)
-                printf("Disable print");
-            else
-                printf("(null)");
-        }
-        printf("\n");
-        printf("Pipe Input: %d\n", current->is_pipe_input);
-        printf("Pipe Output: %d\n", current->is_pipe_output);
-        printf("Pipe: [%d, %d]\n", current->pipe[0], current->pipe[1]);
-        printf("Input File: %s\n", current->infile ? current->infile : "(null)");
-        printf("Output File: %s\n", current->outfile ? current->outfile : "(null)");
-        printf("Append Output: %d\n", current->append_output);
-        printf("Input File FD: %d\n", current->infile_fd);
-        printf("Output File FD: %d\n", current->outfile_fd);
-        printf("Exit Status: %d\n", current->exit_status);
-        printf("Is Builtin: %s\n", current->is_builtin ? "true" : "false");
-        if (current->next != NULL)
-            printf("Next: %p\n", (void*)current->next);
-        else
-            printf("Next: (null)\n");
-        printf("----------\n");
-        current = current->next;
-    }
-}
+

@@ -23,7 +23,8 @@ SRCS =	${SRC_DIR}/main.c ${SRC_DIR}/aux.c ${SRC_DIR}/common.c\
 		${SRC_DIR}/builtins/export/export.c ${SRC_DIR}/builtins/export/export_aux.c ${SRC_DIR}/builtins/export/export_print.c   \
 		${SRC_DIR}/builtins/env/env_init.c ${SRC_DIR}/builtins/env/env_aux.c ${SRC_DIR}/builtins/env/env_path.c 				\
 		${SRC_DIR}/builtins/env/env_crud.c ${SRC_DIR}/builtins/env/env_extract.c ${SRC_DIR}/builtins/env/env.c					\
-		${SRC_DIR}/executor/t_exec_aux.c ${SRC_DIR}/executor/mock_parser.c 														\
+		${SRC_DIR}/executor/t_exec.c ${SRC_DIR}/executor/t_exec_aux.c ${SRC_DIR}/executor/t_exec_errors.c						\
+		${SRC_DIR}/executor/mock_parser.c 																						\
 	#	${SRC_DIR}/lexer/lexer.c ${SRC_DIR}/lexer/lexer_utils.c ${SRC_DIR}/lexer/lexer_token_utils.c \
 	#	${SRC_DIR}/parser/parser.c 
 

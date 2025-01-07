@@ -47,7 +47,7 @@ void main_loop(t_minishell *data)
         command_list = mock_parser(input, data);
         if (command_list)
         {
-            execute_commands(command_list, data);
+            execute_command(command_list, data);
             t_extended_exec_data_free(command_list);
         }
         free(input);
