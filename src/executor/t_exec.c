@@ -1,6 +1,6 @@
 #include "../../inc/minishell.h"
 
-static void heredoc_loop(const char *terminator, int fd)
+void heredoc_loop(const char *terminator, int fd)
 {
     char * input;
     while (true)
@@ -22,7 +22,7 @@ static void heredoc_loop(const char *terminator, int fd)
     }
 }
 
-static bool setup_in_out(t_extended_exec_data *current, int *previous_pipe, int *current_pipe)
+bool setup_in_out(t_extended_exec_data *current, int *previous_pipe, int *current_pipe)
 {
     errno = 0;
     if (current->infile)
@@ -35,7 +35,7 @@ static bool setup_in_out(t_extended_exec_data *current, int *previous_pipe, int 
     {
         if (previous_pipe[1] < 0 && pipe(previous_pipe) != 0)
             return (pipe_open_failure("failed to open heredoc pipe"));
-        set_state_signal_handlers(HERE_DOC);
+        //set_state_signal_handlers(HERE_DOC);
         heredoc_loop(current->here_doc_terminator, previous_pipe[1]);
     }
     if (current->outfile)
@@ -49,7 +49,7 @@ static bool setup_in_out(t_extended_exec_data *current, int *previous_pipe, int 
     }
     return (true);
 }
-static int process_builtin(t_extended_exec_data *current, t_minishell *data)
+int process_builtin(t_extended_exec_data *current, t_minishell *data)
 {
         if (c_strcmp(current->cmd, "echo"))
             return (cmd_echo(current->opt, data));
@@ -69,8 +69,9 @@ static int process_builtin(t_extended_exec_data *current, t_minishell *data)
             return (0);
 }
 
-static void process_pid(pid_t pid, t_extended_exec_data *current, int *previous_pipe, t_minishell *data)
+void process_pid(pid_t pid, t_extended_exec_data *current, int *previous_pipe, t_minishell *data)
 {
+    (void)data;
     if (pid == 0)
     {
         if (previous_pipe[0] >= 0) 
@@ -81,22 +82,96 @@ static void process_pid(pid_t pid, t_extended_exec_data *current, int *previous_
                 dup2(current->pipe[1], STDOUT_FILENO);
         }
         close_pipe(previous_pipe);
-        if (current->is_builtin)
-            current->exit_status = process_builtin(current, data);
-        else
+        //if (current->is_builtin)
+        //    current->exit_status = process_builtin(current, data);
+        //else
             current->exit_status = execve(current->cmd, current->opt, current->env);
     }
     else
     {
-        set_state_signal_handlers(MAIN);
+        //set_state_signal_handlers(MAIN);
         close_pipe(previous_pipe);
         previous_pipe[0] = current->pipe[0];
         previous_pipe[1] = current->pipe[1];  
     }
-    return (true);
+}
+void setup_stdin(t_extended_exec_data *current, int *pipe_fd)
+{
+    if (current->infile)
+    {
+        errno = 0;
+        pipe_fd[0] = open(current->infile, O_RDONLY);
+        if (pipe_fd[0] < 0) {
+            fprintf(stderr, "Minishell: ");
+            fprintf(stderr, "%s", strerror(errno));
+            fprintf(stderr, ": %s\n", current->infile);
+            exit(EXIT_FAILURE);
+        }
+    }
+    else if (current->here_doc_terminator)
+    {
+        if (pipe_fd[1] < 0 && pipe(pipe_fd) != 0)
+        {
+            fprintf(stderr, "failed to open heredoc pipe (%d: %s)\n", errno, strerror(errno));
+            exit(EXIT_FAILURE);
+        }
+        heredoc_loop(current->here_doc_terminator, pipe_fd[1]);
+    }
+}
+
+void setup_stdout(t_extended_exec_data *current, int *pipe_fd)
+{
+    if (current->outfile)
+    {
+        errno = 0;
+        if (current->append_output)
+            pipe_fd[1] = open(current->outfile, O_APPEND);
+        else
+            pipe_fd[1] = open(current->outfile, O_WRONLY);
+         if (pipe_fd[1] < 0) 
+         {
+            fprintf(stderr, "Minishell: ");
+            fprintf(stderr, "%s", strerror(errno));
+            fprintf(stderr, ": %s\n", current->outfile);
+            exit(EXIT_FAILURE); 
+        }
+    }
+}
+
+
+
+void process_parent(int *pipe_fd, t_extended_exec_data *current)
+{
+    close_pipe(pipe_fd);
+    pipe_fd[0] = current->pipe[0];
+    pipe_fd[1] = current->pipe[1];  
+
+}
+
+void process_child(t_extended_exec_data *current, int *pipe_fd)
+{
+    if (pipe_fd[0] >= 0) 
+        dup2(pipe_fd[0], STDIN_FILENO);
+    if (current->next || current->outfile)
+    {
+        if (current->pipe[1] >= 0)
+            dup2(current->pipe[1], STDOUT_FILENO);
+    }
+    close_pipe(pipe_fd);
+    //printf("current->opt\n");
+    //print_array(current->opt);
+    //printf("current->env\n");
+    //print_array(current->env);
+    current->exit_status = execve(current->cmd, current->opt, current->env);
+    if (current->exit_status == -1) 
+    {
+        perror("Error executing command");
+        exit(EXIT_FAILURE);
+    }
 }
 void execute_command(t_extended_exec_data *exec_data, t_minishell *data)
 {
+    (void)data;
     int previous_pipe[2] = {-1, -1};
     pid_t pid;
     t_extended_exec_data *current;
@@ -104,14 +179,20 @@ void execute_command(t_extended_exec_data *exec_data, t_minishell *data)
     current = exec_data;
     while (current && current->cmd)
     {
-        if (!pipe_init(current->pipe))
-            break;
-        if (!setup_in_out(current, previous_pipe, current->pipe))
-            break;
-        set_state_signal_handlers(CHILD);
+        if (pipe(current->pipe) != 0)
+        {
+            fprintf(stderr, "failed to open current pipe (%d: %s)\n", errno, strerror(errno));
+            exit(EXIT_FAILURE);
+        }
+        //setup heredoc signals
+        setup_stdin(current, previous_pipe);   
+        setup_stdout(current, current->pipe);
+        //setup signals
         pid = fork();
-        process_pid(pid, current, previous_pipe, data);
-        data->exit_code = current->exit_status;
+        if (pid == 0)
+            process_child(current, previous_pipe);
+        else
+            process_parent(previous_pipe, current);
         current = current->next;
     }
     close_pipe(previous_pipe);

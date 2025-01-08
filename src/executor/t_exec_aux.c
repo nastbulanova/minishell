@@ -20,6 +20,7 @@ void t_extended_exec_data_init(t_extended_exec_data *exec_data)
     exec_data->infile = NULL;
     exec_data->outfile = NULL;
     exec_data->here_doc_terminator = NULL;
+    exec_data->next = NULL;
 }
 
 void t_extended_exec_data_free(t_extended_exec_data *commands)
@@ -31,10 +32,10 @@ void t_extended_exec_data_free(t_extended_exec_data *commands)
         commands = commands->next;
         if (temp->cmd)
             free(temp->cmd);
-        if (temp->opt)
-            free(temp->opt);
+        //if (temp->opt)
+        //    free_array(temp->opt, NULL);
         if (temp->env)
-            free(temp->env);
+            free_array(temp->env, NULL);
         if (temp->infile)
             free(temp->infile);
         if (temp->outfile)

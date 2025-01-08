@@ -81,10 +81,8 @@ static void handle_one(char **args, t_minishell *data)
 int cmd_exit(char **args, t_minishell *data)
 {
 	int args_size;
-	int i;
 
 	args_size = array_size(args) - 1;
-	i = -1;
 	if (args_size == 0)
 		minishell_exit("exit\n", data);
 	else if (args_size == 1)

@@ -10,7 +10,7 @@ void t_extended_exec_data_init(t_extended_exec_data *exec_data);
 void close_pipe(int *pipe_fd);
 
 //executor/mock_parser.c
-t_extended_exec_data *mock_parser(char *input, t_minishell *data);
+t_extended_exec_data *mock_parser(t_minishell *data);
 
 //executor/t_exec_errors.c
 bool fd_open_failure(char *file, char *err_str);

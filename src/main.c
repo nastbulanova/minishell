@@ -32,25 +32,23 @@ void main_loop(t_minishell *data)
 {
     char *input;
     t_extended_exec_data *command_list; 
+    command_list = mock_parser(data);
     set_state_signal_handlers(MAIN);
     while (TRUE)
     {
         update_prompt(data);
         input = readline(data->prompt);
-        if (!input)
+        
+        printf("Input pointer: %p\n", input);
+        printf("Prompt: %s\n", data->prompt);
+        if (!input) 
         {
             printf("exit\n");
-            break;
+            break; 
         }
-        if (*input) 
-            add_history(input);
-        command_list = mock_parser(input, data);
         if (command_list)
-        {
             execute_command(command_list, data);
-            t_extended_exec_data_free(command_list);
-        }
-        free(input);
+        free(input);   
     }
     if (data)
         minishell_free(data);
@@ -73,6 +71,7 @@ int	main(int argc, char **argv, char **envp)
     }
     env_init(argv, envp, data);
     display_splash_screen();
+    rl_initialize();
     main_loop(data);
     
     return (0);
