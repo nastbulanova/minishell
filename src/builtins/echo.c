@@ -1,6 +1,6 @@
 #include "../../inc/minishell.h"
 
-int cmd_echo(char **args, t_minishell *data)
+int cmd_echo(char **args)
 {
 	bool newline;
 	int first_arg;
@@ -16,6 +16,6 @@ int cmd_echo(char **args, t_minishell *data)
 	}
 	if (!newline)
 		ft_putstr_fd("\n", STDOUT_FILENO);
-	data->exit_code = 0;
+	
 	return (0);
 }

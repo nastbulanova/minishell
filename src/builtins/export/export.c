@@ -59,12 +59,14 @@ static void set_process_exit(t_minishell *data, int count_error)
 	else
 		data->exit_code = 1;
 }
-int cmd_export(char** args, t_minishell *data)
+int cmd_export(char** args)
 {
 	int arg_count;
 	int first_arg;
 	int count_error;
+	t_minishell *data;
 
+	data = get_shell(false);
 	count_error = 0;
 	arg_count = array_size(args) - 1;
 	if (arg_count == 0)

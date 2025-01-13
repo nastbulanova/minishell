@@ -43,7 +43,7 @@ bool all_numeric(char **args)
     return (true);
 }
 
-static void handle_more(char **args, t_minishell *data)
+static int handle_more(char **args)
 {
 	if (!arg_numeric(args[1]))
 	{
@@ -51,44 +51,40 @@ static void handle_more(char **args, t_minishell *data)
 		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
 		ft_putstr_fd(args[1], STDERR_FILENO);
 		ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
-		data->exit_code = 2;
-		minishell_exit(NULL, data);
+		minishell_exit(NULL, 2);
+		return (2);
 	}
 	else
 	{
 		ft_putstr_fd("exit\n", STDERR_FILENO);
 		ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);
-		data->exit_code = 1;
+		return (2);
 	}
 }
-static void handle_one(char **args, t_minishell *data)
+static void handle_one(char **args)
 {
 	if (arg_numeric(args[1]))
-	{
-		data->exit_code = ft_atoi(args[1]);
-		minishell_exit("exit\n", data);
-	}
+		minishell_exit("exit\n", ft_atoi(args[1])); // TODO Check max
 	else
 	{
 		ft_putstr_fd("exit\n", STDERR_FILENO);
 		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
 		ft_putstr_fd(args[1], STDERR_FILENO);
 		ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
-		data->exit_code = 2;
-		minishell_exit(NULL, data);
+		minishell_exit(NULL, 2);
 	}
 }
-int cmd_exit(char **args, t_minishell *data)
+int cmd_exit(char **args)
 {
 	int args_size;
 
 	args_size = array_size(args) - 1;
 	if (args_size == 0)
-		minishell_exit("exit\n", data);
+		minishell_exit("exit\n", 0);
 	else if (args_size == 1)
-		handle_one(args, data);
+		handle_one(args);
 	else if (args_size > 1)
-		handle_more(args, data);
-	data->exit_code = 0;
+		handle_more(args);
+	minishell_exit("exit\n", 0);
 	return (0);
 }

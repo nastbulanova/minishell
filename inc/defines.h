@@ -5,15 +5,17 @@
 # include <stdlib.h>
 # include <limits.h>
 # include <stdio.h>
-# include <sys/wait.h>
-# include <fcntl.h>
-# include <string.h>
 # include <sys/types.h>
+# include <sys/stat.h>
+# include <fcntl.h>
+# include <sys/wait.h>
+# include <string.h>
 # include <stdbool.h>
 # include <errno.h>
 # include "../libs/libft/include/libft.h"
 # include <readline/history.h>
 # include <readline/readline.h>
+
 
 typedef struct s_env t_env;
 typedef struct s_minishell t_minishell;
@@ -51,5 +53,15 @@ typedef enum e_signal_state
     CHILD,
     HERE_DOC
 } t_signal_state;
+
+typedef enum s_redir_type
+{
+    OUTPUT, 
+    OUTPUT_APPEND,
+    INPUT, 
+    HEREDOC,
+    HEREDOC_QUOTED
+
+}   t_redir_type;
 
 #endif

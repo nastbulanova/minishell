@@ -10,7 +10,6 @@ void env_update(t_env *target, const char *new_value)
         target->value = ft_strdup(new_value);
     else
         target->value = NULL;
-    target->visible = true;
     if (!target->value && new_value)
         error_exit(RB "" RST, "env_update in env_crud.c");
 }
@@ -62,7 +61,6 @@ t_env *env_create(char *name, char *value)
         new->value = ft_strdup(value);
     else
         new->value = NULL;
-    new->visible = true;
     new->next = NULL;
     return (new);
 }

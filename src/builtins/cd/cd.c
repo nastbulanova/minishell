@@ -25,8 +25,6 @@ t_env *get_pwd(t_minishell *data)
 		env_add(&data->env, result);
 		free(pwd_dup);
 	}
-	else if (!result->visible)
-		result->visible = true;
 
 	return (result);
 }
@@ -66,15 +64,16 @@ int cd_multiple_args(char **str)
 	return(1);
 }
 
-int cmd_cd(char **str, t_minishell *data)
+int cmd_cd(char **str)
 {
-	(void)str;
+	t_minishell *data;
+
+	data = get_shell(false);
 	int arg_count = array_size(str) - 1;
 	if (arg_count == 0)
-		data->exit_code = cd_no_args(data);
+		return (cd_no_args(data));
 	else if (arg_count == 1)
-		data->exit_code = cd_one_arg(data, str[1]);
+		return(cd_one_arg(data, str[1]));
 	else
-		data->exit_code = cd_multiple_args(str);
-	return (0);
+		return(cd_multiple_args(str));
 }

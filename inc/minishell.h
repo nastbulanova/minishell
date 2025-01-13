@@ -6,7 +6,7 @@
 # include "mini_signals.h"
 # include "builtins.h"
 # include "executor.h"
-
+# include "executor_tests.h"
 //lexer
 t_token	*lexer(char *line);
 
@@ -35,7 +35,7 @@ void minishell_free(t_minishell *shell);
 int c_strcmp(char *str_one, char *str_two);
 void print_array(char **arr);
 void free_array(char **arr, char *temp);
-void minishell_exit(char *msg, t_minishell *data);
+void minishell_exit(char *msg, int exit_code);
 
 //prompt
 //prompt_aux.c

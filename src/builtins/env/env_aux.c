@@ -51,7 +51,7 @@ void env_print(t_env *head)
     {
         if (head->name)
         {
-            if (head->name && head->value && head->visible)
+            if (head->name && head->value)
                 printf("%s=%s\n", head->name, head->value);
         }
         head = head->next;

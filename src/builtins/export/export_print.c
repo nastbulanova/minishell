@@ -7,13 +7,10 @@ static void sort_export_list_aux(t_env *current)
 
     temp.name = current->name;
     value_tmp = current->value;
-    temp.visible = current->visible;
     current->name = current->next->name;
     current->value = current->next->value;
-    current->visible = current->next->visible;
     current->next->name = temp.name;
     current->next->value = value_tmp;
-    current->next->visible = temp.visible;
 }
 static void sort_export_list(t_env **head)
 {
@@ -48,7 +45,6 @@ static t_env *copy_export(t_env *original)
     while (original)
     {
         new_node = env_create(original->name, original->value);
-        new_node->visible = original->visible;
         new_node->next = NULL;
         env_add(&copy, new_node);
         original = original->next;
@@ -71,7 +67,7 @@ void exp_print(t_minishell *data)
     {
         if (head->name)
         {
-            if (head->value && head->visible)
+            if (head->value)
                 printf("declare -x %s=\"%s\"\n", head->name, head->value);
             else if (!head->value)
                 printf("declare -x %s\n", head->name);

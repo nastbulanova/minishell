@@ -11,15 +11,15 @@ char	**get_cmd_flags(char *command);
 bool	has_flag(char **args, char *flag);
 
 //echo.c
-int		cmd_echo(char **args, t_minishell *data);
+int		cmd_echo(char **args);
 //pwd.c
-int		cmd_pwd(t_minishell *data);
+int		cmd_pwd();
 //unset.c
-int     cmd_unset(char **args, t_minishell *data);
+int     cmd_unset(char **args);
 
 //exit.c
 bool    all_numeric(char **args);
-int		cmd_exit(char **args, t_minishell *data);
+int		cmd_exit(char **args);
 // builtins/cd
 // cd_one_arg
 int		cd_one_arg(t_minishell *shell, char *working_arg);
@@ -31,7 +31,7 @@ void	cd_error_exit(char *path, int _errno);
 t_env	*get_pwd(t_minishell *shell);
 int		cd_no_args(t_minishell *shell);
 int		cd_multiple_args(char **str);
-int		cmd_cd(char **str, t_minishell *data);
+int		cmd_cd(char **str);
 
 // builtins/export
 // export/export_aux.c
@@ -41,11 +41,11 @@ void    print_error_export(char *arg);
 //export/export_print.c
 void	exp_print(t_minishell *data);
 // export/export.c
-int		cmd_export(char **str, t_minishell *data);
+int		cmd_export(char **str);
 
 // builtins/env
 // env/env.c
-int		cmd_env(char **str, t_minishell *data);
+int		cmd_env();
 // env/env_init.c
 
 void	env_init(char **argv, char **envp, t_minishell *shell);
