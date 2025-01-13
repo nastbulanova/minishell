@@ -82,17 +82,16 @@ void	handler(int signo, siginfo_t *info, void *context)
 
 void	here_doc_handler(int signal, siginfo_t *info, void *context)
 {
-	t_shell_info	sinfo;
+	t_minishell	*data;
 
 	(void)info;
 	(void)context;
-	sinfo = get_shell_info();
+	data = get_shell(false);
 	if (signal == SIGINT)
 	{
-		write(1, "\n", 1);
-		sinfo.exit_code = 130;
+		data->exit_code = 130;
 	}
-	(void)sinfo;
+	
 }
 
 t_shell_info get_shell_info()

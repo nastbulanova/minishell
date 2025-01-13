@@ -24,19 +24,26 @@ void heredoc_loop(t_redir *current, int fd)
 {
     char * input;
     bool last_input;
-
+    t_minishell *data;
+    int (*default_getc_function)(FILE *);
+    data = get_shell(false);
     if (!current)
         return ;
     last_input = is_last_input(current);  
+    set_state_signal_handlers(HERE_DOC);
+    default_getc_function = rl_getc_function;
+    rl_getc_function = getc;
     while (true)
     {
         input = readline("> ");
         if (break_loop(current, input, last_input, fd))
-            break;
+            break;  
         free(input);
     }
     if (input)
         free(input);
     if (last_input)
         close(fd);
+    rl_getc_function = default_getc_function;
+    set_state_signal_handlers(MAIN);
 }

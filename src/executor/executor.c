@@ -106,13 +106,14 @@ void execute_command_chain(t_exec_data *current, int* previous_pipe, char* redir
             break;
         if (setup_stdin(current, previous_pipe, redir_error) && setup_stdout(current, redir_error))
         {
-             printf("setup_stdin &&  setup_stdout return true\n");
+            printf("setup_stdin &&  setup_stdout return true\n");
+            set_state_signal_handlers(CHILD);
             pid = fork();
              if (pid == 0)
                 execute_child(current, previous_pipe, redir_error, envp);
              else
              {
-                //ste signals here
+                set_state_signal_handlers(MAIN);
                 waitpid(pid,NULL, 0);
                 manage_pipes(current, previous_pipe);
              }

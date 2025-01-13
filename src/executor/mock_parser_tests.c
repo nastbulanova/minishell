@@ -2100,11 +2100,11 @@ t_exec_data *test_11()
 
 t_exec_data *test_10()
 {
-    // First "cat" command
+    ft_printf("Running test 10: cat | cat | ls \n");
     t_exec_data *exec_data_cat1 = malloc(sizeof(t_exec_data));
     memset(exec_data_cat1, 0, sizeof(t_exec_data));
     init_cmd(exec_data_cat1);
-    exec_data_cat1->cmd = "/bin/cat";
+    exec_data_cat1->cmd = ft_strdup("/bin/cat");
     exec_data_cat1->opt = add_string_to_array("cat", exec_data_cat1->opt);
     
 
@@ -2112,14 +2112,14 @@ t_exec_data *test_10()
     t_exec_data *exec_data_cat2 = malloc(sizeof(t_exec_data));
     memset(exec_data_cat2, 0, sizeof(t_exec_data));
     init_cmd(exec_data_cat2);
-    exec_data_cat2->cmd = "/bin/cat";
+    exec_data_cat2->cmd = ft_strdup("/bin/cat");
     exec_data_cat2->opt = add_string_to_array("cat", exec_data_cat2->opt);
 
     // "ls" command
     t_exec_data *exec_data_ls = malloc(sizeof(t_exec_data));
     memset(exec_data_ls, 0, sizeof(t_exec_data));
     init_cmd(exec_data_ls);
-    exec_data_ls->cmd = "/bin/ls";
+    exec_data_ls->cmd = ft_strdup("/bin/ls");
     exec_data_ls->opt = add_string_to_array("ls", exec_data_ls->opt);
 
     // Linking the commands
@@ -2132,20 +2132,21 @@ t_exec_data *test_10()
 
 t_exec_data *test_9()
 {
+    ft_printf("Running test 9: ll > test_output/output.txt  | wc -l \n");
     t_exec_data *exec_data_ls = malloc(sizeof(t_exec_data));
     memset(exec_data_ls, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_ls);
 
     // Setup for ls command
-    exec_data_ls->cmd = "/bin/ll"; // Command to execute
+    exec_data_ls->cmd = ft_strdup("/bin/ll"); // Command to execute
     exec_data_ls->opt = add_string_to_array("ll", exec_data_ls->opt);
-    add_redir_to_list(&exec_data_ls->redirs, create_rdir(OUTPUT, build_full_path("output.txt")));
+    add_redir_to_list(&exec_data_ls->redirs, create_rdir(OUTPUT, build_full_path("test_output/output.txt")));
 
     t_exec_data *exec_data_wc = malloc(sizeof(t_exec_data));
     memset(exec_data_wc, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_wc);
 
-    exec_data_wc->cmd = "/usr/bin/wc"; // Command to execute
+    exec_data_wc->cmd = ft_strdup("/usr/bin/wc"); // Command to execute
     exec_data_wc->opt = add_string_to_array("wc", exec_data_wc->opt);
     exec_data_wc->opt = add_string_to_array("-l", exec_data_wc->opt);
 
@@ -2157,12 +2158,13 @@ t_exec_data *test_9()
 
 t_exec_data *test_8()
 {
+    ft_printf("Running test 8: ls > non_existent_dir/output.txt\n");
     t_exec_data *exec_data_ls = malloc(sizeof(t_exec_data));
     memset(exec_data_ls, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_ls);
 
     // Setup for ls command
-    exec_data_ls->cmd = "/bin/ls"; // Command to execute
+    exec_data_ls->cmd = ft_strdup("/bin/ls"); // Command to execute
     exec_data_ls->opt = add_string_to_array("ls", exec_data_ls->opt);
     add_redir_to_list(&exec_data_ls->redirs, create_rdir(OUTPUT, build_full_path("non_existent_dir/output.txt")));
     
@@ -2173,6 +2175,7 @@ t_exec_data *test_8()
 
 t_exec_data *test_7()
 {
+    ft_printf("Running test 7: grep \"error\" test_input/log1.txt test_input/log2.txt | sort | tee test_output/errors_sorted.txt | wc -l > test_output/count.txt\n");
     t_exec_data *exec_data_grep = malloc(sizeof(t_exec_data));
     memset(exec_data_grep, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_grep);
@@ -2190,26 +2193,26 @@ t_exec_data *test_7()
     init_cmd(exec_data_wc);
 
     // Setup for grep command
-    exec_data_grep->cmd = "/bin/grep"; // Command to execute
+    exec_data_grep->cmd = ft_strdup("/bin/grep"); // Command to execute
     exec_data_grep->opt = add_string_to_array("grep", exec_data_grep->opt);
     exec_data_grep->opt = add_string_to_array("error", exec_data_grep->opt);
-    exec_data_grep->opt = add_string_to_array(build_full_path("log1.txt"), exec_data_grep->opt);
-    exec_data_grep->opt = add_string_to_array(build_full_path("log2.txt"), exec_data_grep->opt);
+    exec_data_grep->opt = add_string_to_array(build_full_path("test_input/log1.txt"), exec_data_grep->opt);
+    exec_data_grep->opt = add_string_to_array(build_full_path("test_input/log2.txt"), exec_data_grep->opt);
 
     // Setup for sort command
-    exec_data_sort->cmd = "/usr/bin/sort"; // Command to execute
+    exec_data_sort->cmd = ft_strdup("/usr/bin/sort"); // Command to execute
     exec_data_sort->opt = add_string_to_array("sort", exec_data_sort->opt);
 
     // Setup for tee command
-    exec_data_tee->cmd = "/usr/bin/tee"; // Command to execute
+    exec_data_tee->cmd = ft_strdup("/usr/bin/tee"); // Command to execute
     exec_data_tee->opt = add_string_to_array("tee", exec_data_tee->opt);
-    exec_data_tee->opt = add_string_to_array(build_full_path("errors_sorted.txt"), exec_data_tee->opt);
+    exec_data_tee->opt = add_string_to_array(build_full_path("test_output/errors_sorted.txt"), exec_data_tee->opt);
 
     // Setup for wc command
-    exec_data_wc->cmd = "/usr/bin/wc"; // Command to execute
+    exec_data_wc->cmd = ft_strdup("/usr/bin/wc"); // Command to execute
     exec_data_wc->opt = add_string_to_array("wc", exec_data_wc->opt);
     exec_data_wc->opt = add_string_to_array("-l", exec_data_wc->opt);
-    add_redir_to_list(&exec_data_wc->redirs, create_rdir(OUTPUT, build_full_path("count.txt")));
+    add_redir_to_list(&exec_data_wc->redirs, create_rdir(OUTPUT, build_full_path("test_output/count.txt")));
 
     // Link commands
     exec_data_grep->next = exec_data_sort;
@@ -2223,6 +2226,7 @@ t_exec_data *test_7()
 
 t_exec_data *test_6()
 {
+    ft_printf("Running test 6: cat << EOF | grep \"hello\" > test_output/greetings.txt\n");
     t_exec_data *exec_data_cat = malloc(sizeof(t_exec_data));
     memset(exec_data_cat, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_cat);
@@ -2232,15 +2236,15 @@ t_exec_data *test_6()
     init_cmd(exec_data_grep);
 
     // Setup for cat command with here-doc
-    exec_data_cat->cmd = "/bin/cat"; // Command to execute
+    exec_data_cat->cmd = ft_strdup("/bin/cat"); // Command to execute
     exec_data_cat->opt = add_string_to_array("cat", exec_data_cat->opt);
-    add_redir_to_list(&exec_data_cat->redirs, create_rdir(HEREDOC_QUOTED, "EOF"));
+    add_redir_to_list(&exec_data_cat->redirs, create_rdir(HEREDOC_QUOTED, ft_strdup("EOF")));
 
     // Setup for grep command
-    exec_data_grep->cmd = "/bin/grep"; // Command to execute
+    exec_data_grep->cmd = ft_strdup("/bin/grep"); // Command to execute
     exec_data_grep->opt = add_string_to_array("grep", exec_data_grep->opt);
     exec_data_grep->opt = add_string_to_array("hello", exec_data_grep->opt);
-    add_redir_to_list(&exec_data_grep->redirs, create_rdir(OUTPUT, build_full_path("greetings.txt")));
+    add_redir_to_list(&exec_data_grep->redirs, create_rdir(OUTPUT, build_full_path("test_output/greetings.txt")));
 
     // Link commands
     exec_data_cat->next = exec_data_grep;
@@ -2252,16 +2256,17 @@ t_exec_data *test_6()
 
 t_exec_data *test_5()
 {
+    ft_printf("Running test 5: cat test_input/input.txt test_input/input1.txt > test_output/combined.txt  \n");
     t_exec_data *exec_data_cat = malloc(sizeof(t_exec_data));
     memset(exec_data_cat, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_cat);
 
     // Setup for cat command
-    exec_data_cat->cmd = "/bin/cat"; // Command to execute
+    exec_data_cat->cmd = ft_strdup("/bin/cat"); // Command to execute
     exec_data_cat->opt = add_string_to_array("cat", exec_data_cat->opt);
-    exec_data_cat->opt = add_string_to_array(build_full_path("input.txt"), exec_data_cat->opt);
-    exec_data_cat->opt = add_string_to_array(build_full_path("input1.txt"), exec_data_cat->opt);
-    add_redir_to_list(&exec_data_cat->redirs, create_rdir(OUTPUT, build_full_path("combined.txt")));
+    exec_data_cat->opt = add_string_to_array(build_full_path("test_input/input.txt"), exec_data_cat->opt);
+    exec_data_cat->opt = add_string_to_array(build_full_path("test_input/input1.txt"), exec_data_cat->opt);
+    add_redir_to_list(&exec_data_cat->redirs, create_rdir(OUTPUT, build_full_path("test_output/combined.txt")));
 
     exec_data_cat->next = NULL; // No more commands in the pipeline
 
@@ -2270,6 +2275,7 @@ t_exec_data *test_5()
 
 t_exec_data *test_4()
 {
+    ft_printf("Running test 4: cat << EOF | wc -l\n");
     t_exec_data *exec_data_cat = malloc(sizeof(t_exec_data));
     memset(exec_data_cat, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_cat);
@@ -2279,12 +2285,12 @@ t_exec_data *test_4()
     init_cmd(exec_data_wc);
 
     // Setup for cat command with here-doc
-    exec_data_cat->cmd = "/bin/cat"; // Command to execute
+    exec_data_cat->cmd = ft_strdup("/bin/cat"); // Command to execute
     exec_data_cat->opt = add_string_to_array("cat", exec_data_cat->opt);
-    add_redir_to_list(&exec_data_cat->redirs, create_rdir(HEREDOC_QUOTED, "EOF"));
+    add_redir_to_list(&exec_data_cat->redirs, create_rdir(HEREDOC_QUOTED, ft_strdup("EOF")));
 
     // Setup for wc command
-    exec_data_wc->cmd = "/bin/wc"; // Command to execute
+    exec_data_wc->cmd = ft_strdup("/bin/wc"); // Command to execute
     exec_data_wc->opt = add_string_to_array("wc", exec_data_wc->opt);
     exec_data_wc->opt = add_string_to_array("-l", exec_data_wc->opt);
 

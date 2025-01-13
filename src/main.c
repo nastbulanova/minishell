@@ -18,14 +18,14 @@ t_minishell *get_shell(bool init)
 }
 t_minishell *init_shell()
 {
-    t_minishell *shell;
+    t_minishell *data;
 
-    shell = safe_malloc(sizeof(t_minishell), "init_shell in main.c");
-    shell->env = NULL;
-    shell->exec_data = NULL;
-    shell->exit_code = 0;
-    shell->token_head = NULL;
-    return (shell);
+    data = safe_malloc(sizeof(t_minishell), "init_shell in main.c");
+    data->env = NULL;
+    data->exec_data = NULL;
+    data->exit_code = 0;
+    data->token_head = NULL;
+    return (data);
 }
 void main_loop(t_minishell *data)
 {
@@ -51,6 +51,20 @@ void main_loop(t_minishell *data)
             command_list = get_test(2);
         if (c_strcmp("run test3", input) == 0)
             command_list = get_test(3);
+        if (c_strcmp("run test4", input) == 0)
+            command_list = get_test(4);
+        if (c_strcmp("run test5", input) == 0)
+            command_list = get_test(5);
+        if (c_strcmp("run test6", input) == 0)
+            command_list = get_test(6);
+        if (c_strcmp("run test7", input) == 0)
+            command_list = get_test(7);
+        if (c_strcmp("run test8", input) == 0)
+            command_list = get_test(8);
+        if (c_strcmp("run test9", input) == 0)
+            command_list = get_test(9);
+        if (c_strcmp("run test10", input) == 0)
+            command_list = get_test(10);
         if (command_list)
         {
             execute_command(command_list, env_to_array(data->env));
