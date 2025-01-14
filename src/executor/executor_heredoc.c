@@ -24,9 +24,8 @@ void heredoc_loop(t_redir *current, int fd)
 {
     char * input;
     bool last_input;
-    t_minishell *data;
     int (*default_getc_function)(FILE *);
-    data = get_shell(false);
+
     if (!current)
         return ;
     last_input = is_last_input(current);  

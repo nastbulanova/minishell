@@ -1,10 +1,18 @@
-#ifndef EXECUTOR_TESTS_H
-# define EXECUTOR_TESTS_H
+14-01-2025
 
-# include "defines.h"
-# include "structs.h"
+PASS //1. cat < input1.txt > out1.txt > out2.txt | wc | sed 's/t/c/g' 
+PASS //2. echo Hello World > output.txt | wc -w < output.txt
+PASS //3. ls | grep "txt" >> results.txt | sort 
+PASS //4. cat << EOF | wc -l
+PASS //5. cat input.txt input1.txt > combined.txt
+PASS //6. cat << EOF | grep "hello" > greetings.txt 
+PASS //7. grep "error" log1.txt log2.txt | sort | tee errors_sorted.txt | wc -l > count.txt 
+PASS //8. ls > non_existent_dir/output.txt 
+FAIL //9. ll > output.txt  | wc -l 
+//10. cat | cat | ls 
+//11. cat << "" < test_input/input1.txt 
 
-char *build_full_path(const char *relative_path);
+12-01-2025
     //1. cat < input1.txt > out1.txt > out2.txt | wc | sed 's/t/c/g'                                                                                                                        
     //2. echo Hello World > output.txt | wc -w < output.txt                                                                                 PASSED* (if your in bash it sometimes says the output file is not found sometimes just returns the value of wc: 2)
     //3. ls | grep "txt" >> results.txt | sort                                                                                              PASSED                                                                                      
@@ -93,96 +101,3 @@ char *build_full_path(const char *relative_path);
     //86. echo hi >>./test_files/invalid_permission >./outfiles/outfile01 | echo bye
     //87. echo hi | echo bye >>./test_files/invalid_permission
     //88. echo hi | echo >>./outfiles/outfile01 bye >./test_files/invalid_permission
-
-t_exec_data *test_88();
-t_exec_data *test_87();
-t_exec_data *test_86();
-t_exec_data *test_85();
-t_exec_data *test_84();
-t_exec_data *test_83();
-t_exec_data *test_82();
-t_exec_data *test_81();
-t_exec_data *test_80();
-t_exec_data *test_79();
-t_exec_data *test_78();
-t_exec_data *test_77();
-t_exec_data *test_76();
-t_exec_data *test_75();
-t_exec_data *test_74();
-t_exec_data *test_73();
-t_exec_data *test_72();
-t_exec_data *test_71();
-t_exec_data *test_70();
-t_exec_data *test_69();
-t_exec_data *test_68();
-t_exec_data *test_67();
-t_exec_data *test_66();
-t_exec_data *test_65();
-t_exec_data *test_64();
-t_exec_data *test_63();
-t_exec_data *test_62();
-t_exec_data *test_61();
-t_exec_data *test_60();
-t_exec_data *test_59();
-t_exec_data *test_58();
-t_exec_data *test_57();
-t_exec_data *test_56();
-t_exec_data *test_55();
-t_exec_data *test_54();
-t_exec_data *test_53();
-t_exec_data *test_52();
-t_exec_data *test_51();
-t_exec_data *test_50();
-t_exec_data *test_49();
-t_exec_data *test_48();
-t_exec_data *test_47();
-t_exec_data *test_46();
-t_exec_data *test_45();
-t_exec_data *test_44();
-t_exec_data *test_43();
-t_exec_data *test_42();
-t_exec_data *test_41();
-t_exec_data *test_40();
-t_exec_data *test_39();
-t_exec_data *test_38();
-t_exec_data *test_37();
-t_exec_data *test_36();
-t_exec_data *test_35();
-t_exec_data *test_34();
-t_exec_data *test_33();
-t_exec_data *test_32();
-t_exec_data *test_31();
-t_exec_data *test_30();
-t_exec_data *test_29();
-t_exec_data *test_28();
-t_exec_data *test_27();
-t_exec_data *test_26();
-t_exec_data *test_25();
-t_exec_data *test_24();
-t_exec_data *test_23();
-t_exec_data *test_22();
-t_exec_data *test_21();
-t_exec_data *test_20();
-t_exec_data *test_19();
-t_exec_data *test_18();
-t_exec_data *test_17();
-t_exec_data *test_16();
-t_exec_data *test_15();
-t_exec_data *test_14();
-t_exec_data *test_13();
-t_exec_data *test_12();
-t_exec_data *test_11();
-t_exec_data *test_10();
-t_exec_data *test_9();
-t_exec_data *test_8();
-t_exec_data *test_7();
-t_exec_data *test_6();
-t_exec_data *test_5();
-t_exec_data *test_4();
-t_exec_data *test_3();
-t_exec_data *test_2();
-t_exec_data *test_1();
-t_exec_data *test_0();
-
-
-#endif

@@ -124,7 +124,7 @@ void add_redir_to_list(t_redir **head, t_redir *new_redir)
     temp->next = new_redir;
     new_redir->next = NULL;
 }
-char **add_string_to_array(const char *new_str, char **old_array) {
+char **add_string_to_array(char *new_str, char **old_array) {
     int count = 0;
     
     while (old_array && old_array[count] != NULL)
@@ -164,6 +164,7 @@ char **add_string_to_array(const char *new_str, char **old_array) {
             free(old_array[i]);
         free(old_array);
     }
+    free(new_str);
     return new_array;
 }
 

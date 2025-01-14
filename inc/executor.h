@@ -44,7 +44,7 @@ void init_cmd(t_exec_data *exec_data);
 //executor/mock_parser.c
 t_redir *create_rdir(t_redir_type type,char *str);
 void add_redir_to_list(t_redir **head, t_redir *new_redir);
-char **add_string_to_array(const char *new_str, char **old_array);
+char **add_string_to_array(char *new_str, char **old_array);
 t_exec_data *get_test(int test_number);
 
 

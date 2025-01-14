@@ -14,12 +14,12 @@ CFLAGS = -Wall -Wextra -Werror -g -Iinc -fsanitize=address,undefined
 
 LINKS = -lreadline -L$(LIBFT_PATH)lib -lft
 
-SRCS =	${SRC_DIR}/main.c ${SRC_DIR}/aux.c ${SRC_DIR}/common.c\
-		${SRC_DIR}/signals/signals.c \
-		${SRC_DIR}/prompt/prompt.c ${SRC_DIR}/prompt/prompt_aux.c \
-		${SRC_DIR}/builtins/unset.c ${SRC_DIR}/builtins/exit.c	\
-		${SRC_DIR}/builtins/echo.c ${SRC_DIR}/builtins/pwd.c ${SRC_DIR}/builtins/common.c\
-		${SRC_DIR}/builtins/cd/cd.c ${SRC_DIR}/builtins/cd/cd_one_arg.c		\
+SRCS =	${SRC_DIR}/main.c ${SRC_DIR}/aux.c ${SRC_DIR}/common.c																	\
+		${SRC_DIR}/signals/signals.c 																							\
+		${SRC_DIR}/prompt/prompt.c ${SRC_DIR}/prompt/prompt_aux.c 																\
+		${SRC_DIR}/builtins/unset.c ${SRC_DIR}/builtins/exit.c																	\
+		${SRC_DIR}/builtins/echo.c ${SRC_DIR}/builtins/pwd.c ${SRC_DIR}/builtins/common.c										\
+		${SRC_DIR}/builtins/cd/cd.c ${SRC_DIR}/builtins/cd/cd_one_arg.c															\
 		${SRC_DIR}/builtins/export/export.c ${SRC_DIR}/builtins/export/export_aux.c ${SRC_DIR}/builtins/export/export_print.c   \
 		${SRC_DIR}/builtins/env/env_init.c ${SRC_DIR}/builtins/env/env_aux.c ${SRC_DIR}/builtins/env/env_path.c 				\
 		${SRC_DIR}/builtins/env/env_crud.c ${SRC_DIR}/builtins/env/env_extract.c ${SRC_DIR}/builtins/env/env.c					\
