@@ -6,6 +6,7 @@
 
 //executor/executor_aux.c
 bool has_output(t_redir *redir);
+bool has_input(t_redir *redir);
 bool is_last_output(t_redir *redir);
 bool is_last_input(t_redir *redir);
 bool safe_fd_error(t_redir *temp, char* redir_error, int err_number);

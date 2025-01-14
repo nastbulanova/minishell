@@ -8,9 +8,16 @@ PASS //5. cat input.txt input1.txt > combined.txt
 PASS //6. cat << EOF | grep "hello" > greetings.txt 
 PASS //7. grep "error" log1.txt log2.txt | sort | tee errors_sorted.txt | wc -l > count.txt 
 PASS //8. ls > non_existent_dir/output.txt 
-FAIL //9. ll > output.txt  | wc -l 
-//10. cat | cat | ls 
-//11. cat << "" < test_input/input1.txt 
+PASS //9. ll > output.txt  | wc -l 
+PASS //10. cat | cat | ls 
+PASS //11. cat << "" < test_input/input1.txt 
+PASS //12. cat << "" >> output.txt < input.txt (input doesnt exist) 
+FAIL //13. cat <missing <inf <<EOF <<ll FAIL (bash runs the HEREDOC and then complains about the input file. this solution imediatly complais about the input file missing and exits)
+PASS //14. grep hi <./test_files/infile 
+PASS //15. grep hi "<infile" <         ./test_files/infile
+PASS (needs work) //16. echo hi < ./test_files/infile bye bye
+PASS //17. grep hi <./test_files/infile_big <./test_files/infile
+PASS //18. echo <"./test_files/infile" "bonjour       42"
 
 12-01-2025
     //1. cat < input1.txt > out1.txt > out2.txt | wc | sed 's/t/c/g'                                                                                                                        

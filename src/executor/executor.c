@@ -51,6 +51,7 @@ void execute_command_single(t_exec_data *current, char **envp, bool is_parent)
 {
     if (current->is_builtin)
     { 
+        fprintf(stderr, "Hit builtin\n");
         if (!is_parent)
             exit(call_builtin(current));
         else
@@ -68,11 +69,14 @@ void execute_command_single(t_exec_data *current, char **envp, bool is_parent)
 }
 void execute_child(t_exec_data *current, int* previous_pipe, char* redir_error, char **envp)
 {
+    //printf(stderr, "this is my out '%s'\n", current->opt[0]);
+    
     if (previous_pipe[0] >= 0)
     {
         dup2(previous_pipe[0], STDIN_FILENO);
         close(previous_pipe[0]);
-    }              
+    }
+         
     if (current->pipe[1] >= 0 && (current->next || has_output(current->redirs)))
     {
         if (dup2(current->pipe[1], STDOUT_FILENO) == -1) 
@@ -137,8 +141,12 @@ void execute_command(t_exec_data *list_exec_data, char **envp)
     process_rdirs(current, &redir_error);
     if (!current->next && current->is_builtin)
     {
+        fprintf(stderr, "Hit builtin\n");
         output_exists = has_output(current->redirs);
+        fprintf(stderr, "has output_exists: %d\n", output_exists);
         if (output_exists && setup_single_pipe(current, previous_pipe))  
+            execute_command_single(current, envp, true);
+        else    
             execute_command_single(current, envp, true);
         if (output_exists && restore_single_pipe(previous_pipe))
             return ;

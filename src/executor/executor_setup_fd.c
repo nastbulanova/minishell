@@ -20,7 +20,7 @@ bool setup_stdin(t_exec_data *current, int* previous_pipe, char* redir_error)
     t_redir *temp;
 
     temp = current->redirs;
-    if (previous_pipe[1] < 0)
+    if (previous_pipe[1] < 0 && has_input(temp))
         init_pipe(previous_pipe);
     while (temp)
     {

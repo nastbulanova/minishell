@@ -2134,7 +2134,7 @@ t_exec_data *test_13()
 
 t_exec_data *test_12()
 {
-    ft_printf("Running test 12: cat << "" >> output.txt < input.txt\n");
+    ft_printf("Running test 12: cat << "" >> test_output/output.txt < input.txt\n");
     t_exec_data *exec_data_cat = malloc(sizeof(t_exec_data));
     memset(exec_data_cat, 0, sizeof(t_exec_data));
     init_cmd(exec_data_cat);
@@ -2167,10 +2167,10 @@ t_exec_data *test_11()
     exec_data_cat->opt = add_string_to_array(ft_strdup("cat"), exec_data_cat->opt);
 
     // Add heredoc
-    add_redir_to_list(&exec_data_cat->redirs, create_rdir(HEREDOC, ""));
+    add_redir_to_list(&exec_data_cat->redirs, create_rdir(HEREDOC, ft_strdup("")));
 
     // Add input redirection
-    add_redir_to_list(&exec_data_cat->redirs, create_rdir(INPUT, build_full_path("input.txt")));
+    add_redir_to_list(&exec_data_cat->redirs, create_rdir(INPUT, build_full_path("test_input/input1.txt")));
 
     exec_data_cat->next = NULL;
 
@@ -2186,7 +2186,7 @@ t_exec_data *test_10()
     exec_data_cat1->cmd = ft_strdup("/bin/cat");
     exec_data_cat1->opt = add_string_to_array(ft_strdup("cat"), exec_data_cat1->opt);
     
-
+    ft_printf("Second cat cmd '%s'", exec_data_cat1->opt[0]);
     // Second "cat" command
     t_exec_data *exec_data_cat2 = malloc(sizeof(t_exec_data));
     memset(exec_data_cat2, 0, sizeof(t_exec_data));
