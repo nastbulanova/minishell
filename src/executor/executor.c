@@ -47,115 +47,68 @@ void process_rdirs(t_exec_data *current, char **redir_error)
     }
 }
 
-void execute_command_single(t_exec_data *current, char **envp, bool is_parent)
+void add_previous(t_exec_data **head, t_exec_data new)
 {
-    if (current->is_builtin)
-    { 
-        fprintf(stderr, "Hit builtin\n");
-        if (!is_parent)
-            exit(call_builtin(current));
-        else
-            call_builtin(current); 
-    }
-    else
+    if (!*head)
     {
-        if (execve(current->cmd, current->opt, envp) == -1)
-        {
-            perror("execve failed");
-            perror(strerror(errno));
-            exit(EXIT_FAILURE);
-        }
-    }
+        *head = &new;
+        new.next = NULL;
+        return;
+    };
+    new.next = *head; // Point the new node to the current head
+    *head = &new;
 }
-void execute_child(t_exec_data *current, int* previous_pipe, char* redir_error, char **envp)
+void execute_command(t_exec_data *head, char **envp)
 {
-    //printf(stderr, "this is my out '%s'\n", current->opt[0]);
-    
-    if (previous_pipe[0] >= 0)
+    t_exec_data *current = head;
+   
+    int pid[3];
+    int original_fd = dup(STDIN_FILENO);;
+    int prev_fd = dup(STDIN_FILENO);
+    fprintf(stderr, "Starting Prev_fd[%d]\n",  prev_fd);
+    int count = 0;
+    //(void)previous;
+    while (current)
     {
-        dup2(previous_pipe[0], STDIN_FILENO);
-        close(previous_pipe[0]);
-    }
-         
-    if (current->pipe[1] >= 0 && (current->next || has_output(current->redirs)))
-    {
-        if (dup2(current->pipe[1], STDOUT_FILENO) == -1) 
+        if (current->next)
+            pipe(current->pipe);
+        //if (!init_pipe(current->pipe))
+        //    break;
+        pid[count] = fork();
+        if (pid[count] == 0)
         {
-            perror("dup2 failed");
-        }
-        close(current->pipe[1]); 
-    }   
-    if (redir_error)
-    {
-        //fprintf(stderr, "Redir Error %s\n",  redir_error);
-        free(redir_error);
-        redir_error = NULL;
-        exit(EXIT_FAILURE);
-    }
-    if (!current->is_builtin && access(current->cmd, F_OK) != 0)
-    {
-        fprintf(stderr, "Minishell: command not found: %s\n", current->cmd);
-        exit(EXIT_FAILURE);
-    }
-    execute_command_single(current, envp, false);
-}
-void execute_command_chain(t_exec_data *current, int* previous_pipe, char* redir_error, char **envp)
-{
-     pid_t pid;
-
-     while (current)
-     {
-        printf("Current CMD: %s\n", current->cmd);
-        if (!init_pipe(current->pipe))
-            break;
-        if (setup_stdin(current, previous_pipe, redir_error) && setup_stdout(current, redir_error))
-        {
-            printf("setup_stdin &&  setup_stdout return true\n");
-            set_state_signal_handlers(CHILD);
-            pid = fork();
-             if (pid == 0)
-                execute_child(current, previous_pipe, redir_error, envp);
-             else
-             {
-                set_state_signal_handlers(MAIN);
-                waitpid(pid,NULL, 0);
-                manage_pipes(current, previous_pipe);
-             }
+            if(dup2(prev_fd, STDIN_FILENO) == -1)
+            {
+                fprintf(stderr, "erro on dup 2 STDIN\n");
+            }
+            if (current->next)
+            {
+                if(dup2(current->pipe[1], STDOUT_FILENO) == -1)
+                {
+                    fprintf(stderr, "erro on dup 2 STDOUT (%d)\n", STDOUT_FILENO);
+                }
+                close(current->pipe[0]);
+            }
+            fprintf(stderr, "Current CMD: %s CPipe[%d][%d] Prev_fd[%d]\n", current->cmd, current->pipe[0], current->pipe[1], prev_fd);
+            if (execve(current->cmd, current->opt, envp) == -1)
+            {
+                perror("execve failed");
+                perror(strerror(errno));
+                exit(EXIT_FAILURE);
+            }
         }
         else
-            manage_pipes(current, previous_pipe);
+        {
+           
+            close(current->pipe[1]);
+            close(prev_fd);
+            prev_fd = current->pipe[0];
+        }
+        count++;
         current = current->next;
-     }
-     
-}
-
-void execute_command(t_exec_data *list_exec_data, char **envp)
-{
-    int previous_pipe[2] = {-1, -1};
-    t_exec_data *current;
-    char *redir_error;
-    bool output_exists;
-
-    current = list_exec_data;
-    redir_error = NULL;
-    process_rdirs(current, &redir_error);
-    if (!current->next && current->is_builtin)
-    {
-        fprintf(stderr, "Hit builtin\n");
-        output_exists = has_output(current->redirs);
-        fprintf(stderr, "has output_exists: %d\n", output_exists);
-        if (output_exists && setup_single_pipe(current, previous_pipe))  
-            execute_command_single(current, envp, true);
-        else    
-            execute_command_single(current, envp, true);
-        if (output_exists && restore_single_pipe(previous_pipe))
-            return ;
     }
-    else
-        execute_command_chain(current, previous_pipe, redir_error, envp);
-    if (redir_error)
-        free(redir_error);
-    if (previous_pipe[0] >= 0)
-        close_pipe(previous_pipe);
-    free_array(envp, NULL);
+    int i = -1;
+    while (++i <= count)
+        waitpid(pid[i], NULL, 0);
+    dup2(original_fd, STDIN_FILENO);
 }

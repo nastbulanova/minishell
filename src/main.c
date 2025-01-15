@@ -32,7 +32,7 @@ void main_loop(t_minishell *data)
     char *input;
     t_exec_data *command_list; 
     command_list = NULL;
-    set_state_signal_handlers(MAIN);
+    //set_state_signal_handlers(MAIN);
     while (TRUE)
     {
         update_prompt(data);

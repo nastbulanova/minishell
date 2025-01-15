@@ -2179,14 +2179,15 @@ t_exec_data *test_11()
 
 t_exec_data *test_10()
 {
-    ft_printf("Running test 10: cat | cat | ls \n");
+    //ft_printf("Running test 10: cat | cat | ls \n");
+    ft_printf("Running test 10: cat | ls \n");
     t_exec_data *exec_data_cat1 = malloc(sizeof(t_exec_data));
     memset(exec_data_cat1, 0, sizeof(t_exec_data));
     init_cmd(exec_data_cat1);
     exec_data_cat1->cmd = ft_strdup("/bin/cat");
     exec_data_cat1->opt = add_string_to_array(ft_strdup("cat"), exec_data_cat1->opt);
     
-    ft_printf("Second cat cmd '%s'", exec_data_cat1->opt[0]);
+    //ft_printf("Second cat cmd '%s'", exec_data_cat1->opt[0]);
     // Second "cat" command
     t_exec_data *exec_data_cat2 = malloc(sizeof(t_exec_data));
     memset(exec_data_cat2, 0, sizeof(t_exec_data));

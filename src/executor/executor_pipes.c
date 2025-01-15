@@ -46,10 +46,10 @@ bool setup_single_pipe(t_exec_data *current, int *previous_pipe)
 
 void manage_pipes(t_exec_data *current, int *previous_pipe)
 {
-    if (current->pipe[1] >= 0)
-        close(current->pipe[1]);
-    if (previous_pipe[0] >= 0)
-        close(previous_pipe[0]);
+    //if (current->pipe[1] >= 0)
+    //    close(current->pipe[1]);
+    //if (previous_pipe[0] >= 0)
+    //    close(previous_pipe[0]);
     previous_pipe[0] = current->pipe[0];
     previous_pipe[1] = current->pipe[1];
 }

@@ -61,6 +61,9 @@ static void set_process_exit(t_minishell *data, int count_error)
 }
 int cmd_export(char** args)
 {
+	//export $ANOTHER=thisisateste
+	//zsh: thisisateste not found
+
 	int arg_count;
 	int first_arg;
 	int count_error;
