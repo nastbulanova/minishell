@@ -1,5 +1,20 @@
 #include "../../inc/minishell.h"
 
+bool has_heredoc(t_redir *redir)
+{
+    if (!redir)
+        return (false);
+
+    while (redir)
+    {
+        if (redir->type == HEREDOC
+        || redir->type == HEREDOC_QUOTED)
+            return (true);
+        redir = redir->next;
+    }
+    return (false);
+}
+
 bool has_input(t_redir *redir)
 {
     if (!redir)

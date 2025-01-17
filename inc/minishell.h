@@ -28,14 +28,14 @@ void    print_token(t_token *token);
 
 //aux.c
 void error_exit(const char *error, const char *function_name);
-void *safe_malloc(size_t bytes, const char *function_name);
+void *safe_malloc(size_t bytes);
 void minishell_free(t_minishell *shell);
 
 //common.c
 int c_strcmp(char *str_one, char *str_two);
 void print_array(char **arr);
 void free_array(char **arr, char *temp);
-void minishell_exit(char *msg, int exit_code);
+void minishell_exit(char *msg, int exit_code, int exit_fd);
 
 //prompt
 //prompt_aux.c

@@ -6,7 +6,7 @@ char *get_final_prompt(char *left, char *right)
     int j;
     if (!left)
         return (ft_strdup(right)); // add the final $ 
-    final_prompt = safe_malloc(ft_strlen(left) + ft_strlen(right) + 1, "get_final_prompt @ prompt.c");
+    final_prompt = safe_malloc(ft_strlen(left) + ft_strlen(right) + 1);
     i = 0;
     j = 0;
     while (left[i])
@@ -45,7 +45,7 @@ char *get_prompt_left(t_minishell *data)
         return (NULL);
     }
     prompt_len = ft_strlen(user->value) + ft_strlen(local) + 3;
-    prompt = safe_malloc(prompt_len, "get_prompt_left @ prompt.c");
+    prompt = safe_malloc(prompt_len);
     built_left_prompt(prompt, user->value, local);
     free (local);
     return (prompt);
@@ -66,7 +66,7 @@ char *get_prompt_right(char *pwd, t_minishell *data)
         (pwd[home_len] == '/' || pwd[home_len] == '\0')) 
         {
             new_pwd_len = strlen(pwd) - home_len + 1; 
-            new_pwd = safe_malloc(new_pwd_len + 1, "get_prompt_left @ common.c");
+            new_pwd = safe_malloc(new_pwd_len + 1);
             new_pwd[0] = '~';
             ft_strlcpy(new_pwd + 1, pwd + home_len, new_pwd_len + 1);
         return (new_pwd);
@@ -80,7 +80,7 @@ char *get_final_pwd(char *pwd)
     char *final_pwd;
     int i;
 
-    final_pwd = safe_malloc(ft_strlen(pwd) + 3, "get_final_pwd @ prompt.c");
+    final_pwd = safe_malloc(ft_strlen(pwd) + 3);
     i = 0;
     while (pwd[i])
     {

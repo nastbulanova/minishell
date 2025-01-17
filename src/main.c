@@ -20,7 +20,7 @@ t_minishell *init_shell()
 {
     t_minishell *data;
 
-    data = safe_malloc(sizeof(t_minishell), "init_shell in main.c");
+    data = safe_malloc(sizeof(t_minishell));
     data->env = NULL;
     data->exec_data = NULL;
     data->exit_code = 0;

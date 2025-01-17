@@ -60,7 +60,7 @@ char *extract_host(char *session_manager)
     if (!end) 
         return (NULL); 
     session_len = (end - start) + 1;
-    session = safe_malloc(session_len + 1, "extract_host @ prompt.c");
+    session = safe_malloc(session_len + 1);
     ft_strlcpy(session, start, session_len);
     return (session);
 }

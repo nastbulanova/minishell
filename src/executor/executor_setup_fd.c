@@ -1,6 +1,10 @@
 #include "../../inc/minishell.h"
 
-
+void safe_dup_two(int fd, int fd_two)
+{
+    if(dup2(fd, fd_two) == -1)
+        minishell_exit("dup2 error on safe_dup_two", 1, STDERR_FILENO);
+}
 static void setup_stdin_aux(t_redir *temp, int* previous_pipe, int safe_fd)
 {
     if (is_last_input(temp))
@@ -63,8 +67,8 @@ bool setup_stdout(t_exec_data *current, char* redir_error)
     temp = current->redirs;
     if (has_output(current->redirs))
     {
-        if (current->pipe[1] >= 0)
-                close(current->pipe[1]);
+        if (current->outpipe[1] >= 0)
+                close(current->outpipe[1]);
     }
     while (temp)
     {
@@ -73,7 +77,7 @@ bool setup_stdout(t_exec_data *current, char* redir_error)
             setup_stdout_aux(temp, &safe_fd);
             if (safe_fd < 0) 
                 return (safe_fd_error_aux(temp, redir_error, errno));
-            current->pipe[1] = safe_fd;
+            current->outpipe[1] = safe_fd;
         }
         temp = temp->next;
     }

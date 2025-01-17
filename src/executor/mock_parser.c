@@ -101,6 +101,7 @@ t_redir *create_rdir(t_redir_type type, char *str)
 
     new_re_dir->next = NULL;
     new_re_dir->str = str;
+    new_re_dir->error = NULL;
     new_re_dir->type = type;
 
     return (new_re_dir);

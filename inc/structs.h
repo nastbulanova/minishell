@@ -3,11 +3,17 @@
 
 #include "defines.h"
 
+typedef struct s_pid_list
+{
+    pid_t pid;
+    struct s_pid_list *next;
+} t_pid_list;
 
 typedef struct s_redir
 {
     t_redir_type    type;
     char            *str;
+    char            *error;
     struct s_redir  *next;
 }   t_redir;
 
@@ -21,7 +27,9 @@ typedef struct  s_exec_data
 {
     char                *cmd;
     t_opt_llist         *opt_llist;
-    int                 pipe[2];
+    int                 outpipe[2];
+    int                 inpipe[2];
+    int                 input_fd;
     char                **opt;
     bool                is_builtin;
     int                 exit_status;

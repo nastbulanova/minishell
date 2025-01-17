@@ -34,13 +34,13 @@ int c_strcmp(char *str_one, char *str_two)
     }
     return (ft_strncmp(str_one, str_two, SIZE_MAX));
 }
-void minishell_exit(char *msg, int exit_code)
+void minishell_exit(char *msg, int exit_code, int exit_fd)
 {
     t_minishell *data;
 
     data = get_shell(false);
     if (msg)
-        ft_putstr_fd(msg, STDOUT_FILENO);
+        ft_putstr_fd(msg, exit_fd);
     minishell_free(data);
     exit((unsigned char)exit_code);
 }

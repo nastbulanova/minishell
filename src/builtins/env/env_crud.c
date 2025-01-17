@@ -55,7 +55,7 @@ t_env *env_create(char *name, char *value)
 {
     t_env *new;
 
-    new = safe_malloc(sizeof(t_env), "env_new in env_aux.c");
+    new = safe_malloc(sizeof(t_env));
     new->name = ft_strdup(name);
     if (value)
         new->value = ft_strdup(value);

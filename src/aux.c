@@ -19,13 +19,13 @@ void display_splash_screen(void)
     printf("\n");
 }
 
-void *safe_malloc(size_t bytes, const char *function_name)
+void *safe_malloc(size_t bytes)
 {
     void *ret;
  
     ret = malloc(bytes);
     if (!ret)
-        error_exit("Error on memory allocation", function_name);
+        minishell_exit("Error on memory allocation", 1, STDERR_FILENO);  
     ft_memset(ret, 0,bytes);
     return (ret);
 }

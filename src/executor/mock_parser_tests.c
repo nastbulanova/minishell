@@ -2180,7 +2180,7 @@ t_exec_data *test_11()
 t_exec_data *test_10()
 {
     //ft_printf("Running test 10: cat | cat | ls \n");
-    ft_printf("Running test 10: cat | ls \n");
+    ft_printf("Running test 10: cat | cat | ls \n");
     t_exec_data *exec_data_cat1 = malloc(sizeof(t_exec_data));
     memset(exec_data_cat1, 0, sizeof(t_exec_data));
     init_cmd(exec_data_cat1);

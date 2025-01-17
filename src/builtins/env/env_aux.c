@@ -19,7 +19,7 @@ char	**env_to_array(t_env *env)
     char    *temp;
     int     i;
 
-    list = safe_malloc(sizeof (char*) * (env_len(env) + 1), "env_to_array @ env_aux.c");
+    list = safe_malloc(sizeof (char*) * (env_len(env) + 1));
 	i = 0;
     while (env)
     {

@@ -51,7 +51,7 @@ char *get_path_from_arrays(char **split_pwd, char **split_arg)
 {
     char *result;
     
-    result = safe_malloc((get_arrays_size(split_pwd, split_arg) + 1) * sizeof(char), "final_path @ env_init");
+    result = safe_malloc((get_arrays_size(split_pwd, split_arg) + 1) * sizeof(char));
     copy_arrays(result, split_pwd, split_arg);
     return (result);
 }
@@ -67,7 +67,7 @@ char *get_path_from_single_array(char **split)
     i = -1;
     while (split[++i])
         size += ft_strlen(split[i]) + 1;
-    result = safe_malloc((size + 1) * sizeof(char), "get_path_from_single_array @ env_init");
+    result = safe_malloc((size + 1) * sizeof(char));
     i = -1;
     while (split[++i])
     {

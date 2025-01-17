@@ -15,7 +15,7 @@ char **sanitize_arg_path(char **split_arg_path)
         if ((c_strcmp(split_arg_path[i], "..") != 0) && (c_strcmp(split_arg_path[i], ".") != 0))
             sanitized_size++;
     }
-    new_split = safe_malloc((sanitized_size + 1) * sizeof(char *), "sanitized_arg_path @ env/env_init.c");
+    new_split = safe_malloc((sanitized_size + 1) * sizeof(char *));
     i = -1;
     index = 0;
     while (split_arg_path[++i])
