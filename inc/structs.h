@@ -28,8 +28,8 @@ typedef struct  s_exec_data
     char                *cmd;
     t_opt_llist         *opt_llist;
     int                 outpipe[2];
-    int                 inpipe[2];
     int                 input_fd;
+    int                 output_fd;
     char                **opt;
     bool                is_builtin;
     int                 exit_status;

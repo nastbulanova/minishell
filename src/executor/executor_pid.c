@@ -49,16 +49,5 @@ void add_pid(t_pid_list **head, pid_t pid)
 
 
 
-void free_pid_list(t_pid_list **head)
-{
-    t_pid_list *current = *head;
-    t_pid_list *next;
-    while (current)
-    {
-        next = current->next;
-        free(current);
-        current = next;
-    }
-    *head = NULL;
-}
+
 

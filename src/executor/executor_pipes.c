@@ -8,7 +8,7 @@ void close_pipe(int *pipe_fd)
         close(pipe_fd[1]); 
 }
 
-void safe_pipe(int *pipe_fd)
+void safe_pipe(int pipe_fd[2])
 {
     if (pipe(pipe_fd) != 0)
         minishell_exit("pipe failure @ safe_pipe", 1, STDERR_FILENO);

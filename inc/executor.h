@@ -15,6 +15,7 @@ int call_builtin(t_exec_data *current);
 bool has_heredoc(t_redir *redir);
 
 //executor/executor_free.c
+void free_pid_list(t_pid_list **head);
 void free_redir(t_redir *redirs);
 void free_opt_llist(t_opt_llist *opt_llist);
 void free_exec_data_list(t_exec_data *head);
@@ -44,11 +45,11 @@ void execute_command_single(t_exec_data *current, char **envp, bool is_parent);
 void process_rdirs(t_exec_data *current, char **redir_error);
 void process_rdirs_aux(t_redir *redirs, int *safe_fd, char **redir_error);
 void init_cmd(t_exec_data *exec_data);
+void execute_command_list(t_exec_data *head, char **envp);
 
 //executor/executor_pid
 t_pid_list *create_pid_node(pid_t pid);
 void add_pid(t_pid_list **head, pid_t pid);
-void free_pid_list(t_pid_list **head);
 pid_t get_last_pid(t_pid_list *head);
 pid_t safe_fork();
 

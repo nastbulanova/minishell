@@ -1,4 +1,16 @@
 #include "../../inc/minishell.h"
+void free_pid_list(t_pid_list **head)
+{
+    t_pid_list *current = *head;
+    t_pid_list *next;
+    while (current)
+    {
+        next = current->next;
+        free(current);
+        current = next;
+    }
+    *head = NULL;
+}
 
 void free_redir(t_redir *redirs)
 {
@@ -9,6 +21,8 @@ void free_redir(t_redir *redirs)
         tmp = redirs;
         redirs = redirs->next;
         free(tmp->str);
+        if (tmp->error)
+            free(tmp->error);
         free(tmp);
     }
 }

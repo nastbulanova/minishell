@@ -223,7 +223,7 @@ void main_loop(t_minishell *data)
             command_list = get_test(88);
         if (command_list)
         {
-            execute_command(command_list, env_to_array(data->env));
+            execute_command_list(command_list, env_to_array(data->env));
             free_exec_data_list(command_list);
             command_list = NULL;
         }

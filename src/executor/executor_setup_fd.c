@@ -1,9 +1,12 @@
 #include "../../inc/minishell.h"
 
 void safe_dup_two(int fd, int fd_two)
-{
+{   errno = 0;
     if(dup2(fd, fd_two) == -1)
-        minishell_exit("dup2 error on safe_dup_two", 1, STDERR_FILENO);
+    {
+        fprintf(stderr, "%s ", strerror(errno));
+        minishell_exit("dup2 error on safe_dup_two\n", 1, STDERR_FILENO);
+    }
 }
 static void setup_stdin_aux(t_redir *temp, int* previous_pipe, int safe_fd)
 {
