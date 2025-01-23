@@ -1,5 +1,18 @@
 #include "../../inc/minishell.h"
 
+static bool is_last_heredoc(t_redir *redir)
+{
+    if (!redir)
+        return (true);
+
+    while (redir)
+    {
+        if (redir->type == HEREDOC || redir->type == HEREDOC_QUOTED)
+            return (false);
+        redir = redir->next;
+    }
+    return (true);
+}
 
 static bool break_loop(t_redir *current, char *input, bool last_input, int fd)
 {
@@ -20,6 +33,7 @@ static bool break_loop(t_redir *current, char *input, bool last_input, int fd)
     }
    return (false);
 }
+
 void heredoc_loop(t_redir *current, int fd)
 {
     char * input;
@@ -28,7 +42,7 @@ void heredoc_loop(t_redir *current, int fd)
 
     if (!current)
         return ;
-    last_input = is_last_input(current);  
+    last_input = is_last_heredoc(current->next); 
     set_state_signal_handlers(HERE_DOC);
     default_getc_function = rl_getc_function;
     rl_getc_function = getc;
@@ -41,8 +55,6 @@ void heredoc_loop(t_redir *current, int fd)
     }
     if (input)
         free(input);
-    if (last_input)
-        close(fd);
     rl_getc_function = default_getc_function;
     set_state_signal_handlers(MAIN);
 }

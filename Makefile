@@ -23,9 +23,9 @@ SRCS =	${SRC_DIR}/main.c ${SRC_DIR}/aux.c ${SRC_DIR}/common.c																	\
 		${SRC_DIR}/builtins/export/export.c ${SRC_DIR}/builtins/export/export_aux.c ${SRC_DIR}/builtins/export/export_print.c   \
 		${SRC_DIR}/builtins/env/env_init.c ${SRC_DIR}/builtins/env/env_aux.c ${SRC_DIR}/builtins/env/env_path.c 				\
 		${SRC_DIR}/builtins/env/env_crud.c ${SRC_DIR}/builtins/env/env_extract.c ${SRC_DIR}/builtins/env/env.c					\
-		${SRC_DIR}/executor/executor_aux.c ${SRC_DIR}/executor/executor_heredoc.c ${SRC_DIR}/executor/executor_pipes.c			\
-		${SRC_DIR}/executor/executor_setup_fd.c ${SRC_DIR}/executor/executor.c ${SRC_DIR}/executor/executor_free.c 				\
-		${SRC_DIR}/executor/executor_pid.c  				\
+		${SRC_DIR}/executor/executor_aux_safe.c ${SRC_DIR}/executor/executor_aux.c ${SRC_DIR}/executor/executor_child.c 					\
+		${SRC_DIR}/executor/executor_child_aux.c ${SRC_DIR}/executor/executor_free.c	${SRC_DIR}/executor/executor_heredoc.c				\
+		${SRC_DIR}/executor/executor.c 	${SRC_DIR}/executor/executor_redir.c  													\
 		${SRC_DIR}/executor/mock_parser.c  ${SRC_DIR}/executor/mock_parser_tests.c 												\
 	#	${SRC_DIR}/lexer/lexer.c ${SRC_DIR}/lexer/lexer_utils.c ${SRC_DIR}/lexer/lexer_token_utils.c \
 	#	${SRC_DIR}/parser/parser.c 
@@ -63,4 +63,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re libs

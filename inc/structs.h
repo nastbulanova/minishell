@@ -61,6 +61,7 @@ typedef struct s_env
     char	*value;
     struct s_env *next;
 } t_env;
+
 typedef struct s_minishell
 {
    t_token     *token_head;

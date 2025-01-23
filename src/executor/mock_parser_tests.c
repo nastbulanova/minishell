@@ -3,7 +3,8 @@
 //char *g_project_path = "/home/joao/Documents/minishell_uta/executor";
 //char *g_project_path = "/home/joaomigu/Documents/minishell_uta/executor";
 //char *g_project_path = "/home/joaomigu/Documents/42Cursus/Cursus/minishell";
-char *g_project_path = "/home/joaomigu/Documents/minishell/";
+//char *g_project_path = "/home/joaomigu/Documents/minishell/";
+char *g_project_path = "/home/joaomigu/Documents/minishell";
 
 char *build_full_path(const char *relative_path)
 {
@@ -2376,6 +2377,7 @@ t_exec_data *test_4()
     exec_data_wc->opt = add_string_to_array(ft_strdup("-l"), exec_data_wc->opt);
 
     // Link commands
+    
     exec_data_cat->next = exec_data_wc;
     exec_data_wc->next = NULL;
 

@@ -1,8 +1,11 @@
 #include "../../inc/minishell.h"
+
+
 void free_pid_list(t_pid_list **head)
 {
     t_pid_list *current = *head;
     t_pid_list *next;
+
     while (current)
     {
         next = current->next;
@@ -52,15 +55,14 @@ void free_exec_data_list(t_exec_data *head)
         free(tmp->cmd);
         if (tmp->opt)
         {   
-            i = 0;
-            while (tmp->opt[i])
-            {
+            i = -1;
+            while (tmp->opt[++i])
                 free(tmp->opt[i]);
-                i++;
-            }
             free(tmp->opt);
         }
-        
+        //close_fd(&tmp->input_fd);
+        //close_fd(&tmp->output_fd);
+        //close_pipe(tmp->outpipe);
         free_opt_llist(tmp->opt_llist);
         free_redir(tmp->redirs);
         free(tmp);
