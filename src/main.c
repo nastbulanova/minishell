@@ -7,7 +7,6 @@ t_minishell *get_shell(bool init)
     static t_minishell data;
     if (init)
     {
-        //data = safe_malloc(sizeof(t_minishell), "init_shell in main.c");
         data.env = NULL;
         data.exec_data = NULL;
         data.exit_code = 0;
@@ -16,23 +15,13 @@ t_minishell *get_shell(bool init)
     }
     return (&data);
 }
-t_minishell *init_shell()
-{
-    t_minishell *data;
 
-    data = safe_malloc(sizeof(t_minishell));
-    data->env = NULL;
-    data->exec_data = NULL;
-    data->exit_code = 0;
-    data->token_head = NULL;
-    return (data);
-}
 void main_loop(t_minishell *data)
 {
     char *input;
     t_exec_data *command_list; 
     command_list = NULL;
-    //set_state_signal_handlers(MAIN);
+    set_state_signal_handlers(MAIN);
     while (TRUE)
     {
         update_prompt(data);
@@ -221,6 +210,8 @@ void main_loop(t_minishell *data)
             command_list = get_test(87);
         if (c_strcmp("run test88", input) == 0)
             command_list = get_test(88);
+        if (c_strcmp("$?", input) == 0)
+            ft_printf("Exit Code: %d\n", data->exit_code);
         if (command_list)
         {
             execute_command_list(command_list, env_to_array(data->env));
@@ -251,6 +242,5 @@ int	main(int argc, char **argv, char **envp)
     env_init(argv, envp, data);
     display_splash_screen();
     main_loop(data);
-    
     return (0);
 }

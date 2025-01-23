@@ -39,7 +39,7 @@ void handle_exit_status(t_pid_list *pid_list)
     data = get_shell(false);
     while(pid_list)
     {
-        fprintf(stderr, "Waiting on : PID: %d\n", pid_list->pid);
+        //fprintf(stderr, "Waiting on : PID: %d\n", pid_list->pid);
         waitpid(pid_list->pid, &status, 0);
         if (WIFEXITED(status)) 
             data->exit_code = WEXITSTATUS(status); 

@@ -51,7 +51,7 @@ static int handle_more(char **args)
 		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
 		ft_putstr_fd(args[1], STDERR_FILENO);
 		ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
-		minishell_exit(NULL, 2, STDERR_FILENO);
+		minishell_exit(NULL, 2, STDERR_FILENO, false);
 		return (2);
 	}
 	else
@@ -64,14 +64,14 @@ static int handle_more(char **args)
 static void handle_one(char **args)
 {
 	if (arg_numeric(args[1]))
-		minishell_exit("exit\n", ft_atoi(args[1]), STDOUT_FILENO); // TODO Check max
+		minishell_exit("exit\n", ft_atoi(args[1]), STDOUT_FILENO, true); // TODO Check max
 	else
 	{
 		ft_putstr_fd("exit\n", STDERR_FILENO);
 		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
 		ft_putstr_fd(args[1], STDERR_FILENO);
 		ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
-		minishell_exit(NULL, 2, STDERR_FILENO);
+		minishell_exit(NULL, 2, STDERR_FILENO, false);
 	}
 }
 int cmd_exit(char **args)
@@ -80,11 +80,11 @@ int cmd_exit(char **args)
 
 	args_size = array_size(args) - 1;
 	if (args_size == 0)
-		minishell_exit("exit\n", 0, STDOUT_FILENO);
+		minishell_exit("exit\n", 0, STDOUT_FILENO,false);
 	else if (args_size == 1)
 		handle_one(args);
 	else if (args_size > 1)
 		handle_more(args);
-	minishell_exit("exit\n", 0, STDOUT_FILENO);
+	minishell_exit("exit\n", 0, STDOUT_FILENO, false);
 	return (0);
 }
