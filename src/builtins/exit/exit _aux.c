@@ -1,4 +1,4 @@
-#include "../../inc/minishell.h"
+#include "../../../inc/minishell.h"
 char *built_exit_string(const char* str)
 {
     size_t final_length;
