@@ -19,7 +19,7 @@ SRCS =	${SRC_DIR}/main.c ${SRC_DIR}/aux.c ${SRC_DIR}/common.c																	\
 		${SRC_DIR}/prompt/prompt.c ${SRC_DIR}/prompt/prompt_aux.c 																\
 		${SRC_DIR}/builtins/unset.c 																							\
 		${SRC_DIR}/builtins/exit/exit.c																							\
-		${SRC_DIR}/builtins/exit/exit_aux.c																						\
+		${SRC_DIR}/builtins/exit/exit_aux.c																				\
 		${SRC_DIR}/builtins/echo.c ${SRC_DIR}/builtins/pwd.c ${SRC_DIR}/builtins/common.c										\
 		${SRC_DIR}/builtins/cd/cd.c ${SRC_DIR}/builtins/cd/cd_one_arg.c															\
 		${SRC_DIR}/builtins/export/export.c ${SRC_DIR}/builtins/export/export_aux.c ${SRC_DIR}/builtins/export/export_print.c   \

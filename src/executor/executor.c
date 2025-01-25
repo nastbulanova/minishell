@@ -40,12 +40,14 @@ static void handle_pipe_sequence(t_exec_data *head, char **envp)
     previous = NULL;
     while (current)
     {
+        
         safe_pipe(current->outpipe);
         pid = safe_fork();
         if (pid == 0)
             handle_child(current, previous, envp); 
         else 
             handle_parent(current, previous, &pid_list, pid);
+        
         previous = current;
         current = current->next;
     }
@@ -73,20 +75,23 @@ static void handle_builtin_command(t_exec_data *current)
         minishell_exit("Critical error processing built in.", 2, STDERR_FILENO, false);
 }
 
-static void handle_command_redirections(t_exec_data *head)
+static void handle_command_redirections(t_minishell *data, t_exec_data *head)
 {
     while (head)
     {
         handle_heredoc_redirection (head);
+        if (data->exit_code == 130)
+            return;
         handle_other_redirections(head);
         head = head->next;
     }
 }
 
-void execute_command_list(t_exec_data *head, char **envp)
+void execute_command_list(t_minishell *data, t_exec_data *head, char **envp)
 {
-
-    handle_command_redirections(head); 
+    handle_command_redirections(data, head);
+    if (data->exit_code == 130)
+        return;
     if (!head->next && head->is_builtin)
         handle_builtin_command(head);
     else

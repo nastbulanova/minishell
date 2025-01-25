@@ -56,10 +56,11 @@ void setup_child_redirections(t_exec_data *current, t_exec_data *previous)
         //fprintf(stderr, "Child CMD %s: Closing input_fd %d \n", current->cmd, current->input_fd);
         close_fd(&current->input_fd);
     } 
-    else if (previous) 
+    else if (previous && previous->outpipe[0] >= 0) 
     {
         //fprintf(stderr, "Child CMD %s: STDIN to previous->outpipe[0] %d \n", current->cmd, previous->outpipe[0]);
         //dup2(previous->outpipe[0], STDIN_FILENO);
+        
         safe_dup_two(previous->outpipe[0], STDIN_FILENO);
     }
     if (previous) 
@@ -111,19 +112,32 @@ void handle_child(t_exec_data *current, t_exec_data *previous, char **envp)
 {
    
     //fprintf(stderr, "CMD %s Input:%d Output:%d pipe[%d][%d]\n", current->cmd, current->input_fd, current->output_fd, current->outpipe[0], current->outpipe[1]);
-    setup_child_redirections(current, previous);
-    if (current->is_builtin)
-        handle_builtin_in_child(current);
-    else
-    {
-        if (!current->cmd || access(current->cmd, F_OK) != 0)
-            minishell_exit(built_error_string(current->cmd),1, STDERR_FILENO, true);
-        if(execve(current->cmd, current->opt, envp) == -1)
-        {
-            perror("execve failed");
-            perror(strerror(errno));
-            exit(EXIT_FAILURE);
+    //if (!current->cmd || access(current->cmd, F_OK) != 0)
+    //{
+    //    char *str_error = built_error_string(current->cmd);
+     //   ft_putstr_fd(str_error, STDERR_FILENO);
+     //   ft_putstr_fd("\n", STDERR_FILENO);
+     //   free(str_error);
+     //   close_pipe(current->outpipe);
+     //   close_fd(&current->output_fd);
+     //   close_fd(&current->input_fd);
+        //minishell_exit(built_error_string(current->cmd),1, STDERR_FILENO, true);
+    //}
+    //else
+    //{
+        setup_child_redirections(current, previous);
+        if (current->is_builtin)
+            handle_builtin_in_child(current);
+        else
+        {   
+            check_redir(current);
+            if(execve(current->cmd, current->opt, envp) == -1)
+            {
+                perror("execve failed");
+                perror(strerror(errno));
+                exit(EXIT_FAILURE);
+            }
         }
-    }
+    //}
 }
 

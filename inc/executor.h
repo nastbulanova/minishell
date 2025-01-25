@@ -44,7 +44,7 @@ void handle_other_redirections(t_exec_data *head);
 //executor/setup_fd.c
 
 //executor/executor
-void execute_command_list(t_exec_data *head, char **envp);
+void execute_command_list(t_minishell *data, t_exec_data *head, char **envp);
 
 
 

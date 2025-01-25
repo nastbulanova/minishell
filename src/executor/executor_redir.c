@@ -4,11 +4,13 @@ void handle_heredoc_redirection(t_exec_data *head)
 {
     int heredoc_pipe[2];
     t_redir *current;
+    t_minishell *data;
 
+    data = get_shell(false);
     heredoc_pipe[0] = -1;
     heredoc_pipe[1] = -1;
     current = head->redirs;
-    while (current)
+    while (current && data->exit_code != 130)
     {
         if (current->type == HEREDOC || current->type == HEREDOC_QUOTED)
         {
@@ -16,7 +18,8 @@ void handle_heredoc_redirection(t_exec_data *head)
             safe_pipe(heredoc_pipe); 
             heredoc_loop(current, heredoc_pipe[1]);
             close_fd(&heredoc_pipe[1]);
-            //fprintf(stderr, "Heredoc on exit is %d\n", heredoc_pipe[0]);
+            if (data->exit_code == 130)
+                close_fd(&heredoc_pipe[0]);    
         }
         current = current->next;
     }

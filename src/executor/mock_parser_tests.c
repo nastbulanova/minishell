@@ -2227,7 +2227,7 @@ t_exec_data *test_9()
     memset(exec_data_wc, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_wc);
 
-    exec_data_wc->cmd = ft_strdup("/usr/bin/wc"); // Command to execute
+    exec_data_wc->cmd = ft_strdup("/bin/wc"); // Command to execute
     exec_data_wc->opt = add_string_to_array(ft_strdup("wc"), exec_data_wc->opt);
     exec_data_wc->opt = add_string_to_array(ft_strdup("-l"), exec_data_wc->opt);
 

@@ -214,7 +214,8 @@ void main_loop(t_minishell *data)
             ft_printf("Exit Code: %d\n", data->exit_code);
         if (command_list)
         {
-            execute_command_list(command_list, env_to_array(data->env));
+            data->exit_code = 0;
+            execute_command_list(data, command_list, env_to_array(data->env));
             free_exec_data_list(command_list);
             command_list = NULL;
         }
@@ -241,10 +242,6 @@ int	main(int argc, char **argv, char **envp)
     }
     env_init(argv, envp, data);
     display_splash_screen();
-    ft_exit_atoi("-9223372036854775808"); //exit fine with 0 code
-    //ft_exit_atoi("-9223372036854775809"); //exit with message and 2 code
-    //ft_exit_atoi("9223372036854775808"); //exit with message and 2 code
-    //ft_exit_atoi("9223372036854775807"); //exit fine with 255 code
-    //main_loop(data);
+    main_loop(data);
     return (0);
 }

@@ -15,7 +15,7 @@ char *built_exit_string(const char* str)
     result = safe_malloc(final_length);
     template_index = -1;
     str_index = -1;
-    while (++template_index < 11)
+    while (++template_index < 17)
         result[template_index] = template[template_index];
     while (++str_index < str_length)
         result[template_index + str_index] = str[str_index];
@@ -33,7 +33,7 @@ static void check_sign(const char *str, int *index, int *sign)
 	*index = 0;
 	if (str[*index] == '-' || str[*index] == '+')
 	{
-		if (str[0] == '-')
+		if (str[*index] == '-')
 			*sign = -1;	
 		(*index)++;
 	}
@@ -52,12 +52,18 @@ char ft_exit_atoi(char *str)
     	digit = str[index] - '0';
 		if (sign < 0 && (INT64_MAX - (value * 10) < digit - 1))
 		{
-			minishell_exit(built_exit_string(str), 2, stderr, true);
+			fprintf(stderr, "result: %lld digit %d\n", (INT64_MAX - (value * 10)), (digit - 1));
+			ft_putstr_fd("exit\n", STDOUT_FILENO);
+			minishell_exit(built_exit_string(str), 2, STDERR_FILENO, true);
+			value = 2;
 			return (2);
 		}
-		else if (INT64_MAX - (value * 10) < digit)
+		else if (sign > 0 && (INT64_MAX - (value * 10) < digit))
 		{
-			minishell_exit(built_exit_string(str), 2, stderr, true);
+			fprintf(stderr, "result: %lld digit %d\n", (INT64_MAX - (value * 10)), (digit - 1));
+			ft_putstr_fd("exit\n", STDOUT_FILENO);
+			minishell_exit(built_exit_string(str), 2, STDERR_FILENO, true);
+			value = 2;
 			return (2);
 		}
         value = (value * 10) + (digit);	
