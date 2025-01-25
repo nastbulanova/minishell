@@ -17,8 +17,10 @@ int		cmd_pwd();
 //unset.c
 int     cmd_unset(char **args);
 
-//exit.c
-bool    all_numeric(char **args);
+//exit/exit_aux.c
+char ft_exit_atoi(char *str);
+char *built_exit_string(const char* str);
+//exit/exit.c
 int		cmd_exit(char **args);
 // builtins/cd
 // cd_one_arg

@@ -85,16 +85,11 @@ static void handle_command_redirections(t_exec_data *head)
 
 void execute_command_list(t_exec_data *head, char **envp)
 {
-    t_minishell *data;
 
-    data = get_shell(false);
     handle_command_redirections(head); 
     if (!head->next && head->is_builtin)
         handle_builtin_command(head);
     else
         handle_pipe_sequence(head, envp);
-    while (head->next)
-        head = head->next;
-    data->exit_code = head->exit_status;
 }
 

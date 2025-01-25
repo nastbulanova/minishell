@@ -16,7 +16,7 @@ void handle_heredoc_redirection(t_exec_data *head)
             safe_pipe(heredoc_pipe); 
             heredoc_loop(current, heredoc_pipe[1]);
             close_fd(&heredoc_pipe[1]);
-            fprintf(stderr, "Heredoc on exit is %d\n", heredoc_pipe[0]);
+            //fprintf(stderr, "Heredoc on exit is %d\n", heredoc_pipe[0]);
         }
         current = current->next;
     }
@@ -30,6 +30,7 @@ static void handle_input_redirection(t_redir *current, int *temp_input_fd, char 
     if (*temp_input_fd < 0)
     {
         current->error = ft_strdup(strerror(errno));
+        fprintf(stderr, "Redir Error Found : %s\n", current->error);
         *error_message = current->error;
     }
 }
@@ -43,6 +44,7 @@ static void handle_output_redirection(t_redir *current, int *temp_output_fd, cha
     if (*temp_output_fd < 0)
     {
         current->error = ft_strdup(strerror(errno));
+        fprintf(stderr, "Redir Error Found : %s\n", current->error);
         *error_message = current->error;
     }
 }
@@ -76,7 +78,7 @@ void handle_other_redirections(t_exec_data *head)
     temp_input_fd = -1;
     temp_output_fd = -1;
     current = head->redirs; 
-    while (current && !current->error)
+    while (current && !error_message)
     {
         if (current->type != HEREDOC && current->type != HEREDOC_QUOTED)
         {

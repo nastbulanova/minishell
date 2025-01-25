@@ -94,28 +94,30 @@ static void handle_builtin_in_child(t_exec_data *current)
     exit(exit_status);
 }
 
-bool check_access(t_exec_data *current)
+void check_redir(t_exec_data *current)
 {
-    if (!current->cmd || access(current->cmd, F_OK) != 0)
+    t_redir *head;
+
+    head = current->redirs;
+    while (head)
     {
-        minishell_exit(built_error_string(current->cmd),1, STDERR_FILENO, true);
-        //ft_printf("%s\n",built_error_string(current->cmd));
-        return (false);
+        if (head->str)
+            break;
+        head = head->next;
     }
-    //if (current->redirs)
-    //minishell: <filename>: No such file or directory
-    return (true);
+    minishell_exit(built_error_string(head->str),1, STDERR_FILENO, true);
 }
 void handle_child(t_exec_data *current, t_exec_data *previous, char **envp)
 {
-    if (!check_access(current))
-        return;
+   
     //fprintf(stderr, "CMD %s Input:%d Output:%d pipe[%d][%d]\n", current->cmd, current->input_fd, current->output_fd, current->outpipe[0], current->outpipe[1]);
     setup_child_redirections(current, previous);
     if (current->is_builtin)
         handle_builtin_in_child(current);
     else
     {
+        if (!current->cmd || access(current->cmd, F_OK) != 0)
+            minishell_exit(built_error_string(current->cmd),1, STDERR_FILENO, true);
         if(execve(current->cmd, current->opt, envp) == -1)
         {
             perror("execve failed");

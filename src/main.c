@@ -241,6 +241,10 @@ int	main(int argc, char **argv, char **envp)
     }
     env_init(argv, envp, data);
     display_splash_screen();
-    main_loop(data);
+    ft_exit_atoi("-9223372036854775808"); //exit fine with 0 code
+    //ft_exit_atoi("-9223372036854775809"); //exit with message and 2 code
+    //ft_exit_atoi("9223372036854775808"); //exit with message and 2 code
+    //ft_exit_atoi("9223372036854775807"); //exit fine with 255 code
+    //main_loop(data);
     return (0);
 }

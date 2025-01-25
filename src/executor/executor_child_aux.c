@@ -50,7 +50,7 @@ void handle_exit_status(t_pid_list *pid_list)
         }
         else
             data->exit_code = 1;
-        fprintf(stderr, "Left: PID: %d\n", pid_list->pid);
+        fprintf(stderr, "Left: PID: %d exit_code: %d\n", pid_list->pid, data->exit_code);
         pid_list = pid_list->next;
     }
 }
