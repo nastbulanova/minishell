@@ -91,6 +91,7 @@ t_exec_data *get_test(int test_number)
     if (test_number == 86) return test_86();
     if (test_number == 87) return test_87();
     if (test_number == 88) return test_88();
+    if (test_number == 89) return test_89();
 
     return (NULL);
 }

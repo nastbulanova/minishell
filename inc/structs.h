@@ -64,6 +64,7 @@ typedef struct s_env
 
 typedef struct s_minishell
 {
+   int          heredoc_pipe[2];
    t_token     *token_head;
    t_exec_data *exec_data;
    t_exec_data *list_exec_data;

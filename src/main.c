@@ -1,7 +1,5 @@
 # include "../inc/minishell.h"
 
-
-
 t_minishell *get_shell(bool init)
 {
     static t_minishell data;
@@ -12,6 +10,9 @@ t_minishell *get_shell(bool init)
         data.exit_code = 0;
         data.token_head = NULL;
         data.prompt = NULL;
+        data.heredoc_pipe[0] = -1;
+        data.heredoc_pipe[1] = -1;
+
     }
     return (&data);
 }
@@ -210,6 +211,8 @@ void main_loop(t_minishell *data)
             command_list = get_test(87);
         if (c_strcmp("run test88", input) == 0)
             command_list = get_test(88);
+        if (c_strcmp("run test89", input) == 0)
+            command_list = get_test(89);
         if (c_strcmp("$?", input) == 0)
             ft_printf("Exit Code: %d\n", data->exit_code);
         if (command_list)
@@ -223,14 +226,6 @@ void main_loop(t_minishell *data)
     }
     if (data)
         minishell_free(data);
-}
-
-size_t custom_strlen(char *str)
-{
-    if (!str)
-        return (0);
-    else
-        return (ft_strlen(str));
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -249,6 +244,7 @@ int	main(int argc, char **argv, char **envp)
     }
     env_init(argv, envp, data);
     display_splash_screen();
+    
     main_loop(data);
     return (0);
 }

@@ -6,6 +6,7 @@
 //char *g_project_path = "/home/joaomigu/Documents/minishell/";
 char *g_project_path = "/home/joaomigu/Documents/minishell";
 
+
 char *build_full_path(const char *relative_path)
 {
     size_t path_len = strlen(g_project_path) + strlen(relative_path) + 2; // Extra 2 for '/' and '\0'
@@ -14,6 +15,33 @@ char *build_full_path(const char *relative_path)
         return NULL; // Handle allocation failure
     snprintf(full_path, path_len, "%s/%s", g_project_path, relative_path);
     return full_path;
+}
+
+t_exec_data *test_89()
+{
+    ft_printf("Running test 89: cat <\"./test_input/infile\" | pwd\n");
+    t_exec_data *exec_data_one= malloc(sizeof(t_exec_data));
+    memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
+    init_cmd(exec_data_one);
+
+    t_exec_data *exec_data_two= malloc(sizeof(t_exec_data));
+    memset(exec_data_two, 0, sizeof(t_exec_data)); // Initialize to 0
+    init_cmd(exec_data_two);
+
+    // Setup for grep command
+    exec_data_one->cmd = ft_strdup("/bin/cat"); // Path to the grep binary
+    exec_data_one->opt = add_string_to_array(ft_strdup("cat"), exec_data_one->opt);
+    add_redir_to_list(&exec_data_one->redirs,
+                      create_rdir(INPUT,build_full_path("test_input/infile")));
+
+    // Setup for grep command
+    exec_data_two->cmd = ft_strdup("pwd"); // Path to the grep binary
+    exec_data_two->is_builtin = true;
+    exec_data_two->opt = add_string_to_array(ft_strdup("pwd"), exec_data_two->opt);
+    
+    exec_data_one->next = exec_data_two; 
+    exec_data_two->next = NULL;
+    return exec_data_one;
 }
 
 t_exec_data *test_88()

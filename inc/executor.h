@@ -4,6 +4,7 @@
 # include "defines.h"
 # include "structs.h"
 
+size_t c_strlen(const char *str);
 
 //executor/executor_aux_safe.c
 void close_pipe(int pipe_fd[2]);
@@ -17,6 +18,7 @@ bool has_output(t_redir *redir);
 bool has_input(t_redir *redir);
 bool has_heredoc(t_redir *redir);
 void init_cmd(t_exec_data *exec_data);
+char *get_rdir_error(t_redir *redir);
 
 //executor/executor_child_aux
 t_pid_list *create_pid_node(pid_t pid);
@@ -39,14 +41,14 @@ void heredoc_loop(t_redir *current, int fd);
 
 
 //executo/executor_redir.c
-void handle_heredoc_redirection(t_exec_data *head);
-void handle_other_redirections(t_exec_data *head);
+void handle_heredoc_redirection(t_minishell *data, t_exec_data *head);
+void handle_io_redirections(t_exec_data *cmd);
 
 //executor/setup_fd.c
 
 //executor/executor
+void execute_command_list_old(t_minishell *data, t_exec_data *head, char **envp);
 void execute_command_list(t_minishell *data, t_exec_data *head, char **envp);
-
 
 
 //executor/mock_parser.c

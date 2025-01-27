@@ -24,7 +24,7 @@ static bool break_loop(t_redir *current, char *input, bool last_input, int fd)
             write(fd, "\n", 1);
         return (true);
     }
-    if (strcmp(input, current->str) == 0)
+    if (c_strcmp(input, current->str) == 0)
         return (true);
     if (last_input)
     {

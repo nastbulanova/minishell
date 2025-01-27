@@ -94,6 +94,7 @@ char *build_full_path(const char *relative_path);
     //87. echo hi | echo bye >>./test_files/invalid_permission
     //88. echo hi | echo >>./outfiles/outfile01 bye >./test_files/invalid_permission
 
+t_exec_data *test_89();
 t_exec_data *test_88();
 t_exec_data *test_87();
 t_exec_data *test_86();

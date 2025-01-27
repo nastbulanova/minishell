@@ -1,5 +1,13 @@
 #include  "../inc/minishell.h"
 
+size_t c_strlen(const char *str)
+{
+    size_t len = 0;
+    while (str && str[len])
+        len++;
+    return len;
+}
+
 void display_splash_screen(void)
 {
     // Clear the screen using ANSI escape codes
@@ -43,6 +51,7 @@ void error_exit(const char *error, const char *function_name)
     minishell_free(data);
     exit(EXIT_FAILURE);
 }
+
 void minishell_free(t_minishell *data)
 {
     if (data)
@@ -51,7 +60,9 @@ void minishell_free(t_minishell *data)
             free(data->prompt);
         if (data->env)
             env_free(data->env);
-        //free(data);
+        if (data->list_exec_data)
+            free_exec_data_list(data->list_exec_data);
+        close_pipe(data->heredoc_pipe);
     }
     clear_history();
 }

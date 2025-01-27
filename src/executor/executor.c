@@ -1,127 +1,137 @@
 #include "../../inc/minishell.h"
 
-void handle_parent(t_exec_data *current, t_exec_data *previous, t_pid_list **pid_list, pid_t pid)
+static void execute_pipe(t_minishell *data, t_exec_data *head, char** envp)
 {
-        add_pid(pid_list, pid);
-        if (current->input_fd >= 0) 
-        {
-            //fprintf(stderr, "Parent: Closing input_fd %d for CMD %s\n", current->input_fd, current->cmd);
-            close_fd(&current->input_fd);
-            if (previous) 
-            {
-                //fprintf(stderr, "Parent: Closing previous->outpipe[0] %d\n", previous->outpipe[0]);
-                close_fd(&previous->outpipe[0]);
-            }
-        }
-        if (current->output_fd >= 0) 
-        {
-            //fprintf(stderr, "Parent: Closing output_fd %d for CMD %s\n", current->output_fd, current->cmd);
-            close_fd(&current->output_fd);
-        }
-        if (previous) 
-        {
-            //fprintf(stderr, "Parent: Closing previous->outpipe[0] %d\n", previous->outpipe[0]);
-            close_fd(&previous->outpipe[0]);
-            //fprintf(stderr, "Parent: Closing previous->outpipe[1] %d\n", previous->outpipe[1]);
-            close_fd(&previous->outpipe[1]);
-        }
-
+    (void)data;
+    (void)head;
+    (void)envp;
+    fprintf(stderr, "NOT IMPLEMENTED\n");
 }
 
-static void handle_pipe_sequence(t_exec_data *head, char **envp)
+static void execute_isolated(t_minishell *data, t_exec_data *cmd, char **envp)
 {
-    t_exec_data *current;
-    t_exec_data *previous;
-    t_pid_list *pid_list;
-    pid_t       pid;
+    int stdin_backup;   //consider storing these variables on initialization of our singleton to restore on application exit or whenever needed
+    int stdout_backup;
+    int stderr_backup;
+    pid_t pid;
 
-    current = head;
-    pid_list = NULL;
-    previous = NULL;
-    while (current)
+    if (cmd->exit_status != 0)//in the earlier setup stage a command could have its exit code preemptivly assigne (ir permission error on input / output)
     {
-        
-        safe_pipe(current->outpipe);
+        data->exit_code = cmd->exit_status;
+        close_fd(&cmd->input_fd);
+        close_fd(&cmd->output_fd);
+        char *error = get_rdir_error(cmd->redirs);
+        if (error)
+            ft_printf("%s\n", error);
+        else
+            fprintf(stderr, "No error found.\n");
+        return;
+    }
+
+    stdin_backup = dup(STDIN_FILENO);
+    stdout_backup = dup(STDOUT_FILENO);
+    stderr_backup = dup(STDERR_FILENO);
+
+    if (cmd->input_fd >= 0)
+    {
+        safe_dup_two(cmd->input_fd, STDIN_FILENO); 
+        close(cmd->input_fd);
+    }
+
+    if (cmd->output_fd >= 0)
+    {
+        safe_dup_two(cmd->output_fd, STDOUT_FILENO); 
+        close(cmd->output_fd);
+    }
+    if (cmd->is_builtin)
+    {
+        if (c_strcmp(cmd->cmd, "echo") == 0)
+        {
+            data->exit_code = cmd_echo(cmd->opt);
+        }
+        else if (c_strcmp(cmd->cmd, "cd") == 0)
+            data->exit_code = cmd_cd(cmd->opt);
+        else if (c_strcmp(cmd->cmd, "unset") == 0)
+            data->exit_code = cmd_unset(cmd->opt);
+        else if (c_strcmp(cmd->cmd, "export") == 0)
+            data->exit_code = cmd_export(cmd->opt);
+        else if (c_strcmp(cmd->cmd, "exit") == 0)
+            data->exit_code = cmd_exit(cmd->opt);
+        else if (c_strcmp(cmd->cmd, "env") == 0)
+            data->exit_code = cmd_env(cmd->opt);
+        else if (c_strcmp(cmd->cmd, "pwd") == 0)
+        {
+            data->exit_code = cmd_pwd(cmd->output_fd);
+        }
+        else
+            minishell_exit("Critical error processing built in.", 2, STDERR_FILENO, false);
+    }
+    else
+    {
         pid = safe_fork();
         if (pid == 0)
-            handle_child(current, previous, envp); 
-        else 
-            handle_parent(current, previous, &pid_list, pid);
-        
-        previous = current;
-        current = current->next;
+        {
+            if (execve(cmd->cmd, cmd->opt, envp) < 0)
+            {
+                perror("execve");
+                if (errno == ENOENT)
+                    exit(127); // Command not found
+                else if (errno == EACCES)
+                    exit(126); // Permission denied
+                else
+                      exit(1); // General error
+            }
+        }
+        else
+        {
+            int status;
+            waitpid(pid, &status, 0); // Wait for the child to finish
+            if (WIFEXITED(status)) 
+            {
+                data->exit_code = WEXITSTATUS(status); // Retrieve exit code
+            }
+        }
     }
-    handle_exit_status(pid_list);
-    free_pid_list(&pid_list);
+    //if i decide to keep the original in my signleton should i dup2 or just dup here?
+    dup2(stdin_backup, STDIN_FILENO);
+    dup2(stdout_backup, STDOUT_FILENO);
+    dup2(stderr_backup, STDERR_FILENO);
+    close_fd(&stdin_backup);
+    close_fd(&stdout_backup);
+    close_fd(&stderr_backup); 
 }
-bool check_redir_parent(t_exec_data *current)
-{
-    t_redir *head;
-    char    *temp;
-    t_minishell *data;
 
-    head = current->redirs;
+
+void handle_command_redirections(t_minishell *data, t_exec_data *head)
+{
     while (head)
     {
-    //fprintf(stderr, "HIT %s\n", head->error);
-        if (head->error)
+        handle_heredoc_redirection (data, head);//tested no leaks
+        if (data->exit_code == 130)//heredocs are process first in bash we can test this and ctrl+c stops execution of all commands
             break;
-        head = head->next;
-    }
-    if (head && head->error)
-    {
-        data = get_shell(false);
-        temp = built_error_string(head->str, head->error);
-        write(STDERR_FILENO, temp, ft_strlen(temp));
-        free(temp);
-        data->exit_code = 1;
-        return (false);
-    }
-    return (true);
-}
-static void handle_builtin_command(t_exec_data *current)
-{
-    if (!check_redir_parent(current))
-        return;
-    if (c_strcmp(current->cmd, "echo") == 0)
-            current->exit_status = cmd_echo(current->opt, current->output_fd);
-    else if (c_strcmp(current->cmd, "cd") == 0)
-        current->exit_status = cmd_cd(current->opt);
-    else if (c_strcmp(current->cmd, "unset") == 0)
-        current->exit_status = cmd_unset(current->opt);
-    else if (c_strcmp(current->cmd, "export") == 0)
-        current->exit_status = cmd_export(current->opt);
-    else if (c_strcmp(current->cmd, "exit") == 0)
-        current->exit_status = cmd_exit(current->opt);
-    else if (c_strcmp(current->cmd, "env") == 0)
-        current->exit_status = cmd_env(current->opt);
-    else if (c_strcmp(current->cmd, "pwd") == 0)
-        current->exit_status = cmd_pwd(current->opt);
-    else
-        minishell_exit("Critical error processing built in.", 2, STDERR_FILENO, false);
-}
-
-static void handle_command_redirections(t_minishell *data, t_exec_data *head)
-{
-    while (head)
-    {
-        handle_heredoc_redirection (head);
-        if (data->exit_code == 130)
-            return;
-        handle_other_redirections(head);
+        handle_io_redirections(head);
         head = head->next;
     }
 }
 
 void execute_command_list(t_minishell *data, t_exec_data *head, char **envp)
 {
-   
     handle_command_redirections(data, head);
     if (data->exit_code == 130)
         return;
-    if (!head->next && head->is_builtin)
-        handle_builtin_command(head);
+    if (!head->next)
+        execute_isolated(data, head, envp);
     else
-        handle_pipe_sequence(head, envp);
+        execute_pipe(data, head, envp);
+
+    while (head)
+    {
+        //close_fd(&head->input_fd);
+        //close_fd(&head->output_fd);
+        //close_pipe(head->outpipe);
+        head = head->next;
+    }
+    
+    
 }
 

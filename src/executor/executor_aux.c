@@ -45,6 +45,20 @@ bool has_output(t_redir *redir)
     return (false);
 }
 
+char *get_rdir_error(t_redir *redir)
+{
+    if (!redir)
+        return (NULL);
+
+    while (redir)
+    {
+        if (redir->error)
+            return (redir->error);
+        redir = redir->next;
+    }
+    return (NULL);
+}
+
 void init_cmd(t_exec_data *exec_data)
 {
     exec_data->cmd = NULL;

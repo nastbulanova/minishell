@@ -11,9 +11,9 @@ char	**get_cmd_flags(char *command);
 bool	has_flag(char **args, char *flag);
 
 //echo.c
-int		cmd_echo(char **args, int fd);
+int		cmd_echo(char **args);
 //pwd.c
-int		cmd_pwd();
+int     cmd_pwd(int fd);
 //unset.c
 int     cmd_unset(char **args);
 
