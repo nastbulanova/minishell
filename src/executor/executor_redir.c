@@ -28,17 +28,18 @@ void handle_heredoc_redirection(t_exec_data *head)
 }
 static void handle_input_redirection(t_redir *current, int *temp_input_fd, char **error_message)
 {
+    errno = 0;
     close_fd(temp_input_fd);
     *temp_input_fd = open(current->str, O_RDONLY);
     if (*temp_input_fd < 0)
     {
         current->error = ft_strdup(strerror(errno));
-        fprintf(stderr, "Redir Error Found : %s\n", current->error);
         *error_message = current->error;
     }
 }
 static void handle_output_redirection(t_redir *current, int *temp_output_fd, char **error_message)
 {
+     errno = 0;
     close_fd(temp_output_fd);
     if (current->type == OUTPUT_APPEND)
         *temp_output_fd = open(current->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -47,7 +48,6 @@ static void handle_output_redirection(t_redir *current, int *temp_output_fd, cha
     if (*temp_output_fd < 0)
     {
         current->error = ft_strdup(strerror(errno));
-        fprintf(stderr, "Redir Error Found : %s\n", current->error);
         *error_message = current->error;
     }
 }
@@ -61,10 +61,8 @@ static void finalize_redirections(t_exec_data *head, int *temp_input_fd, int *te
     }
     else
     {
-        if (has_heredoc(head->redirs))
-            close_fd(temp_input_fd);
-        else
-            head->input_fd = *temp_input_fd;
+        close_fd(&head->input_fd);
+        head->input_fd = *temp_input_fd;
         if (*temp_output_fd >= 0)
             head->output_fd = *temp_output_fd;
         //fprintf(stderr, "This CMD:%s has NO error.Input %d Output %d\n", head->cmd, head->input_fd, head->output_fd);

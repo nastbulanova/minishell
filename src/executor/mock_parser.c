@@ -132,9 +132,8 @@ char **add_string_to_array(char *new_str, char **old_array) {
         count++;
     char **new_array = malloc((count + 2) * sizeof(char *));
     if (!new_array)
-        return NULL; // Allocation failed
+        return NULL; 
     
-    // Copy the old strings to the new array
     for (int i = 0; i < count; i++) 
     {
         new_array[i] = ft_strdup(old_array[i]);
@@ -147,7 +146,6 @@ char **add_string_to_array(char *new_str, char **old_array) {
         }
     }
     
-    // Add the new string to the new array
     new_array[count] = ft_strdup(new_str);
     if (!new_array[count]) 
     {
@@ -158,7 +156,7 @@ char **add_string_to_array(char *new_str, char **old_array) {
     }
     new_array[count + 1] = NULL;
     
-    // Free the old array
+
     if (old_array) 
     {
         for (int i = 0; i < count; i++)

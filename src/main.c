@@ -225,6 +225,13 @@ void main_loop(t_minishell *data)
         minishell_free(data);
 }
 
+size_t custom_strlen(char *str)
+{
+    if (!str)
+        return (0);
+    else
+        return (ft_strlen(str));
+}
 
 int	main(int argc, char **argv, char **envp)
 {

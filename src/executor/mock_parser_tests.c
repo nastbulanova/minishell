@@ -18,7 +18,7 @@ char *build_full_path(const char *relative_path)
 
 t_exec_data *test_88()
 {
-    ft_printf("Running test 88: echo hi | echo >>./test_output/outfile01 bye >./test_output/invalid_permission");
+    ft_printf("Running test 88: echo hi | echo >>./test_output/outfile01 bye >./test_output/invalid_permission\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -28,11 +28,13 @@ t_exec_data *test_88()
     init_cmd(exec_data_two);
 
     exec_data_one->cmd = ft_strdup("echo");
+    exec_data_one->is_builtin = true;
     exec_data_one->opt = add_string_to_array(ft_strdup("echo"), exec_data_one->opt);
     exec_data_one->opt = add_string_to_array(ft_strdup("hi"), exec_data_one->opt);
 
 
     exec_data_two->cmd = ft_strdup("echo");
+    exec_data_two->is_builtin = true;
     exec_data_two->opt = add_string_to_array(ft_strdup("echo"), exec_data_two->opt);
     exec_data_two->opt = add_string_to_array(ft_strdup("bye"), exec_data_two->opt);
     
@@ -50,7 +52,7 @@ t_exec_data *test_88()
 
 t_exec_data *test_87()
 {
-    ft_printf("Running test 87: echo hi | echo bye >>./test_output/invalid_permission");
+    ft_printf("Running test 87: echo hi | echo bye >>./test_output/invalid_permission\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -60,11 +62,13 @@ t_exec_data *test_87()
     init_cmd(exec_data_two);
 
     exec_data_one->cmd = ft_strdup("echo");
+    exec_data_one->is_builtin = true;
     exec_data_one->opt = add_string_to_array(ft_strdup("echo"), exec_data_one->opt);
     exec_data_one->opt = add_string_to_array(ft_strdup("hi"), exec_data_one->opt);
 
 
     exec_data_two->cmd = ft_strdup("echo");
+    exec_data_two->is_builtin = true;
     exec_data_two->opt = add_string_to_array(ft_strdup("echo"), exec_data_two->opt);
     exec_data_two->opt = add_string_to_array(ft_strdup("bye"), exec_data_two->opt);
     
@@ -80,7 +84,7 @@ t_exec_data *test_87()
 
 t_exec_data *test_86()
 {
-    ft_printf("Running test 86: echo hi >>./test_output/invalid_permission >./test_output/outfile01 | echo bye");
+    ft_printf("Running test 86: echo hi >>./test_output/invalid_permission >./test_output/outfile01 | echo bye\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -90,6 +94,7 @@ t_exec_data *test_86()
     init_cmd(exec_data_two);
 
     exec_data_one->cmd = ft_strdup("echo");
+    exec_data_one->is_builtin = true;
     exec_data_one->opt = add_string_to_array(ft_strdup("echo"), exec_data_one->opt);
     exec_data_one->opt = add_string_to_array(ft_strdup("hi"), exec_data_one->opt);
 
@@ -99,6 +104,7 @@ t_exec_data *test_86()
                       create_rdir(OUTPUT, build_full_path("test_output/outfile01")));
 
     exec_data_two->cmd = ft_strdup("echo");
+    exec_data_two->is_builtin = true;
     exec_data_two->opt = add_string_to_array(ft_strdup("echo"), exec_data_two->opt);
     exec_data_two->opt = add_string_to_array(ft_strdup("bye"), exec_data_two->opt);
     
@@ -111,7 +117,7 @@ t_exec_data *test_86()
 
 t_exec_data *test_85()
 {
-    ft_printf("Running test 85: echo hi >>./test_output/invalid_permission | echo bye");
+    ft_printf("Running test 85: echo hi >>./test_output/invalid_permission | echo bye\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -121,6 +127,7 @@ t_exec_data *test_85()
     init_cmd(exec_data_two);
 
     exec_data_one->cmd = ft_strdup("echo");
+    exec_data_one->is_builtin = true;
     exec_data_one->opt = add_string_to_array(ft_strdup("echo"), exec_data_one->opt);
     exec_data_one->opt = add_string_to_array(ft_strdup("hi"), exec_data_one->opt);
 
@@ -128,6 +135,7 @@ t_exec_data *test_85()
                       create_rdir(OUTPUT_APPEND, build_full_path("test_output/invalid_permission")));
 
     exec_data_two->cmd = ft_strdup("echo");
+    exec_data_two->is_builtin = true;
     exec_data_two->opt = add_string_to_array(ft_strdup("echo"), exec_data_two->opt);
     exec_data_two->opt = add_string_to_array(ft_strdup("bye"), exec_data_two->opt);
     
@@ -140,7 +148,7 @@ t_exec_data *test_85()
 
 t_exec_data *test_84()
 {
-    ft_printf("Running test 84: echo hi >>./test_output/outfile01 | echo bye >>./test_output/outfile02");
+    ft_printf("Running test 84: echo hi >>./test_output/outfile01 | echo bye >>./test_output/outfile02\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -150,6 +158,7 @@ t_exec_data *test_84()
     init_cmd(exec_data_two);
 
     exec_data_one->cmd = ft_strdup("echo");
+    exec_data_one->is_builtin = true;
     exec_data_one->opt = add_string_to_array(ft_strdup("echo"), exec_data_one->opt);
     exec_data_one->opt = add_string_to_array(ft_strdup("hi"), exec_data_one->opt);
 
@@ -157,6 +166,7 @@ t_exec_data *test_84()
                       create_rdir(OUTPUT_APPEND, build_full_path("test_output/outfile01")));
 
     exec_data_two->cmd = ft_strdup("echo");
+    exec_data_two->is_builtin = true;
     exec_data_two->opt = add_string_to_array(ft_strdup("echo"), exec_data_two->opt);
     exec_data_two->opt = add_string_to_array(ft_strdup("bye"), exec_data_two->opt);
     
@@ -171,7 +181,7 @@ t_exec_data *test_84()
 
 t_exec_data *test_83()
 {
-    ft_printf("Running test 83: echo hi | echo bye >>./test_output/outfile01 >>./test_output/outfile02");
+    ft_printf("Running test 83: echo hi | echo bye >>./test_output/outfile01 >>./test_output/outfile02\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -181,11 +191,13 @@ t_exec_data *test_83()
     init_cmd(exec_data_two);
 
     exec_data_one->cmd = ft_strdup("echo");
+    exec_data_one->is_builtin = true;
     exec_data_one->opt = add_string_to_array(ft_strdup("echo"), exec_data_one->opt);
     exec_data_one->opt = add_string_to_array(ft_strdup("hi"), exec_data_one->opt);
 
 
     exec_data_two->cmd = ft_strdup("echo");
+    exec_data_two->is_builtin = true;
     exec_data_two->opt = add_string_to_array(ft_strdup("echo"), exec_data_two->opt);
     exec_data_two->opt = add_string_to_array(ft_strdup("bye"), exec_data_two->opt);
     
@@ -202,7 +214,7 @@ t_exec_data *test_83()
 
 t_exec_data *test_82()
 {
-    ft_printf("Running test 82: echo hi | echo >>./test_output/outfile01 bye");
+    ft_printf("Running test 82: echo hi | echo >>./test_output/outfile01 bye\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -212,11 +224,13 @@ t_exec_data *test_82()
     init_cmd(exec_data_two);
 
     exec_data_one->cmd = ft_strdup("echo");
+    exec_data_one->is_builtin = true;
     exec_data_one->opt = add_string_to_array(ft_strdup("echo"), exec_data_one->opt);
     exec_data_one->opt = add_string_to_array(ft_strdup("hi"), exec_data_one->opt);
 
 
     exec_data_two->cmd = ft_strdup("echo");
+    exec_data_two->is_builtin = true;
     exec_data_two->opt = add_string_to_array(ft_strdup("echo"), exec_data_two->opt);
     exec_data_two->opt = add_string_to_array(ft_strdup("bye"), exec_data_two->opt);
     
@@ -231,7 +245,7 @@ t_exec_data *test_82()
 
 t_exec_data *test_81()
 {
-    ft_printf("Running test 81: echo hi >>./test_output/outfile01 >>./test_output/outfile02 | echo bye");
+    ft_printf("Running test 81: echo hi >>./test_output/outfile01 >>./test_output/outfile02 | echo bye\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -241,6 +255,7 @@ t_exec_data *test_81()
     init_cmd(exec_data_two);
 
     exec_data_one->cmd = ft_strdup("echo");
+    exec_data_one->is_builtin = true;
     exec_data_one->opt = add_string_to_array(ft_strdup("echo"), exec_data_one->opt);
     exec_data_one->opt = add_string_to_array(ft_strdup("hi"), exec_data_one->opt);
 
@@ -250,6 +265,7 @@ t_exec_data *test_81()
                       create_rdir(OUTPUT_APPEND, build_full_path("test_output/outfile02")));
 
     exec_data_two->cmd = ft_strdup("echo");
+    exec_data_two->is_builtin = true;
     exec_data_two->opt = add_string_to_array(ft_strdup("echo"), exec_data_two->opt);
     exec_data_two->opt = add_string_to_array(ft_strdup("bye"), exec_data_two->opt);
     
@@ -261,7 +277,7 @@ t_exec_data *test_81()
 
 t_exec_data *test_80()
 {
-    ft_printf("Running test 80: echo hi >>./test_output/outfile01 | echo bye");
+    ft_printf("Running test 80: echo hi >>./test_output/outfile01 | echo bye\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -271,12 +287,15 @@ t_exec_data *test_80()
     init_cmd(exec_data_two);
 
     exec_data_one->cmd = ft_strdup("echo");
+    exec_data_one->is_builtin = true;
     exec_data_one->opt = add_string_to_array(ft_strdup("echo"), exec_data_one->opt);
+    exec_data_one->opt = add_string_to_array(ft_strdup("hi"), exec_data_one->opt);
    
     add_redir_to_list(&exec_data_one->redirs, 
                       create_rdir(OUTPUT_APPEND, build_full_path("test_output/outfile01")));
 
-    exec_data_two->cmd = "echo";
+    exec_data_two->cmd = ft_strdup("echo");
+    exec_data_two->is_builtin = true;
     exec_data_two->opt = add_string_to_array(ft_strdup("echo"), exec_data_two->opt);
     exec_data_two->opt = add_string_to_array(ft_strdup("bye"), exec_data_two->opt);
 
@@ -288,7 +307,7 @@ t_exec_data *test_80()
 
 t_exec_data *test_79()
 {
-    ft_printf("Running test 79: cat <main.c|ls");
+    ft_printf("Running test 79: cat <main.c|ls\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -316,7 +335,7 @@ t_exec_data *test_79()
 
 t_exec_data *test_78()
 {
-    ft_printf("Running test 78: cat <main.c>./test_output/outfile");
+    ft_printf("Running test 78: cat <main.c>./test_output/outfile\n");
     t_exec_data *exec_data_cat = malloc(sizeof(t_exec_data));
     memset(exec_data_cat, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_cat);
@@ -341,7 +360,7 @@ t_exec_data *test_78()
 
 t_exec_data *test_77()
 {
-    ft_printf("Running test 77: ls >./test_output/outfile01 >>./test_output/invalid_permission >>./test_output/outfile02 | cat < ./test_input/input1.txt > /test_output/outfile03");
+    ft_printf("Running test 77: ls >./test_output/outfile01 >>./test_output/invalid_permission >>./test_output/outfile02 | cat < ./test_input/input1.txt > /test_output/outfile03\n");
     t_exec_data *exec_data_ls = malloc(sizeof(t_exec_data));
     memset(exec_data_ls, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_ls);
@@ -378,7 +397,7 @@ t_exec_data *test_77()
 
 t_exec_data *test_76()
 {
-    ft_printf("Running test 76: ls >>./test_output/invalid_permission >>./test_output/outfile02 <missing");
+    ft_printf("Running test 76: ls >>./test_output/invalid_permission >>./test_output/outfile02 <missing\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -404,7 +423,7 @@ t_exec_data *test_76()
 
 t_exec_data *test_75()
 {
-    ft_printf("Running test 75: ls <missing >>./test_output/invalid_permission >>./test_output/outfile02");
+    ft_printf("Running test 75: ls <missing >>./test_output/invalid_permission >>./test_output/outfile02\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -433,7 +452,7 @@ t_exec_data *test_75()
 
 t_exec_data *test_74()
 {
-    ft_printf("Running test 74: ls >./test_output/outfile01 >>./test_output/invalid_permission >>./test_output/outfile02");
+    ft_printf("Running test 74: ls >./test_output/outfile01 >>./test_output/invalid_permission >>./test_output/outfile02\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -463,7 +482,7 @@ t_exec_data *test_74()
 
 t_exec_data *test_73()
 {
-    ft_printf("Running test 73: ls >>./test_output/outfile01 >>./test_output/invalid_permission");
+    ft_printf("Running test 73: ls >>./test_output/outfile01 >>./test_output/invalid_permission\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -489,7 +508,7 @@ t_exec_data *test_73()
 
 t_exec_data *test_72()
 {
-    ft_printf("Running test 72: ls >>./test_output/invalid_permission >>./test_output/outfile01");
+    ft_printf("Running test 72: ls >>./test_output/invalid_permission >>./test_output/outfile01\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -514,7 +533,7 @@ t_exec_data *test_72()
 
 t_exec_data *test_71()
 {
-    ft_printf("Running test 71: ls >>./test_output/invalid_permission");
+    ft_printf("Running test 71: ls >>./test_output/invalid_permission\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -536,7 +555,7 @@ t_exec_data *test_71()
 
 t_exec_data *test_70()
 {
-    ft_printf("Running test 70: ls >>./test_output/outfile01 >>./test_output/outfile02");
+    ft_printf("Running test 70: ls >>./test_output/outfile01 >>./test_output/outfile02\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -562,7 +581,7 @@ t_exec_data *test_70()
 
 t_exec_data *test_69()
 {
-    ft_printf("Running test 69: ls >./test_output/outfile01 >>./test_output/outfile01 >./test_output/outfile02");
+    ft_printf("Running test 69: ls >./test_output/outfile01 >>./test_output/outfile01 >./test_output/outfile02\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -592,7 +611,7 @@ t_exec_data *test_69()
 
 t_exec_data *test_68()
 {
-    ft_printf("Running test 68: ls >./test_output/outfile01 >>./test_output/outfile01");
+    ft_printf("Running test 68: ls >./test_output/outfile01 >>./test_output/outfile01\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -618,7 +637,7 @@ t_exec_data *test_68()
 
 t_exec_data *test_67()
 {
-    ft_printf("Running test 67: ls >>./test_output/outfile01 >./test_output/outfile01");
+    ft_printf("Running test 67: ls >>./test_output/outfile01 >./test_output/outfile01\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -644,7 +663,7 @@ t_exec_data *test_67()
 
 t_exec_data *test_66()
 {
-    ft_printf("Running test 66: ls >>      ./test_output/outfile01");
+    ft_printf("Running test 66: ls >>      ./test_output/outfile01\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -666,7 +685,7 @@ t_exec_data *test_66()
 
 t_exec_data *test_65()
 {
-    ft_printf("Running test 65: ls >>./test_output/outfile01");
+    ft_printf("Running test 65: ls >>./test_output/outfile01\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -687,7 +706,7 @@ t_exec_data *test_65()
 
 t_exec_data *test_64()
 {
-    ft_printf("Running test 64: cat >./test_output/outfile01 <missing >./test_output/invalid_permission");
+    ft_printf("Running test 64: cat >./test_output/outfile01 <missing >./test_output/invalid_permission\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -715,7 +734,7 @@ t_exec_data *test_64()
 
 t_exec_data *test_63()
 {
-    ft_printf("Running test 63: cat >./test_output/invalid_permission <missing");
+    ft_printf("Running test 63: cat >./test_output/invalid_permission <missing\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -741,7 +760,7 @@ t_exec_data *test_63()
 
 t_exec_data *test_62()
 {
-    ft_printf("Running test 62: cat <missing >./test_input/invalid_permission");
+    ft_printf("Running test 62: cat <missing >./test_input/invalid_permission\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -767,7 +786,7 @@ t_exec_data *test_62()
 
 t_exec_data *test_61()
 {
-    ft_printf("Running test 61: cat >./test_output/outfile01 <missing");
+    ft_printf("Running test 61: cat >./test_output/outfile01 <missing\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -793,7 +812,7 @@ t_exec_data *test_61()
 
 t_exec_data *test_60()
 {
-    ft_printf("Running test 60: cat <missing >./test_output/outfile01");
+    ft_printf("Running test 60: cat <missing >./test_output/outfile01\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -819,7 +838,7 @@ t_exec_data *test_60()
 
 t_exec_data *test_59()
 {
-    ft_printf("Running test 59: cat >./test_files/invalid_permission <\"./test_files/infile\"");
+    ft_printf("Running test 59: cat >./test_files/invalid_permission <\"./test_files/infile\"\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -845,7 +864,7 @@ t_exec_data *test_59()
 
 t_exec_data *test_58()
 {
-    ft_printf("Running test 58: cat <\"./test_input/infile\" >./test_output/invalid_permission");
+    ft_printf("Running test 58: cat <\"./test_input/infile\" >./test_output/invalid_permission\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -871,7 +890,7 @@ t_exec_data *test_58()
 
 t_exec_data *test_57()
 {
-    ft_printf("Running test 57: echo hi | echo bye >./test_output/invalid_permission >./test_output/outfile01");
+    ft_printf("Running test 57: echo hi | echo bye >./test_output/invalid_permission >./test_output/outfile01\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -881,13 +900,13 @@ t_exec_data *test_57()
     init_cmd(exec_data_two);
 
     // Setup for the first command (echo hi)
-    exec_data_one->cmd = ft_strdup("/bin/echo"); // Path to the echo binary
+    exec_data_one->cmd = ft_strdup("echo"); // Path to the echo binary
     exec_data_one->is_builtin = true; // echo is a built-in command
     exec_data_one->opt = add_string_to_array(ft_strdup("echo"), exec_data_one->opt);
     exec_data_one->opt = add_string_to_array(ft_strdup("hi"), exec_data_one->opt);
 
     // Setup for the second command (echo bye)
-    exec_data_two->cmd = ft_strdup("/bin/echo"); // Path to the echo binary
+    exec_data_two->cmd = ft_strdup("echo"); // Path to the echo binary
     exec_data_two->is_builtin = true; // echo is a built-in command
     exec_data_two->opt = add_string_to_array(ft_strdup("echo"), exec_data_two->opt);
     exec_data_two->opt = add_string_to_array(ft_strdup("bye"), exec_data_two->opt);
@@ -910,7 +929,7 @@ t_exec_data *test_57()
 
 t_exec_data *test_56()
 {
-    ft_printf("Running test 56: echo hi | >./test_output/outfile01 echo bye >./test_output/invalid_permission");
+    ft_printf("Running test 56: echo hi | >./test_output/outfile01 echo bye >./test_output/invalid_permission\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -920,7 +939,7 @@ t_exec_data *test_56()
     init_cmd(exec_data_two);
 
     // Setup for the first command (echo hi)
-    exec_data_one->cmd = ft_strdup("/bin/echo"); // Path to the echo binary
+    exec_data_one->cmd = ft_strdup("echo"); // Path to the echo binary
     exec_data_one->is_builtin = true; // echo is a built-in command
     exec_data_one->opt = add_string_to_array(ft_strdup("echo"), exec_data_one->opt);
     exec_data_one->opt = add_string_to_array(ft_strdup("hi"), exec_data_one->opt);
@@ -928,7 +947,7 @@ t_exec_data *test_56()
     // Add output redirection for the first command to "./test_output/outfile01"
 
     // Setup for the second command (echo bye)
-    exec_data_two->cmd = ft_strdup("/bin/echo"); // Path to the echo binary
+    exec_data_two->cmd = ft_strdup("echo"); // Path to the echo binary
     exec_data_two->is_builtin = true; // echo is a built-in command
     exec_data_two->opt = add_string_to_array(ft_strdup("echo"), exec_data_two->opt);
     exec_data_two->opt = add_string_to_array(ft_strdup("bye"), exec_data_two->opt);
@@ -949,7 +968,7 @@ t_exec_data *test_56()
 
 t_exec_data *test_55()
 {
-    ft_printf("Running test 55: echo hi | echo bye >./test_output/invalid_permission");
+    ft_printf("Running test 55: echo hi | echo bye >./test_output/invalid_permission\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -959,13 +978,13 @@ t_exec_data *test_55()
     init_cmd(exec_data_two);
 
     // Setup for the first command (echo hi)
-    exec_data_one->cmd = ft_strdup("/bin/echo"); // Path to the echo binary
+    exec_data_one->cmd = ft_strdup("echo"); // Path to the echo binary
     exec_data_one->is_builtin = true; // echo is a built-in command
     exec_data_one->opt = add_string_to_array(ft_strdup("echo"), exec_data_one->opt);
     exec_data_one->opt = add_string_to_array(ft_strdup("hi"), exec_data_one->opt);
 
     // Setup for the second command (echo bye)
-    exec_data_two->cmd = "/bin/echo"; // Path to the echo binary
+    exec_data_two->cmd = ft_strdup("echo"); // Path to the echo binary
     exec_data_two->is_builtin = true; // echo is a built-in command
     exec_data_two->opt = add_string_to_array(ft_strdup("echo"), exec_data_two->opt);
     exec_data_two->opt = add_string_to_array(ft_strdup("bye"), exec_data_two->opt);
@@ -984,7 +1003,7 @@ t_exec_data *test_55()
 
 t_exec_data *test_54()
 {
-    ft_printf("Running test 54: echo hi >./test_output/invalid_permission >./test_output/outfile01 | echo bye");
+    ft_printf("Running test 54: echo hi >./test_output/invalid_permission >./test_output/outfile01 | echo bye\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -994,7 +1013,7 @@ t_exec_data *test_54()
     init_cmd(exec_data_two);
 
     // Setup for the first command (echo hi)
-    exec_data_one->cmd = ft_strdup("/bin/echo"); // Path to the echo binary
+    exec_data_one->cmd = ft_strdup("echo"); // Path to the echo binary
     exec_data_one->is_builtin = true; // echo is a built-in command
     exec_data_one->opt = add_string_to_array(ft_strdup("echo"), exec_data_one->opt);
     exec_data_one->opt = add_string_to_array(ft_strdup("hi"), exec_data_one->opt);
@@ -1008,7 +1027,7 @@ t_exec_data *test_54()
                       create_rdir(OUTPUT, build_full_path("test_output/outfile01"))); // Output redirection to file
 
     // Setup for the second command (echo bye)
-    exec_data_two->cmd = ft_strdup("/bin/echo"); // Path to the echo binary
+    exec_data_two->cmd = ft_strdup("echo"); // Path to the echo binary
     exec_data_two->is_builtin = true; // echo is a built-in command
     exec_data_two->opt = add_string_to_array(ft_strdup("echo"), exec_data_two->opt);
     exec_data_two->opt = add_string_to_array(ft_strdup("bye"), exec_data_two->opt);
@@ -1023,7 +1042,7 @@ t_exec_data *test_54()
 
 t_exec_data *test_53()
 {
-    ft_printf("Running test 53: echo hi >./teste_output/invalid_permission | echo bye");
+    ft_printf("Running test 53: echo hi >./teste_output/invalid_permission | echo bye\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -1033,7 +1052,7 @@ t_exec_data *test_53()
     init_cmd(exec_data_two);
 
     // Setup for the first command (echo hi)
-    exec_data_one->cmd = ft_strdup("/bin/echo"); // Path to the echo binary
+    exec_data_one->cmd = ft_strdup("echo"); // Path to the echo binary
     exec_data_one->is_builtin = true; // echo is a built-in command
     exec_data_one->opt = add_string_to_array(ft_strdup("echo"), exec_data_one->opt);
     exec_data_one->opt = add_string_to_array(ft_strdup("hi"), exec_data_one->opt);
@@ -1043,7 +1062,7 @@ t_exec_data *test_53()
                       create_rdir(OUTPUT, build_full_path("teste_output/invalid_permission"))); // Invalid permission redirection
 
     // Setup for the second command (echo bye)
-    exec_data_two->cmd = ft_strdup("/bin/echo"); // Path to the echo binary
+    exec_data_two->cmd = ft_strdup("echo"); // Path to the echo binary
     exec_data_two->is_builtin = true; // echo is a built-in command
     exec_data_two->opt = add_string_to_array(ft_strdup("echo"), exec_data_two->opt);
     exec_data_two->opt = add_string_to_array(ft_strdup("bye"), exec_data_two->opt);
@@ -1058,7 +1077,7 @@ t_exec_data *test_53()
 
 t_exec_data *test_52()
 {
-    ft_printf("Running test 52: echo hi >./test_output/outfile01 >./test_output/invalid_permission | echo bye");
+    ft_printf("Running test 52: echo hi >./test_output/outfile01 >./test_output/invalid_permission | echo bye\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -1068,7 +1087,7 @@ t_exec_data *test_52()
     init_cmd(exec_data_two);
 
     // Setup for the first command (echo hi)
-    exec_data_one->cmd = ft_strdup("/bin/echo"); // Path to the echo binary
+    exec_data_one->cmd = ft_strdup("echo"); // Path to the echo binary
     exec_data_one->is_builtin = true; // echo is a built-in command
     exec_data_one->opt = add_string_to_array(ft_strdup("echo"), exec_data_one->opt);
     exec_data_one->opt = add_string_to_array(ft_strdup("hi"), exec_data_one->opt);
@@ -1082,7 +1101,7 @@ t_exec_data *test_52()
                       create_rdir(OUTPUT, build_full_path("test_output/invalid_permission"))); // Invalid permission redirection
 
     // Setup for the second command (echo bye)
-    exec_data_two->cmd = ft_strdup("/bin/echo"); // Path to the echo binary
+    exec_data_two->cmd = ft_strdup("echo"); // Path to the echo binary
     exec_data_two->is_builtin = true; // echo is a built-in command
     exec_data_two->opt = add_string_to_array(ft_strdup("echo"), exec_data_two->opt);
     exec_data_two->opt = add_string_to_array(ft_strdup("bye"), exec_data_two->opt);
@@ -1097,7 +1116,7 @@ t_exec_data *test_52()
 
 t_exec_data *test_51()
 {
-    ft_printf("Running test 51: echo hi >./test_output/outfile01 | echo bye >./test_output/outfile02");
+    ft_printf("Running test 51: echo hi >./test_output/outfile01 | echo bye >./test_output/outfile02\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -1107,7 +1126,7 @@ t_exec_data *test_51()
     init_cmd(exec_data_two);
 
     // Setup for the first command (echo hi)
-    exec_data_one->cmd = ft_strdup("/bin/echo"); // Path to the echo binary
+    exec_data_one->cmd = ft_strdup("echo"); // Path to the echo binary
     exec_data_one->is_builtin = true; // echo is a built-in command
     exec_data_one->opt = add_string_to_array(ft_strdup("echo"), exec_data_one->opt);
     exec_data_one->opt = add_string_to_array(ft_strdup("hi"), exec_data_one->opt);
@@ -1117,7 +1136,7 @@ t_exec_data *test_51()
                       create_rdir(OUTPUT, build_full_path("test_output/outfile01"))); // Output redirection to file
 
     // Setup for the second command (echo bye)
-    exec_data_two->cmd = ft_strdup("/bin/echo"); // Path to the echo binary
+    exec_data_two->cmd = ft_strdup("echo"); // Path to the echo binary
     exec_data_two->is_builtin = true; // echo is a built-in command
     exec_data_two->opt = add_string_to_array(ft_strdup("echo"), exec_data_two->opt);
     exec_data_two->opt = add_string_to_array(ft_strdup("bye"), exec_data_two->opt);
@@ -1136,7 +1155,7 @@ t_exec_data *test_51()
 
 t_exec_data *test_50()
 {
-    ft_printf("Running test 50: echo hi | echo bye >./test_output/outfile01 >./test_output/outfile02");
+    ft_printf("Running test 50: echo hi | echo bye >./test_output/outfile01 >./test_output/outfile02\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -1146,13 +1165,13 @@ t_exec_data *test_50()
     init_cmd(exec_data_two);
 
     // Setup for the first command (echo hi)
-    exec_data_one->cmd = ft_strdup("/bin/echo"); // Path to the echo binary
+    exec_data_one->cmd = ft_strdup("echo"); // Path to the echo binary
     exec_data_one->is_builtin = true; // echo is a built-in command
     exec_data_one->opt = add_string_to_array(ft_strdup("echo"), exec_data_one->opt);
     exec_data_one->opt = add_string_to_array(ft_strdup("hi"), exec_data_one->opt);
 
     // Setup for the second command (echo bye)
-    exec_data_two->cmd = ft_strdup("/bin/echo"); // Path to the echo binary
+    exec_data_two->cmd = ft_strdup("echo"); // Path to the echo binary
     exec_data_two->is_builtin = true; // echo is a built-in command
     exec_data_two->opt = add_string_to_array(ft_strdup("echo"), exec_data_two->opt);
     exec_data_two->opt = add_string_to_array(ft_strdup("bye"), exec_data_two->opt);
@@ -1173,7 +1192,7 @@ t_exec_data *test_50()
 
 t_exec_data *test_49()
 {
-    ft_printf("Running test 49: echo hi | echo >./test_output/outfile01 bye");
+    ft_printf("Running test 49: echo hi | echo >./test_output/outfile01 bye\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -1183,13 +1202,13 @@ t_exec_data *test_49()
     init_cmd(exec_data_two);
 
     // Setup for the first command (echo hi)
-    exec_data_one->cmd = ft_strdup("/bin/echo"); // Path to the echo binary
+    exec_data_one->cmd = ft_strdup("echo"); // Path to the echo binary
     exec_data_one->is_builtin = true; // echo is a built-in command
     exec_data_one->opt = add_string_to_array(ft_strdup("echo"), exec_data_one->opt);
     exec_data_one->opt = add_string_to_array(ft_strdup("hi"), exec_data_one->opt);
 
     // Setup for the second command (echo bye)
-    exec_data_two->cmd = ft_strdup("/bin/echo"); // Path to the echo binary
+    exec_data_two->cmd = ft_strdup("echo"); // Path to the echo binary
     exec_data_two->is_builtin = true; // echo is a built-in command
     exec_data_two->opt = add_string_to_array(ft_strdup("echo"), exec_data_two->opt);
     exec_data_two->opt = add_string_to_array(ft_strdup("bye"), exec_data_two->opt);
@@ -1208,7 +1227,7 @@ t_exec_data *test_49()
 
 t_exec_data *test_48()
 {
-    ft_printf("Running test 48: echo hi >./test_output/outfile01 >./test_output/outfile02 | echo bye");
+    ft_printf("Running test 48: echo hi >./test_output/outfile01 >./test_output/outfile02 | echo bye\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -1218,7 +1237,7 @@ t_exec_data *test_48()
     init_cmd(exec_data_two);
 
     // Setup for the first command (echo hi)
-    exec_data_one->cmd = ft_strdup("/bin/echo"); // Path to the echo binary
+    exec_data_one->cmd = ft_strdup("echo"); // Path to the echo binary
     exec_data_one->is_builtin = true; // echo is a built-in command
     exec_data_one->opt = add_string_to_array(ft_strdup("echo"), exec_data_one->opt);
     exec_data_one->opt = add_string_to_array(ft_strdup("hi"), exec_data_one->opt);
@@ -1230,7 +1249,7 @@ t_exec_data *test_48()
                       create_rdir(OUTPUT, build_full_path("test_output/outfile02"))); // Second output redirection
 
     // Setup for the second command (echo bye)
-    exec_data_two->cmd = ft_strdup("/bin/echo"); // Path to the echo binary
+    exec_data_two->cmd = ft_strdup("echo"); // Path to the echo binary
     exec_data_two->is_builtin = true; // echo is a built-in command
     exec_data_two->opt = add_string_to_array(ft_strdup("echo"), exec_data_two->opt);
     exec_data_two->opt = add_string_to_array(ft_strdup("bye"), exec_data_two->opt);
@@ -1245,7 +1264,7 @@ t_exec_data *test_48()
 
 t_exec_data *test_47()
 {
-    ft_printf("Running test 47: echo hi >./test_output/outfile01 | echo bye");
+    ft_printf("Running test 47: echo hi >./test_output/outfile01 | echo bye\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -1255,7 +1274,7 @@ t_exec_data *test_47()
     init_cmd(exec_data_two);
 
     // Setup for the first command (echo hi)
-    exec_data_one->cmd = ft_strdup("/bin/echo"); // Path to the echo binary
+    exec_data_one->cmd = ft_strdup("echo"); // Path to the echo binary
     exec_data_one->is_builtin = true; // echo is a built-in command
     exec_data_one->opt = add_string_to_array(ft_strdup("echo"), exec_data_one->opt);
     exec_data_one->opt = add_string_to_array(ft_strdup("hi"), exec_data_one->opt);
@@ -1265,7 +1284,7 @@ t_exec_data *test_47()
                       create_rdir(OUTPUT, build_full_path("test_output/outfile01"))); // Output redirection to file
 
     // Setup for the second command (echo bye)
-    exec_data_two->cmd = ft_strdup("/bin/echo"); // Path to the echo binary
+    exec_data_two->cmd = ft_strdup("echo"); // Path to the echo binary
     exec_data_two->is_builtin = true; // echo is a built-in command
     exec_data_two->opt = add_string_to_array(ft_strdup("echo"), exec_data_two->opt);
     exec_data_two->opt = add_string_to_array(ft_strdup("bye"), exec_data_two->opt);
@@ -1280,7 +1299,7 @@ t_exec_data *test_47()
 
 t_exec_data *test_46()
 {
-    ft_printf("Running test 46: cat <\"./test_input/infile\" >\"./test_output/outfile01\"");
+    ft_printf("Running test 46: cat <\"./test_input/infile\" >\"./test_output/outfile01\"\n");
     t_exec_data *exec_data = malloc(sizeof(t_exec_data));
     memset(exec_data, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data);
@@ -1304,7 +1323,7 @@ t_exec_data *test_46()
 
 t_exec_data *test_45()
 {
-    ft_printf("Running test 45: ls >./test_output/invalid_permission >\"./test_output/outfile01\" >./test_output/invalid_permission");
+    ft_printf("Running test 45: ls >./test_output/invalid_permission >\"./test_output/outfile01\" >./test_output/invalid_permission\n");
     t_exec_data *exec_data = malloc(sizeof(t_exec_data));
     memset(exec_data, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data);
@@ -1329,7 +1348,7 @@ t_exec_data *test_45()
 
 t_exec_data *test_44()
 {
-    ft_printf("Running test 44: ls >\"./test_output/outfile01\" >./test_output/invalid_permission >\"./test_output/outfile02\"");
+    ft_printf("Running test 44: ls >\"./test_output/outfile01\" >./test_output/invalid_permission >\"./test_output/outfile02\"\n");
     t_exec_data *exec_data = malloc(sizeof(t_exec_data));
     memset(exec_data, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data);
@@ -1354,7 +1373,7 @@ t_exec_data *test_44()
 
 t_exec_data *test_43()
 {
-    ft_printf("Running test 43: ls >\"./test_output/outfile""1""2""3""4""5\"");
+    ft_printf("Running test 43: ls >\"./test_output/outfile""1""2""3""4""5\"\n");
     t_exec_data *exec_data = malloc(sizeof(t_exec_data));
     memset(exec_data, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data);
@@ -1375,7 +1394,7 @@ t_exec_data *test_43()
 
 t_exec_data *test_42()
 {
-    ft_printf("Running test 42: ls >\"./test_output/outfile with spaces\"");
+    ft_printf("Running test 42: ls >\"./test_output/outfile with spaces\"\n");
     t_exec_data *exec_data = malloc(sizeof(t_exec_data));
     memset(exec_data, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data);
@@ -1395,7 +1414,7 @@ t_exec_data *test_42()
 
 t_exec_data *test_41()
 {
-    ft_printf("Running test 41: ls >./test_output/outfile01 >./test_output/invalid_permission");
+    ft_printf("Running test 41: ls >./test_output/outfile01 >./test_output/invalid_permission\n");
     t_exec_data *exec_data = malloc(sizeof(t_exec_data));
     memset(exec_data, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data);
@@ -1418,7 +1437,7 @@ t_exec_data *test_41()
 
 t_exec_data *test_40()
 {
-    ft_printf("Running test 40: ls >./test_output/outfile01 >./test_output/outfile02");
+    ft_printf("Running test 40: ls >./test_output/outfile01 >./test_output/outfile02\n");
     t_exec_data *exec_data = malloc(sizeof(t_exec_data));
     memset(exec_data, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data);
@@ -1441,7 +1460,7 @@ t_exec_data *test_40()
 
 t_exec_data *test_39()
 {
-    ft_printf("Running test 39: echo hi >         ./test_output/outfile01 bye ");
+    ft_printf("Running test 39: echo hi >         ./test_output/outfile01 bye \n");
     t_exec_data *exec_data = malloc(sizeof(t_exec_data));
     memset(exec_data, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data);
@@ -1463,7 +1482,7 @@ t_exec_data *test_39()
 
 t_exec_data *test_38()
 {
-    ft_printf("Running test 38: ls >./test_output/outfile01");
+    ft_printf("Running test 38: ls >./test_output/outfile01\n");
     t_exec_data *exec_data = malloc(sizeof(t_exec_data));
     memset(exec_data, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data);
@@ -1484,7 +1503,7 @@ t_exec_data *test_38()
 
 t_exec_data *test_37()
 {
-    ft_printf("Running test 37: echo <123 <456 hi | echo 42");
+    ft_printf("Running test 37: echo <123 <456 hi | echo 42\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -1520,7 +1539,7 @@ t_exec_data *test_37()
 
 t_exec_data *test_36()
 {
-    ft_printf("Running test 36: cat <missing | cat <\"./test_files/infile\"");
+    ft_printf("Running test 36: cat <missing | cat <\"./test_input/infile\"\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -1553,7 +1572,7 @@ t_exec_data *test_36()
 
 t_exec_data *test_35()
 {
-    ft_printf("Running test 35: cat <missing | echo oi");
+    ft_printf("Running test 35: cat <missing | echo oi\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -1584,7 +1603,7 @@ t_exec_data *test_35()
 
 t_exec_data *test_34()
 {
-    ft_printf("Running test 34: cat <missing | cat");
+    ft_printf("Running test 34: cat <missing | cat\n");
     t_exec_data *exec_data_one = malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -1601,7 +1620,7 @@ t_exec_data *test_34()
 
     // Setup for the second command
     exec_data_two->cmd = ft_strdup("/bin/cat"); // Path to the cat binary
-    exec_data_two->is_builtin = true;
+    exec_data_two->is_builtin = false;
     exec_data_two->opt = add_string_to_array(ft_strdup("cat"), exec_data_two->opt);
 
     // Link the two commands in the pipeline
@@ -1614,7 +1633,7 @@ t_exec_data *test_34()
 
 t_exec_data *test_33()
 {
-    ft_printf("Running test 33: cat <missing");
+    ft_printf("Running test 33: cat <missing\n");
     t_exec_data *exec_data = malloc(sizeof(t_exec_data));
     memset(exec_data, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data);
@@ -1632,7 +1651,7 @@ t_exec_data *test_33()
 
 t_exec_data *test_32()
 {
-    ft_printf("Running test 32: cat <\"./test_input/infile_big\" | echo hi");
+    ft_printf("Running test 32: cat <\"./test_input/infile_big\" | echo hi\n");
     t_exec_data *exec_data_one= malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -1648,9 +1667,10 @@ t_exec_data *test_32()
                       create_rdir(INPUT,build_full_path("test_input/infile")));
 
     // Setup for second command
-    exec_data_two->cmd = "echo"; 
+    exec_data_two->cmd = ft_strdup("echo"); 
+    exec_data_two->is_builtin = true;
     exec_data_two->opt = add_string_to_array(ft_strdup("echo"), exec_data_two->opt);
-    exec_data_two->opt = add_string_to_array(ft_strdup("oi"), exec_data_two->opt);
+    exec_data_two->opt = add_string_to_array(ft_strdup("hi"), exec_data_two->opt);
     
     exec_data_one->next = exec_data_two; 
     exec_data_two->next = NULL;
@@ -1659,7 +1679,7 @@ t_exec_data *test_32()
 
 t_exec_data *test_31()
 {
-    ft_printf("Running test 31: cat <\"./test_input/infile\" | grep hello");
+    ft_printf("Running test 31: cat <\"./test_input/infile\" | grep hello\n");
     t_exec_data *exec_data_one= malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -1686,7 +1706,7 @@ t_exec_data *test_31()
 
 t_exec_data *test_30()
 {
-    ft_printf("Running test 30: cat <\"./test_input/infile\" | echo hi");
+    ft_printf("Running test 30: cat <\"./test_input/infile\" | echo hi\n");
     t_exec_data *exec_data_one= malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -1702,7 +1722,7 @@ t_exec_data *test_30()
                       create_rdir(INPUT,build_full_path("test_input/infile")));
 
     // Setup for grep command
-    exec_data_two->cmd = "echo"; // Path to the grep binary
+    exec_data_two->cmd = ft_strdup("echo"); // Path to the grep binary
     exec_data_two->is_builtin = true;
     exec_data_two->opt = add_string_to_array(ft_strdup("echo"), exec_data_two->opt);
     exec_data_two->opt = add_string_to_array(ft_strdup("hi"), exec_data_two->opt);
@@ -1714,7 +1734,7 @@ t_exec_data *test_30()
 
 t_exec_data *test_29()
 {
-    ft_printf("Running test 29: echo hi | cat \"./test_input/infile\"");
+    ft_printf("Running test 29: echo hi | cat \"./test_input/infile\"\n");
     t_exec_data *exec_data_one= malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -1741,7 +1761,7 @@ t_exec_data *test_29()
 
 t_exec_data *test_28()
 {
-    ft_printf("Running test 28: echo hi | cat <\"./test_input/infile\"");
+    ft_printf("Running test 28: echo hi | cat <\"./test_input/infile\"\n");
     t_exec_data *exec_data_one= malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -1770,7 +1790,7 @@ t_exec_data *test_28()
 
 t_exec_data *test_27()
 {
-    ft_printf("Running test 27: echo <\"./test_input/infile_big\" | echo <\"./test_input/infile\"");
+    ft_printf("Running test 27: echo <\"./test_input/infile_big\" | echo <\"./test_input/infile\"\n");
     t_exec_data *exec_data_one= malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -1779,17 +1799,18 @@ t_exec_data *test_27()
     memset(exec_data_two, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_two);
 
-    // Setup for grep command
-    exec_data_one->cmd = ft_strdup("echo"); // Path to the grep binary
+   
+    exec_data_one->cmd = ft_strdup("echo"); 
     exec_data_one->is_builtin = true;
     exec_data_one->opt = add_string_to_array(ft_strdup("echo"), exec_data_one->opt);
 
-    // Add input redirection
+   
     add_redir_to_list(&exec_data_one->redirs,
                       create_rdir(INPUT,build_full_path("test_input/infile_big")));
 
-    // Setup for grep command
-    exec_data_two->cmd = ft_strdup("echo"); // Path to the grep binary
+    
+    exec_data_two->cmd = ft_strdup("echo"); 
+    exec_data_two->is_builtin = true;
     exec_data_two->opt = add_string_to_array(ft_strdup("echo"), exec_data_two->opt);
     
     add_redir_to_list(&exec_data_two->redirs,
@@ -1803,7 +1824,7 @@ t_exec_data *test_27()
 
 t_exec_data *test_26()
 {
-    ft_printf("Running test 26: echo <\"./test_input/infile_big\" | cat \"./test_input/infile\"");
+    ft_printf("Running test 26: echo <\"./test_input/infile_big\" | cat \"./test_input/infile\"\n");
     t_exec_data *exec_data_one= malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -1834,7 +1855,7 @@ t_exec_data *test_26()
 
 t_exec_data *test_25()
 {
-    ft_printf("Running test 25: echo <\"./test_input/infile_big\" | cat <\"./test_input/infile\"");
+    ft_printf("Running test 25: echo <\"./test_input/infile_big\" | cat <\"./test_input/infile\"\n");
     t_exec_data *exec_data_one= malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -1868,14 +1889,14 @@ t_exec_data *test_25()
 
 t_exec_data *test_24()
 {
-    ft_printf("Running test 24: cat <\"./test_input/infile\"");
+    ft_printf("Running test 24: cat <\"./test_input/infile\"\n");
     t_exec_data *exec_data_one= malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
 
     // Setup for grep command
     exec_data_one->cmd = ft_strdup("/bin/cat"); 
-    exec_data_one->is_builtin = true;
+    exec_data_one->is_builtin = false;
     exec_data_one->opt = add_string_to_array(ft_strdup("cat"), exec_data_one->opt); 
     
 
@@ -1888,7 +1909,7 @@ t_exec_data *test_24()
 }
 t_exec_data *test_23()
 {
-    ft_printf("Running test 23: echo <missing <\"./test_input/infile\" <missing");
+    ft_printf("Running test 23: echo <missing <\"./test_input/infile\" <missing\n");
     t_exec_data *exec_data_one= malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -1912,7 +1933,7 @@ t_exec_data *test_23()
 
 t_exec_data *test_22()
 {
-    ft_printf("Running test 22: echo <\"./test_input/infile\" <missing <\"./test_input/infile\"");
+    ft_printf("Running test 22: echo <\"./test_input/infile\" <missing <\"./test_input/infile\"\n");
     t_exec_data *exec_data_one= malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
@@ -1936,14 +1957,14 @@ t_exec_data *test_22()
 
 t_exec_data *test_21()
 {
-    ft_printf("Running test 21: cat <\"1""2""3""4""5\"");
+    ft_printf("Running test 21: cat <\"1""2""3""4""5\"\n");
     t_exec_data *exec_data_one= malloc(sizeof(t_exec_data));
     memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
     init_cmd(exec_data_one);
 
     // Setup for grep command
     exec_data_one->cmd = ft_strdup("/bin/cat"); 
-    exec_data_one->is_builtin = true;
+    exec_data_one->is_builtin = false;
     exec_data_one->opt = add_string_to_array(ft_strdup("cat"), exec_data_one->opt); 
     
 
@@ -1964,7 +1985,7 @@ t_exec_data *test_20()
 
     // Setup for grep command
     exec_data_one->cmd = ft_strdup("/bin/cat"); 
-    exec_data_one->is_builtin = true;
+    exec_data_one->is_builtin = false;
     exec_data_one->opt = add_string_to_array(ft_strdup("cat"), exec_data_one->opt); 
     exec_data_one->opt = add_string_to_array(build_full_path("test_input/infile"), exec_data_one->opt); 
     
@@ -1986,7 +2007,7 @@ t_exec_data *test_19()
 
     // Setup for grep command
     exec_data_one->cmd = ft_strdup("/bin/cat"); 
-    exec_data_one->is_builtin = true;
+    exec_data_one->is_builtin = false;
     exec_data_one->opt = add_string_to_array(ft_strdup("cat"), exec_data_one->opt); 
 
     
@@ -2075,10 +2096,9 @@ t_exec_data *test_15()
     exec_data_grep->cmd = ft_strdup("/bin/grep"); // Path to the grep binary
     exec_data_grep->opt = add_string_to_array(ft_strdup("grep"), exec_data_grep->opt); // Add "grep" as the command itself
     exec_data_grep->opt = add_string_to_array(ft_strdup("hi"), exec_data_grep->opt);   // Add "hi" as an argument
+    exec_data_grep->opt = add_string_to_array(ft_strdup("<infile"), exec_data_grep->opt);   // Add "hi" as an argument
 
     // Add input redirection
-    add_redir_to_list(&exec_data_grep->redirs,
-                      create_rdir(INPUT,build_full_path("<infile")));
     add_redir_to_list(&exec_data_grep->redirs,
                       create_rdir(INPUT,build_full_path("test_input/infile")));
 

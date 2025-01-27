@@ -1,0 +1,9 @@
+bin
+inc
+libs
+Makefile
+obj
+README.md
+src
+test_input
+test_output

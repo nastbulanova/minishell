@@ -25,7 +25,8 @@ void handle_exit_status(t_pid_list *pid_list);
 
 //executor/executor_child.c
 void handle_child(t_exec_data *current, t_exec_data *previous, char **envp);
-char *built_error_string(const char* filename);
+char *built_error_string(char* filename, char *str_error);
+void check_redir(t_exec_data *current);
 
 //executor/executor_free.c
 void free_pid_list(t_pid_list **head);

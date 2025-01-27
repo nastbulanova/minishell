@@ -54,11 +54,37 @@ static void handle_pipe_sequence(t_exec_data *head, char **envp)
     handle_exit_status(pid_list);
     free_pid_list(&pid_list);
 }
+bool check_redir_parent(t_exec_data *current)
+{
+    t_redir *head;
+    char    *temp;
+    t_minishell *data;
 
+    head = current->redirs;
+    while (head)
+    {
+    //fprintf(stderr, "HIT %s\n", head->error);
+        if (head->error)
+            break;
+        head = head->next;
+    }
+    if (head && head->error)
+    {
+        data = get_shell(false);
+        temp = built_error_string(head->str, head->error);
+        write(STDERR_FILENO, temp, ft_strlen(temp));
+        free(temp);
+        data->exit_code = 1;
+        return (false);
+    }
+    return (true);
+}
 static void handle_builtin_command(t_exec_data *current)
 {
+    if (!check_redir_parent(current))
+        return;
     if (c_strcmp(current->cmd, "echo") == 0)
-            current->exit_status = cmd_echo(current->opt);
+            current->exit_status = cmd_echo(current->opt, current->output_fd);
     else if (c_strcmp(current->cmd, "cd") == 0)
         current->exit_status = cmd_cd(current->opt);
     else if (c_strcmp(current->cmd, "unset") == 0)
@@ -89,6 +115,7 @@ static void handle_command_redirections(t_minishell *data, t_exec_data *head)
 
 void execute_command_list(t_minishell *data, t_exec_data *head, char **envp)
 {
+   
     handle_command_redirections(data, head);
     if (data->exit_code == 130)
         return;
