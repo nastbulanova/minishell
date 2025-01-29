@@ -38,6 +38,12 @@ static void check_sign(const char *str, int *index, int *sign)
 		(*index)++;
 	}
 }
+
+static void ft_exit_atoi_aux(char *str)
+{
+	ft_putstr_fd("exit\n", STDOUT_FILENO);
+	minishell_exit(built_exit_string(str), 2, STDERR_FILENO, true);
+}
 char ft_exit_atoi(char *str)
 {
 	int sign;
@@ -52,18 +58,12 @@ char ft_exit_atoi(char *str)
     	digit = str[index] - '0';
 		if (sign < 0 && (INT64_MAX - (value * 10) < digit - 1))
 		{
-			fprintf(stderr, "result: %lld digit %d\n", (INT64_MAX - (value * 10)), (digit - 1));
-			ft_putstr_fd("exit\n", STDOUT_FILENO);
-			minishell_exit(built_exit_string(str), 2, STDERR_FILENO, true);
-			value = 2;
+			ft_exit_atoi_aux(str);
 			return (2);
 		}
 		else if (sign > 0 && (INT64_MAX - (value * 10) < digit))
 		{
-			fprintf(stderr, "result: %lld digit %d\n", (INT64_MAX - (value * 10)), (digit - 1));
-			ft_putstr_fd("exit\n", STDOUT_FILENO);
-			minishell_exit(built_exit_string(str), 2, STDERR_FILENO, true);
-			value = 2;
+			ft_exit_atoi_aux(str);
 			return (2);
 		}
         value = (value * 10) + (digit);	

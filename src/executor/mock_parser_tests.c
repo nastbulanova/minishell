@@ -17,6 +17,33 @@ char *build_full_path(const char *relative_path)
     return full_path;
 }
 
+t_exec_data *test_90()
+{
+    ft_printf("Running test 90: cat <$test_input | pwd\n");
+    t_exec_data *exec_data_one= malloc(sizeof(t_exec_data));
+    memset(exec_data_one, 0, sizeof(t_exec_data)); // Initialize to 0
+    init_cmd(exec_data_one);
+
+    t_exec_data *exec_data_two= malloc(sizeof(t_exec_data));
+    memset(exec_data_two, 0, sizeof(t_exec_data)); // Initialize to 0
+    init_cmd(exec_data_two);
+
+    // Setup for grep command
+    exec_data_one->cmd = ft_strdup("/bin/cat"); // Path to the grep binary
+    exec_data_one->opt = add_string_to_array(ft_strdup("cat"), exec_data_one->opt);
+    add_redir_to_list(&exec_data_one->redirs,
+                      create_rdir(INPUT, ft_strdup("$test_input")));
+
+    // Setup for grep command
+    exec_data_two->cmd = ft_strdup("pwd"); // Path to the grep binary
+    exec_data_two->is_builtin = true;
+    exec_data_two->opt = add_string_to_array(ft_strdup("pwd"), exec_data_two->opt);
+    
+    exec_data_one->next = exec_data_two; 
+    exec_data_two->next = NULL;
+    return exec_data_one;
+}
+
 t_exec_data *test_89()
 {
     ft_printf("Running test 89: cat <\"./test_input/infile\" | pwd\n");
@@ -984,7 +1011,7 @@ t_exec_data *test_56()
                       create_rdir(OUTPUT, build_full_path("test_output/outfile01"))); // Output redirection to file
     // Add output redirection for the second command to "./test_input/invalid_permission"
     add_redir_to_list(&exec_data_two->redirs,
-                      create_rdir(OUTPUT, build_full_path("test_outpu/invalid_permission"))); // Invalid permission redirection
+                      create_rdir(OUTPUT, build_full_path("test_output/invalid_permission"))); // Invalid permission redirection
 
     // Connect the first command to the second command in the pipeline
     exec_data_one->next = exec_data_two;
@@ -1087,7 +1114,7 @@ t_exec_data *test_53()
 
     // Add output redirection for the first command to "./test_input/invalid_permission"
     add_redir_to_list(&exec_data_one->redirs,
-                      create_rdir(OUTPUT, build_full_path("teste_output/invalid_permission"))); // Invalid permission redirection
+                      create_rdir(OUTPUT, build_full_path("test_output/invalid_permission"))); // Invalid permission redirection
 
     // Setup for the second command (echo bye)
     exec_data_two->cmd = ft_strdup("echo"); // Path to the echo binary
@@ -2488,7 +2515,7 @@ t_exec_data *test_2()
     exec_data_echo->opt = add_string_to_array(ft_strdup("Hello"), exec_data_echo->opt);
     exec_data_echo->opt = add_string_to_array(ft_strdup("World"), exec_data_echo->opt);
     exec_data_echo->is_builtin = true;
-    add_redir_to_list(&exec_data_echo->redirs, create_rdir(OUTPUT, build_full_path("test_output/output2.txt")));
+    add_redir_to_list(&exec_data_echo->redirs, create_rdir(OUTPUT, build_full_path("test_output/output.txt")));
 
     // Setup for wc command
     exec_data_wc->cmd = ft_strdup("/bin/wc"); // Command to execute

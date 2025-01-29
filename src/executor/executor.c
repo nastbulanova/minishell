@@ -16,13 +16,12 @@ static bool command_is_valid_aux(t_minishell *data, t_exec_data *cmd, char **fin
     {
         data->exit_code = 127;
         if (errno == ENOENT)
-            *final_string = built_error_string(cmd->cmd, strerror(errno));
+            *final_string = built_error_string(cmd->cmd, strerror(errno), true);
         return (false);
-    }
-    if (access(cmd->cmd, X_OK) == -1)
+    } else if (access(cmd->cmd, X_OK) == -1)
     {
         data->exit_code = 126;
-        *final_string = built_error_string(cmd->cmd, strerror(errno));
+        *final_string = built_error_string(cmd->cmd, strerror(errno), true);
         return (false);
     }
     return (true);
@@ -39,17 +38,18 @@ bool command_is_valid(t_exec_data *cmd, t_minishell *data)
     {
         data->exit_code = cmd->exit_status;
         error = get_rdir_error(cmd->redirs);
-        final_string = built_error_string(cmd->cmd, error);
+        final_string = ft_strdup(error);
         result = false;
     }
     if (result && !cmd->is_builtin)
         result = command_is_valid_aux(data, cmd, &final_string);
     if (!result)
         print_and_cleanup_error(cmd, final_string);
+    
     return (result);
 }
 
-static void execute_pipe(t_minishell *data, t_exec_data *head, char** envp)
+void execute_pipe(t_minishell *data, t_exec_data *head, char** envp)
 {
     t_exec_data *current;
     t_exec_data *previous;
@@ -61,16 +61,17 @@ static void execute_pipe(t_minishell *data, t_exec_data *head, char** envp)
     previous = NULL;
     while (current)
     {
-        if (command_is_valid(current, data))
-        {
+        //fprintf(stderr, "   CMD %s Execute_pipe at entrance input_fd %d, output_fd %d, outpit[%d][%d]\n", current->cmd, current->input_fd, current->output_fd, current->outpipe[0], current->outpipe[1]);
+        //if (command_is_valid(current, data))
+        //{
             if (current->next)
                 safe_pipe(current->outpipe);    
             pid = safe_fork();
             if (pid == 0)
-                handle_child(current, previous, envp);    
+                handle_child(current, previous, envp, head);    
             else
                 handle_parent(current, previous, &pid_list, pid);
-        }
+        //}
         close_command_fds(previous);
         previous = current;
         current = current->next;
@@ -87,8 +88,9 @@ void execute_command_list(t_minishell *data, t_exec_data *head, char **envp)
     {
         handle_heredoc_redirection (data, current);
         if (data->exit_code == 130)
-            return;
+            break;
         handle_io_redirections(current);
+        //fprintf(stderr, "CMD %s After redirection  input_fd %d, output_fd %d, outpit[%d][%d]\n", head->cmd, head->input_fd, head->output_fd, head->outpipe[0], head->outpipe[1]);
         current = current->next;
     }
     if (data->exit_code == 130)
@@ -98,5 +100,6 @@ void execute_command_list(t_minishell *data, t_exec_data *head, char **envp)
     else
         execute_pipe(data, head, envp);
 
+    free_array(envp, NULL);
 }
 

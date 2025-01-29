@@ -6,8 +6,9 @@
 
 size_t c_strlen(const char *str);
 
-void execute_execve(t_exec_data *cmd, char **envp);
+void execute_execve(t_exec_data *cmd, char **envp, t_exec_data *head);
 void execute_non_pipe(t_minishell *data, t_exec_data *cmd, char **envp);
+void clear_fds(t_exec_data *temp);
 
 //executor/executor_aux_safe.c
 void close_fd(int *fd);
@@ -19,7 +20,7 @@ pid_t safe_fork();
 //executor/executor_aux.c
 int execute_builtin(t_exec_data *cmd);
 void close_command_fds(t_exec_data *cmd);
-char *built_error_string(char* filename, char *error_str);
+char *built_error_string(char* filename, char *error_str, bool newline);
 
 //executor/executor_common.c
 bool has_heredoc(t_redir *redir);
@@ -34,9 +35,8 @@ void add_pid(t_pid_list **head, pid_t pid);
 void handle_exit_status(t_minishell *data, t_pid_list *pid_list);
 
 //executor/executor_child.c
-void handle_child(t_exec_data *current, t_exec_data *previous, char **envp);
+void handle_child(t_exec_data *cmd, t_exec_data *previous, char **envp, t_exec_data *head);
 void handle_parent(t_exec_data *cmd, t_exec_data *previous, t_pid_list **pid_list, pid_t pid);
-char *built_error_string(char* filename, char *str_error);
 
 //executor/executor_free.c
 void free_pid_list(t_pid_list **head);

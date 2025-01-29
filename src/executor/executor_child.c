@@ -1,6 +1,6 @@
 #include "../../inc/minishell.h"
 
-static void clear_fds(t_exec_data *temp)
+void clear_fds(t_exec_data *temp)
 {
     while (temp) 
     {
@@ -33,13 +33,15 @@ static void handle_child_input(t_exec_data *cmd, t_exec_data *previous)
 {
     if (cmd->input_fd >= 0) 
     {
-        safe_dup_two(cmd->input_fd, STDIN_FILENO);
+        if (!cmd->is_builtin)
+            safe_dup_two(cmd->input_fd, STDIN_FILENO);
         close_fd(&cmd->input_fd);
     }
     else if (previous) 
     {   
         if (previous->outpipe[0] >= 0)
         {
+            //fprintf(stderr, "Previous CMD %s has outpipe[%d]", previous->cmd, previous->outpipe[0]);
             safe_dup_two(previous->outpipe[0], STDIN_FILENO); 
             close_fd(&previous->outpipe[0]);
         }
@@ -63,27 +65,42 @@ static void handle_child_output(t_exec_data *cmd)
     }
 }
 
-void handle_child(t_exec_data *cmd, t_exec_data *previous, char **envp)
+void handle_child(t_exec_data *cmd, t_exec_data *previous, char **envp, t_exec_data *head)
 {
     int exit_code;
 
+    exit_code = 0;
     handle_child_input(cmd, previous);
     handle_child_output(cmd);
     if (cmd->next) 
         close_fd(&cmd->outpipe[0]);
     if (previous) 
         close_fd(&previous->outpipe[1]);
-    fprintf(stderr, "   CMD %s After child redirect input_fd %d, output_fd %d, outpit[%d][%d]\n", cmd->cmd, cmd->input_fd, cmd->output_fd, cmd->outpipe[0], cmd->outpipe[1]);
-    clear_fds(cmd->next);
+    //fprintf(stderr, "   CMD %s After child redirect input_fd %d, output_fd %d, outpit[%d][%d]\n", cmd->cmd, cmd->input_fd, cmd->output_fd, cmd->outpipe[0], cmd->outpipe[1]);
+    //clear_fds(cmd->next);
     if (cmd->is_builtin)
     {
-        exit_code = execute_builtin(cmd);
-        close_fd(&cmd->outpipe[1]);
-        fprintf(stderr, "   CMD %s After execv input_fd %d, output_fd %d, outpit[%d][%d]\n", cmd->cmd, cmd->input_fd, cmd->output_fd, cmd->outpipe[0], cmd->outpipe[1]);
+        if (command_is_valid(cmd, get_shell(false)))
+        {
+            exit_code = execute_builtin(cmd);
+        }
+        clear_fds(head);
+        //fprintf(stderr, "   CMD %s After execute_builtin input_fd %d, output_fd %d, outpit[%d][%d]\n", cmd->cmd, cmd->input_fd, cmd->output_fd, cmd->outpipe[0], cmd->outpipe[1]);
         minishell_exit(NULL, exit_code, STDOUT_FILENO, false);
     }
     else
-        execute_execve(cmd, envp);    
+    {
+        //fprintf(stderr, "   CMD %s before  execute_execve input_fd %d, output_fd %d, outpit[%d][%d]\n", cmd->cmd, cmd->input_fd, cmd->output_fd, cmd->outpipe[0], cmd->outpipe[1]);
+        if (command_is_valid(cmd, get_shell(false)))
+        {
+            execute_execve(cmd, envp, head);    
+        }
+        else
+        {
+            clear_fds(head);
+            minishell_exit(NULL, -1, STDERR_FILENO, true);
+        }
+    }
 }
 
 

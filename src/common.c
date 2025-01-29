@@ -46,6 +46,8 @@ void minishell_exit(char *msg, int exit_code, int exit_fd, bool dispose_msg)
             free(msg);
     }
     minishell_free(data);
+    if (exit_code < 0)
+        exit_code = data->exit_code;
     exit((unsigned char)exit_code);
 }
 

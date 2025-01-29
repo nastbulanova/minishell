@@ -213,6 +213,8 @@ void main_loop(t_minishell *data)
             command_list = get_test(88);
         if (c_strcmp("run test89", input) == 0)
             command_list = get_test(89);
+         if (c_strcmp("run test90", input) == 0)
+            command_list = get_test(90);
         if (c_strcmp("$?", input) == 0)
             ft_printf("Exit Code: %d\n", data->exit_code);
         if (command_list)

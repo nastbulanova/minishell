@@ -12,7 +12,7 @@ static void error_string_aux(char *str, char *final_string, size_t *index_final,
         (*index_final)++;
     }
 }
-char *built_error_string(char* filename, char *error_str)
+char *built_error_string(char* filename, char *error_str, bool newline)
 {
     size_t final_length;
     char *final_string;
@@ -21,13 +21,18 @@ char *built_error_string(char* filename, char *error_str)
 
     index = 0;
     final_length = 0;
-    final_length = (c_strlen(template) + c_strlen(filename) + c_strlen(error_str) + 3);
+    if (newline)
+        final_length = (c_strlen(template) + c_strlen(filename) + c_strlen(error_str) + 4);
+    else
+        final_length = (c_strlen(template) + c_strlen(filename) + c_strlen(error_str) + 3);
     final_string = safe_malloc(final_length);
     error_string_aux(template, final_string, &index, index);
     error_string_aux(filename, final_string, &index, 0);
     final_string[index++] = ':';
     final_string[index++] = ' ';
     error_string_aux(error_str, final_string, &index, 0);
+    if (newline)
+        final_string[index++] = '\n';
     final_string[index] = '\0';
     return final_string;
 }

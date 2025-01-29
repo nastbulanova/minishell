@@ -1,16 +1,20 @@
 #include "../../inc/minishell.h"
 
-void execute_execve(t_exec_data *cmd, char **envp)
+void execute_execve(t_exec_data *cmd, char **envp, t_exec_data *head)
 {
+    int exit_code;
+
     if (execve(cmd->cmd, cmd->opt, envp) < 0)
     {
-        perror("execve");
         if (errno == ENOENT)
-            exit(127); 
+            exit_code = 127; 
         else if (errno == EACCES)
-            exit(126); 
+            exit_code = 126; 
         else
-            exit(1);
+            exit_code = 1;
+        if (head)
+            clear_fds(head);
+        minishell_exit(built_error_string(cmd->cmd, strerror(errno), true), exit_code, STDERR_FILENO, true);
     }
 }
 static void execute_isolated_aux(t_minishell *data, t_exec_data *cmd, char **envp)
@@ -18,13 +22,14 @@ static void execute_isolated_aux(t_minishell *data, t_exec_data *cmd, char **env
     pid_t pid;
     t_pid_list *pid_list;
 
+    pid_list = NULL;
     if (cmd->is_builtin)
         data->exit_code = execute_builtin(cmd);
     else
     {
         pid = safe_fork();
         if (pid == 0)
-            execute_execve(cmd, envp);
+            execute_execve(cmd, envp, NULL);
         else
         {
             add_pid(&pid_list, pid);
