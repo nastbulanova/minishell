@@ -5,7 +5,7 @@ void close_fd(int *fd)
     if (fd && *fd >=0)
     {
         if (close(*fd) == -1)
-            minishell_exit("Failed to close file descriptor.", 2, STDERR_FILENO, false);   
+            minishell_exit("Failed to close file descriptor.", 2, STDERR_FILENO, false);  
         *fd = -1;
     }
 }
@@ -23,7 +23,7 @@ void safe_pipe(int pipe_fd[2])
 }
 
 void safe_dup_two(int fd, int fd_two)
-{   errno = 0;
+{   
     if(dup2(fd, fd_two) == -1)
         minishell_exit("dup2 error on safe_dup_two\n", 2, STDERR_FILENO, false);
 }

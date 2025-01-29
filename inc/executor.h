@@ -6,29 +6,37 @@
 
 size_t c_strlen(const char *str);
 
+void execute_execve(t_exec_data *cmd, char **envp);
+void execute_non_pipe(t_minishell *data, t_exec_data *cmd, char **envp);
+
 //executor/executor_aux_safe.c
+void close_fd(int *fd);
 void close_pipe(int pipe_fd[2]);
 void safe_pipe(int pipe_fd[2]);
-void close_fd(int *fd);
-pid_t safe_fork();
 void safe_dup_two(int fd, int fd_two);
+pid_t safe_fork();
 
 //executor/executor_aux.c
-bool has_output(t_redir *redir);
-bool has_input(t_redir *redir);
+int execute_builtin(t_exec_data *cmd);
+void close_command_fds(t_exec_data *cmd);
+char *built_error_string(char* filename, char *error_str);
+
+//executor/executor_common.c
 bool has_heredoc(t_redir *redir);
-void init_cmd(t_exec_data *exec_data);
+bool has_input(t_redir *redir);
+bool has_output(t_redir *redir);
 char *get_rdir_error(t_redir *redir);
+void init_cmd(t_exec_data *exec_data);
 
 //executor/executor_child_aux
 t_pid_list *create_pid_node(pid_t pid);
 void add_pid(t_pid_list **head, pid_t pid);
-void handle_exit_status(t_pid_list *pid_list);
+void handle_exit_status(t_minishell *data, t_pid_list *pid_list);
 
 //executor/executor_child.c
 void handle_child(t_exec_data *current, t_exec_data *previous, char **envp);
+void handle_parent(t_exec_data *cmd, t_exec_data *previous, t_pid_list **pid_list, pid_t pid);
 char *built_error_string(char* filename, char *str_error);
-void check_redir(t_exec_data *current);
 
 //executor/executor_free.c
 void free_pid_list(t_pid_list **head);
@@ -47,8 +55,8 @@ void handle_io_redirections(t_exec_data *cmd);
 //executor/setup_fd.c
 
 //executor/executor
-void execute_command_list_old(t_minishell *data, t_exec_data *head, char **envp);
 void execute_command_list(t_minishell *data, t_exec_data *head, char **envp);
+bool command_is_valid(t_exec_data *cmd, t_minishell *data);
 
 
 //executor/mock_parser.c

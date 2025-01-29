@@ -1,159 +1,91 @@
 #include "../../inc/minishell.h"
 
-char *built_error_string(char* filename, char *error_str)
+static void clear_fds(t_exec_data *temp)
 {
-    size_t filename_size = 0;
-    size_t error_str_size = 0;
-    size_t final_length = 0;
-    char *final_string;
-    char *template = "minishell: ";
-    size_t index = 0;
-    size_t temp_index = 0;
-
-
-    filename_size = c_strlen(filename);
-    error_str_size = c_strlen(error_str);
-    final_length = (c_strlen(template) + filename_size + 2 + error_str_size + 1);
-    final_string = safe_malloc(final_length);
-    while (index < c_strlen(template))
+    while (temp) 
     {
-        final_string[index] = template[index];
-        index++;
+        if (temp->input_fd >= 0)
+            close_fd(&temp->input_fd);
+        if (temp->output_fd >= 0) 
+            close_fd(&temp->output_fd);
+        if (temp->outpipe[0] >= 0)
+            close_fd(&temp->outpipe[0]);
+        if (temp->outpipe[1] >= 0)
+            close_fd(&temp->outpipe[1]);
+        temp = temp->next;
     }
-    //fprintf(stderr, "%s\n", final_string);
-    while (temp_index < filename_size)
-    {
-        final_string[index] = filename[temp_index];
-        temp_index++;
-        index++;
-    }
-    final_string[index++] = ':';
-    final_string[index++] = ' ';
-    //fprintf(stderr, "%s\n", final_string);
-    temp_index = 0;
-    while (temp_index < error_str_size)
-    {
-        final_string[index] = error_str[temp_index];
-        temp_index++;
-        index++;
-    }
-    //final_string[index++] = '\n';
-    final_string[index] = '\0';
-    return final_string;
 }
 
-
-void setup_child_redirections(t_exec_data *current, t_exec_data *previous)
+void handle_parent(t_exec_data *cmd, t_exec_data *previous, t_pid_list **pid_list, pid_t pid)
 {
-     fprintf(stderr, "  Child CMD %s: outfile_fd %d \n", current->cmd, current->output_fd);
-    if (current->output_fd >= 0)
-    {
-        fprintf(stderr, "Child CMD %s: STDOUT to outfile_fd %d \n", current->cmd, current->output_fd);
-        //dup2(current->output_fd, STDOUT_FILENO);
-        safe_dup_two(current->output_fd, STDOUT_FILENO);
-        close_fd(&current->output_fd);
-    }
-    else if (current->next) 
-    {
-        fprintf(stderr, "Child CMD %s: STDOUT to outpipe[1] %d \n", current->cmd, current->outpipe[1]);
-        //dup2(current->outpipe[1], STDOUT_FILENO);
-        safe_dup_two(current->outpipe[1], STDOUT_FILENO);
-    }
-    //fprintf(stderr, "Child CMD %s: Closing to outpipe[0] %d \n", current->cmd, current->outpipe[0]);
-    //fprintf(stderr, "Child CMD %s: Closing to outpipe[1] %d \n", current->cmd, current->outpipe[1]);
-    close_fd(&current->outpipe[0]); // Close read end
-    close_fd(&current->outpipe[1]); // Close write end if redirected
-    if (current->input_fd >= 0) 
-    {
-        fprintf(stderr, "Child CMD %s: STDIN to input_fd %d \n", current->cmd, current->input_fd);
-        //dup2(current->input_fd, STDIN_FILENO);
-        
-        safe_dup_two(current->input_fd, STDIN_FILENO);
-        fprintf(stderr, "Child CMD %s: Closing input_fd %d \n", current->cmd, current->input_fd);
-        close(current->input_fd);
-    } 
-    else if (previous && previous->outpipe[0] >= 0) 
-    {
-        //fprintf(stderr, "Child CMD %s: STDIN to previous->outpipe[0] %d \n", current->cmd, previous->outpipe[0]);
-        //dup2(previous->outpipe[0], STDIN_FILENO);
-        safe_dup_two(previous->outpipe[0], STDIN_FILENO);
-    }
-    if (previous) 
-    {
-        //fprintf(stderr, "Child CMD %s: Closing previous outpipe[0] %d && outpipe[1] %d\n", current->cmd, previous->outpipe[0], previous->outpipe[1]);
+    add_pid(pid_list, pid);
+    if (cmd->outpipe[1] >= 0) 
+        close_fd(&cmd->outpipe[1]);
+    if (previous && previous->outpipe[0] >= 0) 
         close_fd(&previous->outpipe[0]);
-        close_fd(&previous->outpipe[1]);
-        close_fd(&previous->output_fd);
-        close_fd(&previous->input_fd);
-    }
-    
+    if (cmd->input_fd >= 0) 
+        close_fd(&cmd->input_fd);
+    if (cmd->output_fd >= 0) 
+        close_fd(&cmd->output_fd);
 }
 
-static void handle_builtin_in_child(t_exec_data *current)
+static void handle_child_input(t_exec_data *cmd, t_exec_data *previous)
 {
-    //int exit_status;
-    check_redir(current);
-    if (c_strcmp(current->cmd, "echo") == 0)
+    if (cmd->input_fd >= 0) 
     {
-        close_fd(&current->input_fd);
-        close(STDIN_FILENO);
-        current->exit_status = cmd_echo(current->opt);
+        safe_dup_two(cmd->input_fd, STDIN_FILENO);
+        close_fd(&cmd->input_fd);
     }
-    else if (c_strcmp(current->cmd, "cd") == 0)
-        current->exit_status = cmd_cd(current->opt);
-    else if (c_strcmp(current->cmd, "unset") == 0)
-        current->exit_status = cmd_unset(current->opt);
-    else if (c_strcmp(current->cmd, "export") == 0)
-        current->exit_status = cmd_export(current->opt);
-    else if (c_strcmp(current->cmd, "exit") == 0)
-        current->exit_status = cmd_exit(current->opt);
-    else if (c_strcmp(current->cmd, "env") == 0)
-        current->exit_status = cmd_env(current->opt);
-    else if (c_strcmp(current->cmd, "pwd") == 0)
-    {
-        current->exit_status = cmd_pwd(current->output_fd);
-    }
-    else
-        minishell_exit("Critical error processing built in.", 2, STDERR_FILENO, false);
-    exit(current->exit_status);
-}
-
-void check_redir(t_exec_data *current)
-{
-    t_redir *head;
-    head = current->redirs;
-    while (head)
-    {
-    //fprintf(stderr, "HIT %s\n", head->error);
-        if (head->error)
-            break;
-        head = head->next;
-    }
-    if (head && head->error && head->str)
-    {
-        //fprintf(stderr, "check_redir str: %s error: %s\n", head->str, head->error);
-        minishell_exit(built_error_string(head->str, head->error),1, STDERR_FILENO, false);
-    }
-}
-void handle_child(t_exec_data *current, t_exec_data *previous, char **envp)
-{
-   
-    setup_child_redirections(current, previous);
-    if (current->is_builtin)
-    {
-        handle_builtin_in_child(current);
-    }
-    else
+    else if (previous) 
     {   
-        errno = 0;
-        check_redir(current);
-        if (!current->cmd || access(current->cmd, F_OK) != 0)
+        if (previous->outpipe[0] >= 0)
         {
-            minishell_exit(built_error_string(current->cmd, strerror(errno)), 127, STDERR_FILENO, false);
-            return;
+            safe_dup_two(previous->outpipe[0], STDIN_FILENO); 
+            close_fd(&previous->outpipe[0]);
         }
-        if(execve(current->cmd, current->opt, envp) == -1)
-            minishell_exit(built_error_string(current->cmd, strerror(errno)), 127, STDERR_FILENO, true);
     }
 }
+
+static void handle_child_output(t_exec_data *cmd)
+{
+    if (cmd->output_fd >= 0) 
+    {
+        safe_dup_two(cmd->output_fd, STDOUT_FILENO);
+        close_fd(&cmd->output_fd);
+    } 
+    else if (cmd->next) 
+    {
+        if (cmd->outpipe[1] >= 0)
+        {
+            safe_dup_two(cmd->outpipe[1], STDOUT_FILENO);
+            close_fd(&cmd->outpipe[1]);
+        }
+    }
+}
+
+void handle_child(t_exec_data *cmd, t_exec_data *previous, char **envp)
+{
+    int exit_code;
+
+    handle_child_input(cmd, previous);
+    handle_child_output(cmd);
+    if (cmd->next) 
+        close_fd(&cmd->outpipe[0]);
+    if (previous) 
+        close_fd(&previous->outpipe[1]);
+    fprintf(stderr, "   CMD %s After child redirect input_fd %d, output_fd %d, outpit[%d][%d]\n", cmd->cmd, cmd->input_fd, cmd->output_fd, cmd->outpipe[0], cmd->outpipe[1]);
+    clear_fds(cmd->next);
+    if (cmd->is_builtin)
+    {
+        exit_code = execute_builtin(cmd);
+        close_fd(&cmd->outpipe[1]);
+        fprintf(stderr, "   CMD %s After execv input_fd %d, output_fd %d, outpit[%d][%d]\n", cmd->cmd, cmd->input_fd, cmd->output_fd, cmd->outpipe[0], cmd->outpipe[1]);
+        minishell_exit(NULL, exit_code, STDOUT_FILENO, false);
+    }
+    else
+        execute_execve(cmd, envp);    
+}
+
+
+
 

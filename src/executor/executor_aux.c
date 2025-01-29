@@ -1,74 +1,68 @@
 #include "../../inc/minishell.h"
 
-bool has_heredoc(t_redir *redir)
+static void error_string_aux(char *str, char *final_string, size_t *index_final, size_t index)
 {
-    if (!redir)
-        return (false);
+    size_t str_size;
 
-    while (redir)
+    str_size = c_strlen(str);
+    while (index < str_size)
     {
-        if (redir->type == HEREDOC
-        || redir->type == HEREDOC_QUOTED)
-            return (true);
-        redir = redir->next;
+        final_string[*index_final] = str[index];
+        index++;
+        (*index_final)++;
     }
-    return (false);
 }
-
-bool has_input(t_redir *redir)
+char *built_error_string(char* filename, char *error_str)
 {
-    if (!redir)
-        return (false);
+    size_t final_length;
+    char *final_string;
+    char *template = "minishell: ";
+    size_t index = 0;
 
-    while (redir)
-    {
-        if (redir->type == INPUT
-        || redir->type == HEREDOC
-        || redir->type == HEREDOC_QUOTED)
-            return (true);
-        redir = redir->next;
-    }
-    return (false);
+    index = 0;
+    final_length = 0;
+    final_length = (c_strlen(template) + c_strlen(filename) + c_strlen(error_str) + 3);
+    final_string = safe_malloc(final_length);
+    error_string_aux(template, final_string, &index, index);
+    error_string_aux(filename, final_string, &index, 0);
+    final_string[index++] = ':';
+    final_string[index++] = ' ';
+    error_string_aux(error_str, final_string, &index, 0);
+    final_string[index] = '\0';
+    return final_string;
 }
 
-bool has_output(t_redir *redir)
+void close_command_fds(t_exec_data *cmd)
 {
-    if (!redir)
-        return (false);
-
-    while (redir)
-    {
-        if (redir->type == OUTPUT || redir->type == OUTPUT_APPEND)
-            return (true);
-        redir = redir->next;
-    }
-    return (false);
+    if (!cmd)
+        return;
+    close_pipe(cmd->outpipe);
+    if (cmd->input_fd >= 0)
+        close_fd(&cmd->input_fd);
+    if (cmd->output_fd >= 0)
+        close_fd(&cmd->output_fd);
 }
 
-char *get_rdir_error(t_redir *redir)
+int execute_builtin(t_exec_data *cmd)
 {
-    if (!redir)
-        return (NULL);
+    int exit_code;
 
-    while (redir)
-    {
-        if (redir->error)
-            return (redir->error);
-        redir = redir->next;
-    }
-    return (NULL);
+    exit_code = 0;
+    if (c_strcmp(cmd->cmd, "echo") == 0)
+        exit_code = cmd_echo(cmd->opt);
+    else if (c_strcmp(cmd->cmd, "cd") == 0)
+        exit_code = cmd_cd(cmd->opt);
+    else if (c_strcmp(cmd->cmd, "unset") == 0)
+        exit_code = cmd_unset(cmd->opt);
+    else if (c_strcmp(cmd->cmd, "export") == 0)
+        exit_code = cmd_export(cmd->opt);
+    else if (c_strcmp(cmd->cmd, "exit") == 0)
+        exit_code = cmd_exit(cmd->opt);
+    else if (c_strcmp(cmd->cmd, "env") == 0)
+        exit_code = cmd_env(cmd->opt);
+    else if (c_strcmp(cmd->cmd, "pwd") == 0)
+        exit_code = cmd_pwd(cmd->output_fd);
+    else
+        minishell_exit("Critical error processing built in.", 2, STDERR_FILENO, false);
+    return (exit_code);
 }
-
-void init_cmd(t_exec_data *exec_data)
-{
-    exec_data->cmd = NULL;
-    exec_data->opt = NULL;
-    exec_data->is_builtin = false;
-    exec_data->redirs = NULL;
-    exec_data->exit_status = 0;
-    exec_data->input_fd = -1;
-    exec_data->output_fd = -1;
-    exec_data->outpipe[0] = -1;
-    exec_data->outpipe[1] = -1;
-}
-

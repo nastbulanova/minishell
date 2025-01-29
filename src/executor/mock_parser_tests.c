@@ -2296,6 +2296,7 @@ t_exec_data *test_8()
     exec_data_ls->cmd = ft_strdup("/bin/ls"); // Command to execute
     exec_data_ls->opt = add_string_to_array(ft_strdup("ls"), exec_data_ls->opt);
     add_redir_to_list(&exec_data_ls->redirs, create_rdir(OUTPUT, build_full_path("non_existent_dir/output.txt")));
+    //add_redir_to_list(&exec_data_ls->redirs, create_rdir(OUTPUT, ft_strdup("$non_existent_dir/output.txt")));
     
     exec_data_ls->next = NULL; // No more commands in the pipeline
 
@@ -2487,7 +2488,7 @@ t_exec_data *test_2()
     exec_data_echo->opt = add_string_to_array(ft_strdup("Hello"), exec_data_echo->opt);
     exec_data_echo->opt = add_string_to_array(ft_strdup("World"), exec_data_echo->opt);
     exec_data_echo->is_builtin = true;
-    add_redir_to_list(&exec_data_echo->redirs, create_rdir(OUTPUT, build_full_path("test_output/output.txt")));
+    add_redir_to_list(&exec_data_echo->redirs, create_rdir(OUTPUT, build_full_path("test_output/output2.txt")));
 
     // Setup for wc command
     exec_data_wc->cmd = ft_strdup("/bin/wc"); // Command to execute

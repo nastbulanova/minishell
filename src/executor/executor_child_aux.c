@@ -1,5 +1,18 @@
 #include "../../inc/minishell.h"
 
+void free_pid_list(t_pid_list **head)
+{
+    t_pid_list *current = *head;
+    t_pid_list *next;
+
+    while (current)
+    {
+        next = current->next;
+        free(current);
+        current = next;
+    }
+    *head = NULL;
+}
 
 t_pid_list *create_pid_node(pid_t pid)
 {
@@ -30,17 +43,16 @@ void add_pid(t_pid_list **head, pid_t pid)
     current->next = new_node;  
 }
 
-void handle_exit_status(t_pid_list *pid_list)
+void handle_exit_status(t_minishell *data, t_pid_list *pid_list)
 {
-    t_minishell *data;
     int status;
     int signal;
+    t_pid_list *current;
 
-    data = get_shell(false);
-    while(pid_list)
+    current = pid_list;
+    while(current)
     {
-        //fprintf(stderr, "Waiting on : PID: %d\n", pid_list->pid);
-        waitpid(pid_list->pid, &status, 0);
+        waitpid(current->pid, &status, 0);
         if (WIFEXITED(status)) 
             data->exit_code = WEXITSTATUS(status); 
         else if (WIFSIGNALED(status)) 
@@ -50,7 +62,8 @@ void handle_exit_status(t_pid_list *pid_list)
         }
         else
             data->exit_code = 1;
-        fprintf(stderr, "Left: PID: %d exit_code: %d\n", pid_list->pid, data->exit_code);
-        pid_list = pid_list->next;
+        fprintf(stderr, "Left: PID: %d exit_code: %d\n", current->pid, data->exit_code);
+        current = current->next;
     }
+    free_pid_list(&pid_list);
 }

@@ -28,7 +28,6 @@ static void process_io_input(t_exec_data *cmd, t_redir *current, int *temp_input
     *temp_input_fd = open(current->str, O_RDONLY);
     if (*temp_input_fd < 0)
     {
-       
         current->error =  built_error_string(current->str, strerror(errno));
         //if (errno == EACCES)
         //    cmd->exit_status = 126;
@@ -36,6 +35,20 @@ static void process_io_input(t_exec_data *cmd, t_redir *current, int *temp_input
         //    cmd->exit_status = 127;
         //else
         cmd->exit_status = 1;
+    }
+}
+
+static void finalize_redirections(t_exec_data *cmd, char *error_msg, int *temp_input_fd, int *temp_output_fd)
+{
+    if (!error_msg)
+    {
+        cmd->input_fd = *temp_input_fd;
+        cmd->output_fd = *temp_output_fd;
+    }
+    else
+    {
+        close_fd(temp_input_fd);
+        close_fd(temp_output_fd);
     }
 }
 
@@ -52,23 +65,19 @@ void handle_io_redirections(t_exec_data *cmd)
     current = cmd->redirs;
     while (current && !error_msg)
     {
-        if (current->type == INPUT)
+        if (current->str[0] == '$')
+        {
+            current->error =  built_error_string(current->str, "ambiguous redirect");
+            cmd->exit_status = 1;
+        }
+        else if (current->type == INPUT)
             process_io_input(cmd, current, &temp_input_fd);
         else if (current->type == OUTPUT || current->type == OUTPUT_APPEND)
             process_io_output(cmd, current, &temp_output_fd);
         error_msg = current->error;
         current = current->next;
     }
-    if (!current || !current->error)
-    {
-        cmd->input_fd = temp_input_fd;
-        cmd->output_fd = temp_output_fd;
-    }
-    else
-    {
-        close_fd(&temp_input_fd);
-        close_fd(&temp_output_fd);
-    }
+    finalize_redirections(cmd, error_msg, &temp_input_fd, &temp_output_fd);
 }
 
 void handle_heredoc_redirection(t_minishell *data, t_exec_data *head)
