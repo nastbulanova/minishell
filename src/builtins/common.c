@@ -33,6 +33,7 @@ int index_arg(char **args, char **flags)
     while (args[++i]) 
     {
         is_flag = 0;
+        //if (args[i][0] == '-')
         if (ft_strlen(args[i]) == 1)
             is_flag = 1;
         j = -1;
@@ -89,11 +90,11 @@ bool has_flag(char **args, char *flag)
 
 char	**get_cmd_flags(char *command)
 {
-	static char	*echo_flags[] = {"-n", "-e", "-E", NULL};
-	static char	*cd_flags[] = {"-L", "-P", NULL};
+	static char	*echo_flags[] = {"n", "e", "E", NULL};
+	static char	*cd_flags[] = {"L", "P", NULL};
 	static char	*pwd_flags[] = {NULL};
-	static char	*export_flags[] = {"-p", NULL};
-    static char	*unset_flags[] = {"-v", "-f", NULL};
+	static char	*export_flags[] = {"p", NULL};
+    static char	*unset_flags[] = {"v", "f", NULL};
 	static char	*env_flags[] = {NULL};
     static char	*exit_flags[] = {NULL};
 
