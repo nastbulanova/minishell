@@ -72,8 +72,8 @@ t_minishell *get_shell(bool init)
 void main_loop(t_minishell *data)
 {
     char *input;
-    t_exec_data *command_list; 
-    command_list = NULL;
+    //t_exec_data *command_list; 
+    //command_list = NULL;
     set_state_signal_handlers(MAIN);
     while (TRUE)
     {

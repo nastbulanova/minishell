@@ -59,7 +59,7 @@ void execute_command_list(t_minishell *data, t_exec_data *head, char **envp);
 bool command_is_valid(t_exec_data *cmd, t_minishell *data);
 
 
-//executor/mock_parser.c\
+//executor/mock_parser.c
 //this function will have to be deleted on the final version
 t_redir *create_rdir(t_redir_type type,char *str);
 
