@@ -11,11 +11,11 @@ void execute_non_pipe(t_minishell *data, t_exec_data *cmd, char **envp);
 void clear_fds(t_exec_data *temp);
 
 //executor/executor_aux_safe.c
-void close_fd(int *fd);
-void close_pipe(int pipe_fd[2]);
-void safe_pipe(int pipe_fd[2]);
-void safe_dup_two(int fd, int fd_two);
-pid_t safe_fork();
+bool close_fd(int *fd);
+bool close_pipe(int pipe_fd[2]);
+bool safe_pipe(int pipe_fd[2]);
+bool safe_dup_two(int fd, int fd_two);
+
 
 //executor/executor_aux.c
 int execute_builtin(t_exec_data *cmd);
@@ -61,13 +61,13 @@ bool command_is_valid(t_exec_data *cmd, t_minishell *data);
 
 //executor/mock_parser.c
 //this function will have to be deleted on the final version
-t_redir *create_rdir(t_redir_type type,char *str);
+//t_redir *create_rdir(t_redir_type type,char *str);
 
 
 
-void add_redir_to_list(t_redir **head, t_redir *new_redir);
-char **add_string_to_array(char *new_str, char **old_array);
-t_exec_data *get_test(int test_number);
+//void add_redir_to_list(t_redir **head, t_redir *new_redir);
+//char **add_string_to_array(char *new_str, char **old_array);
+//t_exec_data *get_test(int test_number);
 
 
 

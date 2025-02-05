@@ -10,7 +10,7 @@ NAME = ${BIN_DIR}/minishell
 
 LIBFT_PATH = $(LIB_DIR)/libft/
 
-CFLAGS = -Wall -Wextra -Werror -g -Iinc -fsanitize=address,undefined
+CFLAGS = -Wall -Wextra -Werror -g -Iinc #-fsanitize=address,undefined
 
 LINKS = -lreadline -L$(LIBFT_PATH)lib -lft
 

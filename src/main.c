@@ -77,8 +77,9 @@ void main_loop(t_minishell *data)
     set_state_signal_handlers(MAIN);
     while (TRUE)
     {
-        update_prompt(data);
-        input = readline(data->prompt);
+        //update_prompt(data);
+        //input = readline(data->prompt);
+        input = readline(":");
         if (!input) 
         {
             printf("exit\n");
@@ -92,13 +93,13 @@ void main_loop(t_minishell *data)
 		    exit(0);
 	    }
 
-        printf("token list created\n");
-        //data->env = env_to_linked_list(env);
+        //printf("token list created\n");
         if (parser(data) == OK)
         {
+            data->exit_code = 0;
             print_exec_data(data);
-            execute_command_list(data, data->list_exec_data,env_to_array(data->env));
-           
+            if (data->list_exec_data)
+                execute_command_list(data, data->list_exec_data,env_to_array(data->env));
             free_parser_data(&data);
         }
         free(input);   
@@ -122,7 +123,7 @@ int	main(int argc, char **argv, char **envp)
         env_init_default(argv, data);
     }
     env_init(argv, envp, data);
-    display_splash_screen();
+    //display_splash_screen();
     main_loop(data);
     return (0);
 }

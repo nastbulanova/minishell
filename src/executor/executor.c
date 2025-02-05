@@ -12,11 +12,12 @@ static void print_and_cleanup_error(t_exec_data *cmd, char *final_string)
 
 static bool command_is_valid_aux(t_minishell *data, t_exec_data *cmd, char **final_string)
 {
+    //fprintf(stderr, "command_is_valid_aux HIT\n");
     if (access(cmd->cmd, F_OK) == -1)
     {
         data->exit_code = 127;
         if (errno == ENOENT)
-            *final_string = built_error_string(cmd->cmd, strerror(errno), true);
+            *final_string = built_error_string(cmd->cmd, "command not found", false);
         return (false);
     } else if (access(cmd->cmd, X_OK) == -1)
     {
@@ -61,17 +62,18 @@ void execute_pipe(t_minishell *data, t_exec_data *head, char** envp)
     previous = NULL;
     while (current)
     {
-        //fprintf(stderr, "   CMD %s Execute_pipe at entrance input_fd %d, output_fd %d, outpit[%d][%d]\n", current->cmd, current->input_fd, current->output_fd, current->outpipe[0], current->outpipe[1]);
-        //if (command_is_valid(current, data))
-        //{
             if (current->next)
                 safe_pipe(current->outpipe);    
-            pid = safe_fork();
+            pid = fork();
+            if (pid < 0)
+            {
+                free_pid_list(&pid_list);
+                return;
+            }
             if (pid == 0)
                 handle_child(current, previous, envp, head);    
             else
                 handle_parent(current, previous, &pid_list, pid);
-        //}
         close_command_fds(previous);
         previous = current;
         current = current->next;

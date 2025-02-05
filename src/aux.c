@@ -33,7 +33,10 @@ void *safe_malloc(size_t bytes)
  
     ret = malloc(bytes);
     if (!ret)
-        minishell_exit("Error on memory allocation", 2, STDERR_FILENO, false);  
+    {
+        //minishell_exit("Error on memory allocation", 2, STDERR_FILENO, false);  
+        return (NULL);
+    }
     ft_memset(ret, 0,bytes);
     return (ret);
 }

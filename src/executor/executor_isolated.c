@@ -7,7 +7,7 @@ void execute_execve(t_exec_data *cmd, char **envp, t_exec_data *head)
     if (execve(cmd->cmd, cmd->opt, envp) < 0)
     {
         if (errno == ENOENT)
-            exit_code = 127; 
+            exit_code = 1; 
         else if (errno == EACCES)
             exit_code = 126; 
         else
@@ -27,11 +27,15 @@ static void execute_isolated_aux(t_minishell *data, t_exec_data *cmd, char **env
         data->exit_code = execute_builtin(cmd);
     else
     {
-        pid = safe_fork();
+        set_state_signal_handlers(CHILD);
+        pid = fork();
+        if (pid < 0)
+            return ;
         if (pid == 0)
             execute_execve(cmd, envp, NULL);
         else
         {
+            set_state_signal_handlers(MAIN);
             add_pid(&pid_list, pid);
             handle_exit_status(data, pid_list);
         }

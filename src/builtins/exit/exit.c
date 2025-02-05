@@ -43,9 +43,7 @@ static void handle_one(char **args)
 		minishell_exit(NULL, exit_code, STDOUT_FILENO, false);
 	}
 	else
-	{
 		minishell_exit(built_exit_string(args[1]), 2, STDERR_FILENO, false);
-	}
 }
 int cmd_exit(char **args)
 {

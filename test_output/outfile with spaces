@@ -1,5 +1,6 @@
 bin
-dome.txt
+env_to_ll.c
+for_test.c
 inc
 libs
 Makefile

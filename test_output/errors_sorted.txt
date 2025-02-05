@@ -1,4 +1,4 @@
-/home/joaomigu/Documents/minishell/test_input/log1.txt:error de log 1
-/home/joaomigu/Documents/minishell/test_input/log1.txt:error de log 1
-/home/joaomigu/Documents/minishell/test_input/log2.txt:error de log2
-/home/joaomigu/Documents/minishell/test_input/log2.txt:error de log2
+test_input/log1.txt:error de log 1
+test_input/log1.txt:error de log 1
+test_input/log2.txt:error de log2
+test_input/log2.txt:error de log2

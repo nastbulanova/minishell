@@ -15,7 +15,7 @@ static void process_io_output(t_exec_data *cmd, t_redir *current, int *temp_outp
     {
         if (errno == ENOENT)
         {
-            cmd->exit_status = 127;
+            cmd->exit_status = 1;
             current->error = built_error_string(current->str, "No such file or directory", false);
         }
         else if (errno == EACCES)

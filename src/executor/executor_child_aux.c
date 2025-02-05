@@ -62,7 +62,7 @@ void handle_exit_status(t_minishell *data, t_pid_list *pid_list)
         }
         else
             data->exit_code = 1;
-        fprintf(stderr, "Left: PID: %d exit_code: %d\n", current->pid, data->exit_code);
+        //fprintf(stderr, "Left: PID: %d exit_code: %d\n", current->pid, data->exit_code);
         current = current->next;
     }
     free_pid_list(&pid_list);
