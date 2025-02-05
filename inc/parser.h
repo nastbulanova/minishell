@@ -17,7 +17,7 @@ char			*open_field(t_minishell *data, t_token *token);
 char			*env_var_replace(t_minishell *data, char *name);
 t_parser_error	redir_check(t_minishell **data, t_token ***token);
 t_parser_error	heredoc_check(t_minishell **data, t_token ***token);
-t_redir	    *redir_create(char *str, t_token_type type);
+t_redir	        *redir_create(char *str, t_token_type type);
 
 //parser_free_utils
 void			free_parser_data(t_minishell **data);
@@ -31,6 +31,7 @@ int				opt_llist_len(t_opt_llist *opt_llist);
 char			**opt_llist_to_array(t_opt_llist *opt_llist);
 
 //parser_error_utils
-int				syntax_error(t_minishell **data, t_token **token);
+t_parser_error	syntax_error(t_minishell **data, t_token **token);
+t_parser_error  memory_error(t_minishell **data);
 
 #endif
