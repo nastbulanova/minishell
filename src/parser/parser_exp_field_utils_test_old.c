@@ -30,9 +30,7 @@ t_parser_error	end_code_exp(t_exp_field **field, char *str)
 	char	*temp_result;
 	char    *tmp;
 
-	fprintf(stderr, "Got Called Data: %d\n", (*field)->data->exit_code);
 	code = ft_itoa((*field)->data->exit_code);
-	fprintf(stderr, "Got Called Code:%s\n", code);
 	if (!code)
 		return (MALLOC_ERROR);
 	tmp = ft_substr(str, (*field)->start, (*field)->i - (*field)->start);

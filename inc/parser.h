@@ -31,6 +31,8 @@ int				opt_llist_len(t_opt_llist *opt_llist);
 char			**opt_llist_to_array(t_opt_llist *opt_llist);
 
 //parser_error_utils
-int				syntax_error(t_minishell **data, t_token **token);
+//int				syntax_error(t_minishell **data, t_token **token);
+t_parser_error syntax_error(t_minishell **data, t_token **token);
+t_parser_error memory_error(t_minishell **data);
 
 #endif

@@ -113,10 +113,12 @@ void handle_heredoc_redirection(t_minishell *data, t_exec_data *head)
         if (current->type == HEREDOC || current->type == HEREDOC_QUOTED)
         {
             close_pipe(data->heredoc_pipe);
-            safe_pipe(data->heredoc_pipe); 
-            heredoc_loop(current, data->heredoc_pipe[1]);
-            close_fd(&data->heredoc_pipe[1]);
-            if (data->exit_code == 130)
+            if (safe_pipe(data->heredoc_pipe))
+            {
+                heredoc_loop(current, data->heredoc_pipe[1]);
+                close_fd(&data->heredoc_pipe[1]);
+            }
+            if (data->exit_code == 130)//Ctrl + C was pressed inside the loop
                 close_fd(&data->heredoc_pipe[0]);    
         }
         current = current->next;

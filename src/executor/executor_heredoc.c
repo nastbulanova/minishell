@@ -58,3 +58,5 @@ void heredoc_loop(t_redir *current, int fd)
     rl_getc_function = default_getc_function;
     set_state_signal_handlers(MAIN);
 }
+
+

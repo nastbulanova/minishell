@@ -1,0 +1,109 @@
+diff --git a/src/parser/parser.c b/src/parser/parser.c
+index 07debc4..815e66f 100644
+--- a/src/parser/parser.c
++++ b/src/parser/parser.c
+@@ -27,31 +27,48 @@ t_parser_error parser_loop(t_minishell *data, t_token **token, int *cmd)
+ 	return(error);
+ }
+ 
++static t_parser_error handle_pipe(t_minishell *data, t_token **token, int *cmd)
++{
++	if (token && *token && (*token)->type == PIPE)
++	{
++		if (*cmd == 0 || !(*token)->next)
++			return(SYNTAX_ERROR);
++		else
++		{
++			cmd = 0;
++			(*token) = (*token)->next;
++			return(exec_data_append(&data, 1));
++		}
++	}
++	else
++		return(exec_data_append(&data, 0));
++}
++
+ t_parser_error parser(t_minishell *data)
+ {
++	t_token 	*token;
++	int			cmd;
++	t_parser_error	error;
+ 
+ 	(data)->exec_data = exec_data_init();
+ 	token = data->token_head;
+ 	while (token)
+ 	{
+ 		cmd = 0;
+-		if (parser_loop(data, &token, &cmd) != OK)
+-			return(exec_data_append(&data, 0), syntax_error(&data, &token));
+-		if (token && token->type == PIPE)
++		error = OK;
++		error = parser_loop(data, &token, &cmd);
++		if (error == SYNTAX_ERROR)
++			return(syntax_error(&data, &token));
++		else if (error == MALLOC_ERROR)
++			return(memory_error(&data));
++		else
+ 		{
+-			if (cmd == 0 || !token->next)
+-				return(exec_data_append(&data, 0), syntax_error(&data, &token));
+-			else
+-			{
+-				exec_data_append(&data, 1);
+-				cmd = 0;
+-				token = token->next;
+-			}
++			error = handle_pipe(data, &token, &cmd);
++			if (error == SYNTAX_ERROR)
++				return(syntax_error(&data, &token));
++			if (error == MALLOC_ERROR)
++				return(memory_error(&data));
+ 		}
+-		else
+-			exec_data_append(&data, 0);
+ 	}
+ 	return(OK);
+ }
+diff --git a/src/parser/parser_error_utils.c b/src/parser/parser_error_utils.c
+index 30a7813..15c2d7f 100644
+--- a/src/parser/parser_error_utils.c
++++ b/src/parser/parser_error_utils.c
+@@ -1,6 +1,6 @@
+ #include "../../inc/minishell.h"
+ 
+-int syntax_error(t_minishell **data, t_token **token)
++t_parser_error syntax_error(t_minishell **data, t_token **token)
+ {
+     write(2, "minishell: syntax error near unexpected token `", 47);
+     if ((*token)->next)
+@@ -11,6 +11,15 @@ int syntax_error(t_minishell **data, t_token **token)
+     else
+         write(2, "\\n", 2);
+     write(2, "'\n", 2);
++    free_exec_data((*data)->exec_data);
+     free_parser_data(data);
+-    return (0);
++    return (SYNTAX_ERROR);
++}
++
++t_parser_error memory_error(t_minishell **data)
++{
++    write(2, "minishell: memory allocation failed\n", 37);
++    free_exec_data((*data)->exec_data);
++    free_parser_data(data);
++    return (MALLOC_ERROR);
+ }
+diff --git a/src/parser/parser_exp_field_utils_test.c b/src/parser/parser_exp_field_utils_test.c
+index c3aff27..60da758 100644
+--- a/src/parser/parser_exp_field_utils_test.c
++++ b/src/parser/parser_exp_field_utils_test.c
+@@ -30,7 +30,9 @@ t_parser_error	end_code_exp(t_exp_field **field, char *str)
+ 	char	*temp_result;
+ 	char    *tmp;
+ 
++	fprintf(stderr, "Got Called Data: %d\n", (*field)->data->exit_code);
+ 	code = ft_itoa((*field)->data->exit_code);
++	fprintf(stderr, "Got Called Code:%s\n", code);
+ 	if (!code)
+ 		return (MALLOC_ERROR);
+ 	tmp = ft_substr(str, (*field)->start, (*field)->i - (*field)->start);
