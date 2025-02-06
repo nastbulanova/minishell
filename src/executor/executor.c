@@ -15,13 +15,13 @@ static bool command_is_valid_aux(t_minishell *data, t_exec_data *cmd, char **fin
     //fprintf(stderr, "command_is_valid_aux HIT\n");
     if (access(cmd->cmd, F_OK) == -1)
     {
-        data->exit_code = 127;
+        data->exit_code = 1;
         if (errno == ENOENT)
             *final_string = built_error_string(cmd->cmd, "command not found", false);
         return (false);
     } else if (access(cmd->cmd, X_OK) == -1)
     {
-        data->exit_code = 126;
+        data->exit_code = 1;
         *final_string = built_error_string(cmd->cmd, strerror(errno), true);
         return (false);
     }

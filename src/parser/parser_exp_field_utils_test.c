@@ -30,9 +30,9 @@ t_parser_error	end_code_exp(t_exp_field **field, char *str)
 	char	*temp_result;
 	char    *tmp;
 
-	fprintf(stderr, "Got Called Data: %d\n", (*field)->data->exit_code);
+	//fprintf(stderr, "Got Called Data: %d\n", (*field)->data->exit_code);
 	code = ft_itoa((*field)->data->exit_code);
-	fprintf(stderr, "Got Called Code:%s\n", code);
+	//fprintf(stderr, "Got Called Code:%s\n", code);
 	if (!code)
 		return (MALLOC_ERROR);
 	tmp = ft_substr(str, (*field)->start, (*field)->i - (*field)->start);
@@ -129,7 +129,7 @@ static t_parser_error fill_field(t_exp_field *field, char *str, int len)
             if (error != OK)
                 return (error);
         }
-        else if (str[field->i] == '$')
+        else if (str[field->i] == '$' && (field->i + 1 < len) && ft_iswordchar(str[field->i + 1]))
         {
             error = env_var_exp(&field, str);
             if (error != OK)
@@ -189,3 +189,4 @@ char *open_field(t_minishell *data, t_token *token)
     free(field);
     return(final_result);
 }
+

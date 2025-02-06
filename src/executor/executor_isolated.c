@@ -9,7 +9,7 @@ void execute_execve(t_exec_data *cmd, char **envp, t_exec_data *head)
         if (errno == ENOENT)
             exit_code = 1; 
         else if (errno == EACCES)
-            exit_code = 126; 
+            exit_code = 1; 
         else
             exit_code = 1;
         if (head)
