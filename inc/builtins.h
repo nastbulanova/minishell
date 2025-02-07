@@ -10,7 +10,10 @@ int		index_arg(char **args, char **flags);
 char	**get_cmd_flags(char *command);
 bool	has_flag(char **args, char *flag);
 
+
 //echo.c
+bool is_string_flag(char *str, char **flags);
+bool is_char_in_flag(char c, char **flags);
 int		cmd_echo(char **args);
 //pwd.c
 int     cmd_pwd(int fd);

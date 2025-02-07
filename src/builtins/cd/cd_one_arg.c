@@ -59,7 +59,6 @@ int cd_remainder(t_env **oldpwd, t_env **pwd, char *working_arg)
 		env_update(*oldpwd, (*pwd)->value);
 	else
 	{
-		errno = 0;
 		chdir(working_arg);
 		if (errno)
 		{

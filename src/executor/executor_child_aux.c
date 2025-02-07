@@ -53,8 +53,11 @@ void handle_exit_status(t_minishell *data, t_pid_list *pid_list)
     while(current)
     {
         waitpid(current->pid, &status, 0);
-        if (WIFEXITED(status)) 
+        if (WIFEXITED(status))
+        {
             data->exit_code = WEXITSTATUS(status); 
+            //data->exit_code = 1;
+        }
         else if (WIFSIGNALED(status)) 
         {
             signal = WTERMSIG(status);
@@ -62,7 +65,7 @@ void handle_exit_status(t_minishell *data, t_pid_list *pid_list)
         }
         else
             data->exit_code = 1;
-        //fprintf(stderr, "Left: PID: %d exit_code: %d\n", current->pid, data->exit_code);
+        //fprintf(stderr, "Exit Code is %d\n",data->exit_code);
         current = current->next;
     }
     free_pid_list(&pid_list);

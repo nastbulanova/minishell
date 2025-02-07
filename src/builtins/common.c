@@ -33,8 +33,7 @@ int index_arg(char **args, char **flags)
     while (args[++i]) 
     {
         is_flag = 0;
-        //if (args[i][0] == '-')
-        if (ft_strlen(args[i]) == 1)
+        if (args[i][0] == '-')
             is_flag = 1;
         j = -1;
         while(flags && flags[++j]&& !is_flag)

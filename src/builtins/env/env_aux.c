@@ -29,11 +29,14 @@ char	**env_to_array(t_env *env)
             free_array(list, temp);
             error_exit("Malloc error!", "env_to_array @ env_aux.c");
         }
-        list[i] = ft_strjoin(temp, env->value);
-        if (!list[i] || !temp)
+        if (env->value)
         {
-            free_array(list, temp);
-            error_exit("Malloc error!", "env_to_array @ env_aux.c");
+            list[i] = ft_strjoin(temp, env->value);
+            if (!list[i] || !temp)
+            {
+                free_array(list, temp);
+                error_exit("Malloc error!", "env_to_array @ env_aux.c");
+            }
         }
         free(temp);
         env = env->next;
@@ -52,7 +55,9 @@ void env_print(t_env *head)
         if (head->name)
         {
             if (head->name && head->value)
-                printf("%s=%s\n", head->name, head->value);
+                ft_printf("%s=%s\n", head->name, head->value);
+            else
+                ft_printf("%s=\n", head->name);
         }
         head = head->next;
     }

@@ -68,6 +68,9 @@ int execute_builtin(t_exec_data *cmd)
     else if (c_strcmp(cmd->cmd, "pwd") == 0)
         exit_code = cmd_pwd(cmd->output_fd);
     else
+    {
         minishell_exit("Critical error processing built in.", 2, STDERR_FILENO, false);
+        exit_code = 2;
+    }
     return (exit_code);
 }

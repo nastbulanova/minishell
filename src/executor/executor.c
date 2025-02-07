@@ -9,40 +9,86 @@ static void print_and_cleanup_error(t_exec_data *cmd, char *final_string)
     close_fd(&cmd->input_fd);
     close_fd(&cmd->output_fd);
 }
-
+static bool contains_slash(const char *cmd) 
+{
+    return (strchr(cmd, '/') != NULL);
+}
 static bool command_is_valid_aux(t_minishell *data, t_exec_data *cmd, char **final_string)
 {
-    //fprintf(stderr, "command_is_valid_aux HIT\n");
-    if (access(cmd->cmd, F_OK) == -1)
+    struct stat st;
+    //check if the path exists
+    if (!contains_slash(cmd->cmd)) 
     {
-        data->exit_code = 1;
+        // For a bare command name, if not found in PATH, mimic bash:
+        data->exit_code = 127;
+        *final_string = built_error_string(cmd->cmd, "command not found", false);
+        return false;
+    }
+    if (access(cmd->cmd, F_OK) == -1) 
+    {
+        data->exit_code = 127;
         if (errno == ENOENT)
-            *final_string = built_error_string(cmd->cmd, "command not found", false);
+            *final_string = built_error_string(cmd->cmd, "No such file or directory", false);
         return (false);
-    } else if (access(cmd->cmd, X_OK) == -1)
+    }
+    
+    // Check if it's a directory.
+    
+    if (stat(cmd->cmd, &st) == 0 && S_ISDIR(st.st_mode)) 
     {
-        data->exit_code = 1;
+        data->exit_code = 126;  // Often used for "command invoked cannot execute"
+        *final_string = built_error_string(cmd->cmd, "Is a directory", false);
+        return (false);
+    }
+    
+    // Check if we have execution permissions.
+    if (access(cmd->cmd, X_OK) == -1) 
+    {
+        //fprintf(stderr, "Access X_OK Fail: %s\n", strerror(errno));
+        data->exit_code = 126;
         *final_string = built_error_string(cmd->cmd, strerror(errno), true);
         return (false);
     }
+    
     return (true);
 }
+// static bool command_is_valid_aux(t_minishell *data, t_exec_data *cmd, char **final_string)
+// {
+//     //fprintf(stderr, "command_is_valid_aux HIT\n");
+   
+//     if (access(cmd->cmd, F_OK) == -1)
+//     {
+//         fprintf(stderr, "Access F_OK Fail");
+//         data->exit_code = 1;
+//         if (errno == ENOENT)
+//             *final_string = built_error_string(cmd->cmd, "command not found", false);
+        
+//         return (false);
+//     } 
+//     else if (access(cmd->cmd, X_OK) == -1)
+//     {
+//         fprintf(stderr, "Access X_OK Fail");
+//         data->exit_code = 1;
+//         *final_string = built_error_string(cmd->cmd, strerror(errno), true);
+//         return (false);
+//     }
+//     return (true);
+// }
 
 bool command_is_valid(t_exec_data *cmd, t_minishell *data)
 {
     char *error;
     char *final_string;
     bool result;
-
     result = true;
     if (cmd->exit_status != 0)
     {
         data->exit_code = cmd->exit_status;
         error = get_rdir_error(cmd->redirs);
         final_string = ft_strdup(error);
-        result = false;
+        return (false);
     }
-    if (result && !cmd->is_builtin)
+    if (!cmd->is_builtin)
         result = command_is_valid_aux(data, cmd, &final_string);
     if (!result)
         print_and_cleanup_error(cmd, final_string);
@@ -92,7 +138,6 @@ void execute_command_list(t_minishell *data, t_exec_data *head, char **envp)
         if (data->exit_code == 130)
             break;
         handle_io_redirections(current);
-        //fprintf(stderr, "CMD %s After redirection  input_fd %d, output_fd %d, outpit[%d][%d]\n", head->cmd, head->input_fd, head->output_fd, head->outpipe[0], head->outpipe[1]);
         current = current->next;
     }
     if (data->exit_code == 130)

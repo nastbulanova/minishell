@@ -69,7 +69,8 @@ char ft_exit_atoi(char *str)
         value = (value * 10) + (digit);	
         index++;
     }
-	return (unsigned char)(value * sign);
+	value = value * sign;
+	return ((unsigned char)value);
 }
 
 

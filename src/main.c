@@ -96,9 +96,10 @@ void main_loop(t_minishell *data)
         //printf("token list created\n");
         if (parser(data) == OK)
         {
+
             data->exit_code = 0;
             //print_exec_data(data);
-            if (data->list_exec_data)
+            if (data->list_exec_data && data->list_exec_data->cmd)
                 execute_command_list(data, data->list_exec_data,env_to_array(data->env));
             free_parser_data(&data);
         }

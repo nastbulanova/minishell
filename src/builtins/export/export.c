@@ -44,10 +44,15 @@ static bool process_arg(char *arg, t_minishell *data)
 			var_value = NULL;
 		}
 		result = is_valid_variable_name(var_name);
-		if (result)
+		if (result && var_value)
 			update_env(data, var_name, var_value);
 		else
 			free_name_value(var_name, var_value);
+	}
+	else
+	{
+		if (p && p == arg)
+			result = false;
 	}
 	return (result);
 }
@@ -59,11 +64,10 @@ static void set_process_exit(t_minishell *data, int count_error)
 	else
 		data->exit_code = 1;
 }
+
 int cmd_export(char** args)
 {
-	//export $ANOTHER=thisisateste
-	//zsh: thisisateste not found
-
+	
 	int arg_count;
 	int first_arg;
 	int count_error;
@@ -84,9 +88,9 @@ int cmd_export(char** args)
 				count_error++;
 				print_error_export(args[first_arg]);
 			}	
-		first_arg++;
+			first_arg++;
 		}
 	}
 	set_process_exit(data, count_error);
-	return (0);
+	return (data->exit_code);
 }

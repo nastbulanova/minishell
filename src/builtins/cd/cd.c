@@ -2,10 +2,10 @@
 
 void cd_error_exit(char *path, int _errno)
 {
-	ft_putstr_fd("cd: ", STDERR_FILENO);
-	ft_putstr_fd(strerror(_errno), STDERR_FILENO);
-	ft_putstr_fd(": ", STDERR_FILENO);
+	ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
 	ft_putstr_fd(path, STDERR_FILENO);
+	ft_putstr_fd(": ", STDERR_FILENO);
+	ft_putstr_fd(strerror(_errno), STDERR_FILENO);
     ft_putstr_fd("\n", STDERR_FILENO);
 }
 
@@ -56,13 +56,6 @@ int cd_no_args(t_minishell *data)
 	return (0);
 }
 
-int cd_multiple_args(char **str)
-{
-	ft_putstr_fd("cd: string not in pwd: ", STDERR_FILENO);
-	ft_putstr_fd(str[1], STDERR_FILENO);
-    ft_putstr_fd("\n", STDERR_FILENO);
-	return(1);
-}
 
 int cmd_cd(char **str)
 {
@@ -75,5 +68,8 @@ int cmd_cd(char **str)
 	else if (arg_count == 1)
 		return(cd_one_arg(data, str[1]));
 	else
-		return(cd_multiple_args(str));
+	{
+		ft_putstr_fd("minishell: cd: too many arguments\n", STDERR_FILENO);
+		return(1);
+	}
 }

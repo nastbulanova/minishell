@@ -1,6 +1,6 @@
 #include "../../inc/minishell.h"
 
-static bool is_char_in_flag(char c, char **flags)
+bool is_char_in_flag(char c, char **flags)
 {
 	int i = 0;
 	while (flags[i])
@@ -12,7 +12,7 @@ static bool is_char_in_flag(char c, char **flags)
 	return (false);
 }
 
-static bool is_string_flag(char *str, char **flags)
+bool is_string_flag(char *str, char **flags)
 {
 	int i;
 
