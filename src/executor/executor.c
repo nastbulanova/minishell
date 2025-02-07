@@ -86,9 +86,9 @@ bool command_is_valid(t_exec_data *cmd, t_minishell *data)
         data->exit_code = cmd->exit_status;
         error = get_rdir_error(cmd->redirs);
         final_string = ft_strdup(error);
-        return (false);
+        result = false;
     }
-    if (!cmd->is_builtin)
+    else if (!cmd->is_builtin)
         result = command_is_valid_aux(data, cmd, &final_string);
     if (!result)
         print_and_cleanup_error(cmd, final_string);
@@ -130,7 +130,6 @@ void execute_pipe(t_minishell *data, t_exec_data *head, char** envp)
 void execute_command_list(t_minishell *data, t_exec_data *head, char **envp)
 {
     t_exec_data *current;
-
     current = head;
     while (current)
     {

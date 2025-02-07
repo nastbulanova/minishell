@@ -48,24 +48,34 @@ void handle_exit_status(t_minishell *data, t_pid_list *pid_list)
     int status;
     int signal;
     t_pid_list *current;
+    t_exec_data *head;
 
+    head = data->list_exec_data;
     current = pid_list;
     while(current)
     {
         waitpid(current->pid, &status, 0);
-        if (WIFEXITED(status))
+        if (head->exit_status != 0)
         {
-            data->exit_code = WEXITSTATUS(status); 
-            //data->exit_code = 1;
-        }
-        else if (WIFSIGNALED(status)) 
-        {
-            signal = WTERMSIG(status);
-            data->exit_code = 128 + signal; 
+            data->exit_code = head->exit_status;
         }
         else
-            data->exit_code = 1;
+        {
+            if (WIFEXITED(status))
+            {
+                data->exit_code = WEXITSTATUS(status); 
+                //data->exit_code = 1;
+            }
+            else if (WIFSIGNALED(status)) 
+            {
+                signal = WTERMSIG(status);
+                data->exit_code = 128 + signal; 
+            }
+            else
+                data->exit_code = 1;
+        }
         //fprintf(stderr, "Exit Code is %d\n",data->exit_code);
+        head = head->next;
         current = current->next;
     }
     free_pid_list(&pid_list);

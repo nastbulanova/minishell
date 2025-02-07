@@ -68,7 +68,9 @@ static void handle_child_output(t_exec_data *cmd)
 void handle_child(t_exec_data *cmd, t_exec_data *previous, char **envp, t_exec_data *head)
 {
     int exit_code;
+    t_minishell *data;
 
+    data = get_shell(false);
     exit_code = 0;
     handle_child_input(cmd, previous);
     handle_child_output(cmd);
@@ -80,7 +82,7 @@ void handle_child(t_exec_data *cmd, t_exec_data *previous, char **envp, t_exec_d
     //clear_fds(cmd->next);
     if (cmd->is_builtin)
     {
-        if (command_is_valid(cmd, get_shell(false)))
+        if (command_is_valid(cmd, data))
         {
             exit_code = execute_builtin(cmd);
         }
@@ -91,14 +93,14 @@ void handle_child(t_exec_data *cmd, t_exec_data *previous, char **envp, t_exec_d
     else
     {
         //fprintf(stderr, "   CMD %s before  execute_execve input_fd %d, output_fd %d, outpit[%d][%d]\n", cmd->cmd, cmd->input_fd, cmd->output_fd, cmd->outpipe[0], cmd->outpipe[1]);
-        if (command_is_valid(cmd, get_shell(false)))
+        if (command_is_valid(cmd, data))
         {
             execute_execve(cmd, envp, head);    
         }
         else
         {
             clear_fds(head);
-            minishell_exit(NULL, -1, STDERR_FILENO, true);
+            minishell_exit(NULL, data->exit_code, STDERR_FILENO, true);
         }
     }
 }

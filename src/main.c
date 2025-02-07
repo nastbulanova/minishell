@@ -72,14 +72,13 @@ t_minishell *get_shell(bool init)
 void main_loop(t_minishell *data)
 {
     char *input;
-    //t_exec_data *command_list; 
-    //command_list = NULL;
+
     set_state_signal_handlers(MAIN);
     while (TRUE)
     {
-        //update_prompt(data);
-        //input = readline(data->prompt);
-        input = readline(":");
+        update_prompt(data);
+        input = readline(data->prompt);
+        //input = readline(":");
         if (!input) 
         {
             printf("exit\n");
@@ -124,7 +123,7 @@ int	main(int argc, char **argv, char **envp)
         env_init_default(argv, data);
     }
     env_init(argv, envp, data);
-    //display_splash_screen();
+    display_splash_screen();
     main_loop(data);
     return (0);
 }
