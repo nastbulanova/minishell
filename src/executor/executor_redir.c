@@ -9,25 +9,16 @@ static void process_io_output(t_exec_data *cmd, t_redir *current, int *temp_outp
         flags = (O_WRONLY | O_CREAT | O_TRUNC);
     else
         flags = (O_WRONLY | O_CREAT | O_APPEND);
-    errno = 0;
     *temp_output_fd = open(current->str, flags, 0644);
     if (*temp_output_fd < 0)
     {
+        cmd->exit_status = 1;
         if (errno == ENOENT)
-        {
-            cmd->exit_status = 1;
             current->error = built_error_string(current->str, "No such file or directory", false);
-        }
         else if (errno == EACCES)
-        {
-            cmd->exit_status = 1;
             current->error = built_error_string(current->str, "Permission denied", false);
-        }
         else
-        {
-            cmd->exit_status = 1;
             current->error = built_error_string(current->str, "Unknown error", false);
-        }
     }
 }
 
@@ -37,21 +28,13 @@ static void process_io_input(t_exec_data *cmd, t_redir *current, int *temp_input
     *temp_input_fd = open(current->str, O_RDONLY);
     if (*temp_input_fd < 0)
     {
+        cmd->exit_status = 1;
         if (errno == ENOENT)
-        {
-            cmd->exit_status = 1;
             current->error = built_error_string(current->str, "No such file or directory", false);
-        }
         else if (errno == EACCES)
-        {
-            cmd->exit_status = 1;
             current->error = built_error_string(current->str, "Permission denied", false);
-        }
         else
-        {
-            cmd->exit_status = 1;
             current->error = built_error_string(current->str, "Unknown error", false);
-        }
     }
 }
 
@@ -97,7 +80,6 @@ void handle_io_redirections(t_exec_data *cmd)
         else if (current->type == OUTPUT || current->type == OUTPUT_APPEND)
             process_io_output(cmd, current, &temp_output_fd);
         error_msg = current->error;
-        
         current = current->next;
     }
     finalize_redirections(cmd, error_msg, &temp_input_fd, &temp_output_fd);

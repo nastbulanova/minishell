@@ -1,11 +1,20 @@
 #include "../inc/minishell.h"
-void print_array(char **arr)
+
+t_minishell *get_shell(bool init)
 {
-    int i;
-    
-    i = -1;
-    while (arr[++i])
-        ft_printf("'%s'\n", arr[i]);
+    static t_minishell data;
+    if (init)
+    {
+        data.env = NULL;
+        data.exec_data = NULL;
+        data.exit_code = 0;
+        data.token_head = NULL;
+        data.prompt = NULL;
+        data.heredoc_pipe[0] = -1;
+        data.heredoc_pipe[1] = -1;
+
+    }
+    return (&data);
 }
 
 void free_array(char **arr, char *temp)
@@ -21,6 +30,7 @@ void free_array(char **arr, char *temp)
         free(arr[i]);
     free(arr);
 }
+
 int c_strcmp(char *str_one, char *str_two)
 {
     if (!str_one && !str_two)
@@ -34,21 +44,8 @@ int c_strcmp(char *str_one, char *str_two)
     }
     return (ft_strncmp(str_one, str_two, SIZE_MAX));
 }
-void minishell_exit(char *msg, int exit_code, int exit_fd, bool dispose_msg)
-{
-    t_minishell *data;
 
-    data = get_shell(false);
-    if (msg)
-    {
-        ft_putstr_fd(msg, exit_fd);
-        if (dispose_msg)
-            free(msg);
-    }
-    minishell_free(data);
-    if (exit_code < 0)
-        exit_code = data->exit_code;
-    exit((unsigned char)exit_code);
-}
+
+
 
 

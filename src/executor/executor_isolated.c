@@ -47,7 +47,6 @@ void execute_non_pipe(t_minishell *data, t_exec_data *cmd, char **envp)
     int stdin_backup;  
     int stdout_backup;
 
-    //check command
     if (command_is_valid(cmd, data))
     {
         stdin_backup = dup(STDIN_FILENO);
