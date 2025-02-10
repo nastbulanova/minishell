@@ -1,18 +1,30 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/10 14:30:01 by joaomigu          #+#    #+#             */
+/*   Updated: 2025/02/10 14:30:02 by joaomigu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../../inc/minishell.h"
 
-void cd_error_exit(char *path, int _errno)
+void	cd_error_exit(char *path, int _errno)
 {
 	ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
 	ft_putstr_fd(path, STDERR_FILENO);
 	ft_putstr_fd(": ", STDERR_FILENO);
 	ft_putstr_fd(strerror(_errno), STDERR_FILENO);
-    ft_putstr_fd("\n", STDERR_FILENO);
+	ft_putstr_fd("\n", STDERR_FILENO);
 }
 
-t_env *get_pwd(t_minishell *data)
+t_env	*get_pwd(t_minishell *data)
 {
-	t_env *result;
-	char *pwd_dup;
+	t_env	*result;
+	char	*pwd_dup;
 
 	pwd_dup = NULL;
 	result = env_retrieve(data->env, "PWD");
@@ -25,15 +37,14 @@ t_env *get_pwd(t_minishell *data)
 		env_add(&data->env, result);
 		free(pwd_dup);
 	}
-
 	return (result);
 }
 
-int cd_no_args(t_minishell *data)
+int	cd_no_args(t_minishell *data)
 {
-	t_env *home;
-	t_env *oldpwd;
-	t_env *pwd;
+	t_env	*home;
+	t_env	*oldpwd;
+	t_env	*pwd;
 
 	home = env_retrieve(data->env, "HOME");
 	oldpwd = env_retrieve(data->env, "OLDPWD");
@@ -56,20 +67,20 @@ int cd_no_args(t_minishell *data)
 	return (0);
 }
 
-
-int cmd_cd(char **str)
+int	cmd_cd(char **str)
 {
-	t_minishell *data;
+	t_minishell	*data;
+	int			arg_count;
 
 	data = get_shell(false);
-	int arg_count = array_size(str) - 1;
+	arg_count = array_size(str) - 1;
 	if (arg_count == 0)
 		return (cd_no_args(data));
 	else if (arg_count == 1)
-		return(cd_one_arg(data, str[1]));
+		return (cd_one_arg(data, str[1]));
 	else
 	{
 		ft_putstr_fd("minishell: cd: too many arguments\n", STDERR_FILENO);
-		return(1);
+		return (1);
 	}
 }

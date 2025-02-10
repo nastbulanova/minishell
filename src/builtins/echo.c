@@ -1,8 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   echo.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/10 13:24:12 by joaomigu          #+#    #+#             */
+/*   Updated: 2025/02/10 13:24:14 by joaomigu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
-bool is_char_in_flag(char c, char **flags)
+bool	is_char_in_flag(char c, char **flags)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	while (flags[i])
 	{
 		if (c == flags[i][0])
@@ -12,13 +26,12 @@ bool is_char_in_flag(char c, char **flags)
 	return (false);
 }
 
-bool is_string_flag(char *str, char **flags)
+bool	is_string_flag(char *str, char **flags)
 {
-	int i;
+	int	i;
 
 	if (ft_strlen(str) < 2 || str[0] != '-')
 		return (false);
-
 	i = 1;
 	while (str && str[i])
 	{
@@ -29,10 +42,10 @@ bool is_string_flag(char *str, char **flags)
 	return (true);
 }
 
-static bool flag_exists(char c, char **flags, char **args)
+static bool	flag_exists(char c, char **flags, char **args)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 1;
 	j = 0;
@@ -52,11 +65,12 @@ static bool flag_exists(char c, char **flags, char **args)
 	return (false);
 }
 
-int cmd_echo(char **args)
+int	cmd_echo(char **args)
 {
-	bool newline;
-	int first_arg;
-	char **command_args;
+	bool	newline;
+	int		first_arg;
+	char	**command_args;
+
 	command_args = get_cmd_flags(args[0]);
 	newline = flag_exists('n', command_args, args);
 	first_arg = 1;

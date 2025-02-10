@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unset.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/10 13:23:37 by joaomigu          #+#    #+#             */
+/*   Updated: 2025/02/10 13:23:39 by joaomigu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
-int cmd_unset(char **args)
+int	cmd_unset(char **args)
 {
-	int first_arg;
-	t_env *to_delete;
-	t_minishell *data;
+	int			first_arg;
+	t_env		*to_delete;
+	t_minishell	*data;
 
 	data = get_shell(false);
 	first_arg = index_arg(args, get_cmd_flags(args[0]));

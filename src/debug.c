@@ -1,21 +1,33 @@
-# include "../inc/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   debug.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/10 12:54:23 by joaomigu          #+#    #+#             */
+/*   Updated: 2025/02/10 12:54:24 by joaomigu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void print_array(char **arr)
+#include "../inc/minishell.h"
+
+void	print_array(char **arr)
 {
-    int i;
-    
-    i = -1;
-    while (arr[++i])
-        ft_printf("'%s'\n", arr[i]);
+	int	i;
+
+	i = -1;
+	while (arr[++i])
+		ft_printf("'%s'\n", arr[i]);
 }
 
 void	print_exec_data(t_minishell *data)
 {
 	t_exec_data	*tmp;
 	t_redir		*redirs;
-	char	**list;
-	int i;
-	int j;
+	char		**list;
+	int			i;
+	int			j;
 
 	i = 0;
 	tmp = data->list_exec_data;
