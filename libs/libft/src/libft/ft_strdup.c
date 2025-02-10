@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 19:47:10 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/03 13:24:19 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/10 14:32:45 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ char	*ft_strdup(const char *s)
 
 	if (!s)
 		return (NULL);
-		
 	s_len = ft_strlen(s);
 	p = malloc(s_len + 1);
 	if (p == NULL)
