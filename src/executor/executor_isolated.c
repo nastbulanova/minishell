@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:16:38 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 13:17:14 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/10 16:49:09 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,3 +83,4 @@ void	execute_non_pipe(t_minishell *data, t_exec_data *cmd, char **envp)
 		close_fd(&stdout_backup);
 	}
 }
+

@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:36:04 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 14:36:05 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/10 16:58:50 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 void		execute_execve(t_exec_data *cmd, char **envp, t_exec_data *head);
 void		execute_non_pipe(t_minishell *data, t_exec_data *cmd, char **envp);
 void		clear_fds(t_exec_data *temp);
+bool		command_is_valid(t_exec_data *cmd, t_minishell *data);
 
 // executor/executor_aux_safe.c
 bool		close_fd(int *fd);

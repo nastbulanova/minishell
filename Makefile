@@ -24,7 +24,7 @@ SRCS =	${SRC_DIR}/main.c 							${SRC_DIR}/aux.c 						${SRC_DIR}/common.c						
 		${SRC_DIR}/builtins/env/env_extract.c 		${SRC_DIR}/builtins/env/env.c 			${SRC_DIR}/builtins/export/export_aux.c 		\
 		${SRC_DIR}/builtins/export/export_print.c 	${SRC_DIR}/builtins/export/export.c 	${SRC_DIR}/builtins/common_flag.c				\
 		${SRC_DIR}/executor/executor_aux_safe.c 	${SRC_DIR}/executor/executor_aux.c 		${SRC_DIR}/executor/executor_child_aux.c 		\
-		${SRC_DIR}/executor/executor_child.c 		${SRC_DIR}/executor/executor_common.c 													\
+		${SRC_DIR}/executor/executor_child.c 		${SRC_DIR}/executor/executor_common.c 	${SRC_DIR}/executor/executor_command_valid.c	\
 		${SRC_DIR}/executor/executor_heredoc.c 		${SRC_DIR}/executor/executor_isolated.c ${SRC_DIR}/executor/executor_redir.c 			\
 		${SRC_DIR}/executor/executor.c 																										\
 		${SRC_DIR}/lexer/lexer_char_utils.c 				${SRC_DIR}/lexer/lexer_error_utils.c  		${SRC_DIR}/lexer/lexer_search_utils.c 		\
