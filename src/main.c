@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 12:39:30 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 12:53:20 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:26:50 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	minishell_exit(char *msg, int exit_code, int exit_fd, bool dispose_msg)
 /**
  * @brief Displays the splash screen with ASCII art and a welcome message.
  */
-static void	display_splash_screen(void)
+void	display_splash_screen(void)
 {
 	printf("\033[H\033[J");
 	printf("==========================================\
@@ -104,8 +104,9 @@ static void	main_loop(t_minishell *data)
 	set_state_signal_handlers(MAIN);
 	while (TRUE)
 	{
-		update_prompt(data);
-		input = readline(data->prompt);
+		//update_prompt(data);
+		//input = readline(data->prompt);
+		input = readline(":");
 		if (!input)
 		{
 			printf("exit\n");
@@ -143,7 +144,7 @@ int	main(int argc, char **argv, char **envp)
 		env_init_default(argv, data);
 	}
 	env_init(argv, envp, data);
-	display_splash_screen();
+	//display_splash_screen();
 	main_loop(data);
 	return (0);
 }

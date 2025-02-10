@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:18:15 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 13:22:31 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/10 14:55:32 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,9 @@ void	add_pid(t_pid_list **head, pid_t pid)
 	current->next = new_node;
 }
 
-static void	exit_status_aux(t_minishell *data, t_exec_data *head)
+static void	exit_status_aux(t_minishell *data, t_exec_data *head, int status)
 {
 	int	signal;
-	int	status;
 
 	if (head->exit_status != 0)
 		data->exit_code = head->exit_status;
@@ -80,7 +79,6 @@ static void	exit_status_aux(t_minishell *data, t_exec_data *head)
 void	handle_exit_status(t_minishell *data, t_pid_list *pid_list)
 {
 	int			status;
-	int			signal;
 	t_pid_list	*current;
 	t_exec_data	*head;
 
@@ -89,7 +87,7 @@ void	handle_exit_status(t_minishell *data, t_pid_list *pid_list)
 	while (current)
 	{
 		waitpid(current->pid, &status, 0);
-		exit_status_aux(data, head);
+		exit_status_aux(data, head, status);
 		head = head->next;
 		current = current->next;
 	}

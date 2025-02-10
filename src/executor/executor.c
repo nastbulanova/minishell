@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:08:00 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 13:15:26 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:31:02 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static bool	cmd_valid(t_minishell *data, t_exec_data *cmd, char **end_str)
 					"No such file or directory", false);
 		return (false);
 	}
-	if (stat(cmd->cmd, &st) == 0)
+	if (stat(cmd->cmd, &st) == 0 && S_ISDIR(st.st_mode))
 	{
 		data->exit_code = 126;
 		if (S_ISDIR(st.st_mode))
@@ -55,6 +55,7 @@ bool	command_is_valid(t_exec_data *cmd, t_minishell *data)
 	char	*final_string;
 	bool	result;
 
+	final_string = NULL;
 	result = true;
 	if (cmd->exit_status != 0)
 	{

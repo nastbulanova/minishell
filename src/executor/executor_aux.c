@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:22:53 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 13:23:14 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:29:13 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ char	*get_err_str(char *filename, char *error_str, bool newline)
 	size_t	index;
 
 	template = "minishell: ";
-	index = 0;
 	index = 0;
 	final_length = 0;
 	if (newline)
