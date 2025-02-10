@@ -6,12 +6,17 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:17:29 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 13:17:33 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/10 17:48:55 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
+/**
+ * @brief Checks if the given redirection is the last heredoc in the list.
+ * 
+ * @param redir Pointer to the current redirection node.
+ * @return true if it is the last heredoc, false otherwise.
+ */
 static bool	is_last_heredoc(t_redir *redir)
 {
 	if (!redir)
@@ -24,7 +29,15 @@ static bool	is_last_heredoc(t_redir *redir)
 	}
 	return (true);
 }
-
+/**
+ * @brief Determines if the heredoc input loop should terminate.
+ * 
+ * @param current Pointer to the current heredoc redirection node.
+ * @param input The user-provided input string.
+ * @param last_input Indicates whether this is the last heredoc input to be processed.
+ * @param fd The file descriptor where heredoc content is written.
+ * @return true if the loop should break, false otherwise.
+ */
 static bool	break_loop(t_redir *current, char *input, bool last_input, int fd)
 {
 	if (!input)
@@ -44,7 +57,15 @@ static bool	break_loop(t_redir *current, char *input, bool last_input, int fd)
 	}
 	return (false);
 }
-
+/**
+ * @brief Handles the input loop for processing heredoc redirections.
+ * 
+ * Reads user input line by line, checking against the expected delimiter,
+ * and writes to the provided file descriptor if necessary.
+ * 
+ * @param current Pointer to the current heredoc redirection node.
+ * @param fd The file descriptor where heredoc content should be written.
+ */
 void	heredoc_loop(t_redir *current, int fd)
 {
 	char	*input;

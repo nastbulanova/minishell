@@ -6,12 +6,22 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 12:55:01 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 12:55:02 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/10 17:15:43 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+/**
+ * @file common.c
+ * @brief Common utility functions for Minishell.
+ */
 
+/**
+ * @brief Retrieves the singleton instance of the shell data structure.
+ *
+ * @param init If true, initializes the shell data structure.
+ * @return Pointer to the shell instance.
+ */
 t_minishell	*get_shell(bool init)
 {
 	static t_minishell	data;
@@ -28,7 +38,12 @@ t_minishell	*get_shell(bool init)
 	}
 	return (&data);
 }
-
+/**
+ * @brief Frees a dynamically allocated array of strings.
+ *
+ * @param arr The array to be freed.
+ * @param temp An optional temporary string to free.
+ */
 void	free_array(char **arr, char *temp)
 {
 	int	i;
@@ -42,7 +57,13 @@ void	free_array(char **arr, char *temp)
 		free(arr[i]);
 	free(arr);
 }
-
+/**
+ * @brief Compares two strings safely, handling NULL pointers.
+ *
+ * @param str_one First string to compare.
+ * @param str_two Second string to compare.
+ * @return 0 if strings are equal, nonzero otherwise.
+ */
 int	c_strcmp(char *str_one, char *str_two)
 {
 	if (!str_one && !str_two)

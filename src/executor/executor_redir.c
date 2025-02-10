@@ -6,12 +6,23 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:15:59 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 16:23:55 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/10 17:43:43 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
+/**
+ * @brief Handles output redirection by opening the specified file.
+ *
+ * This function closes the provided output file descriptor (if any) and opens
+ * the file specified in the redirection structure. The file is opened with
+ * either truncation or append mode, depending on the redirection type.
+ * If an error occurs, it sets the appropriate error message and exit status.
+ *
+ * @param cmd The execution data containing exit status.
+ * @param current The redirection structure specifying the file and type.
+ * @param temp_output_fd Pointer to the temporary output file descriptor.
+ */
 static void	process_io_output(t_exec_data *cmd, t_redir *current,
 		int *temp_output_fd)
 {
@@ -38,7 +49,17 @@ static void	process_io_output(t_exec_data *cmd, t_redir *current,
 			current->error = get_err_str(current->str, "Unknown error", false);
 	}
 }
-
+/**
+ * @brief Handles input redirection by opening the specified file.
+ *
+ * This function closes the provided input file descriptor (if any) and opens
+ * the file specified in the redirection structure for reading. If an error
+ * occurs, it sets the appropriate error message and exit status.
+ *
+ * @param cmd The execution data containing exit status.
+ * @param current The redirection structure specifying the file.
+ * @param temp_input_fd Pointer to the temporary input file descriptor.
+ */
 static void	process_io_input(t_exec_data *cmd, t_redir *current,
 		int *temp_input_fd)
 {
@@ -56,7 +77,18 @@ static void	process_io_input(t_exec_data *cmd, t_redir *current,
 			current->error = get_err_str(current->str, "Unknown error", false);
 	}
 }
-
+/**
+ * @brief Finalizes the redirection process by setting file descriptors.
+ *
+ * If no error occurred during redirection processing, this function assigns
+ * the temporary input and output file descriptors to the execution structure.
+ * If an error occurred, it closes any opened file descriptors.
+ *
+ * @param cmd The execution data where final descriptors will be stored.
+ * @param error_msg The error message (if any) from redirection processing.
+ * @param temp_input_fd Pointer to the temporary input file descriptor.
+ * @param temp_output_fd Pointer to the temporary output file descriptor.
+ */
 static void	finalize_redirections(t_exec_data *cmd, char *error_msg,
 		int *temp_input_fd, int *temp_output_fd)
 {
@@ -76,7 +108,14 @@ static void	finalize_redirections(t_exec_data *cmd, char *error_msg,
 		close_fd(temp_output_fd);
 	}
 }
-
+/**
+ * @brief Processes input and output redirections for a command.
+ *
+ * Iterates through the command's redirection list, handling input, output,
+ * and append redirections. If an error occurs, the process is stopped.
+ *
+ * @param cmd The execution data containing redirection details.
+ */
 void	handle_io_redirections(t_exec_data *cmd)
 {
 	t_redir	*current;
@@ -105,7 +144,16 @@ void	handle_io_redirections(t_exec_data *cmd)
 	}
 	finalize_redirections(cmd, error_msg, &temp_input_fd, &temp_output_fd);
 }
-
+/**
+ * @brief Handles heredoc redirection for a command.
+ *
+ * Iterates through the command's redirection list and processes heredoc
+ * entries. A pipe is created for heredoc input, and if interrupted,
+ * the appropriate cleanup is performed.
+ *
+ * @param data The minishell structure containing heredoc pipe details.
+ * @param head The execution data containing redirections.
+ */
 void	handle_heredoc_redirection(t_minishell *data, t_exec_data *head)
 {
 	t_redir	*current;

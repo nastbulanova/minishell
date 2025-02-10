@@ -6,12 +6,22 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 12:55:21 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 12:55:22 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/10 17:17:43 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
+/**
+ * @brief Allocates memory safely and initializes it to zero.
+ *
+ * This function wraps malloc, ensuring that allocation failures are detected.
+ * It initializes the allocated memory to zero and prints an error message
+ * if allocation fails.
+ *
+ * @param bytes The number of bytes to allocate.
+ * @return A pointer to the allocated memory, or NULL if allocation fails.
+ */
 void	*safe_malloc(size_t bytes)
 {
 	void	*ret;
@@ -25,7 +35,16 @@ void	*safe_malloc(size_t bytes)
 	ft_memset(ret, 0, bytes);
 	return (ret);
 }
-
+/**
+ * @brief Prints an error message and terminates the shell.
+ *
+ * This function retrieves the shell instance, prints an error message
+ * including the function name where the error occurred, and then frees
+ * allocated resources before exiting with failure status.
+ *
+ * @param error The error message to display.
+ * @param function_name The name of the function where the error occurred.
+ */
 void	error_exit(const char *error, const char *function_name)
 {
 	t_minishell	*data;
@@ -39,7 +58,15 @@ void	error_exit(const char *error, const char *function_name)
 	minishell_free(data);
 	exit(EXIT_FAILURE);
 }
-
+/**
+ * @brief Frees allocated memory associated with the shell instance.
+ *
+ * This function releases memory used by the shell, including the prompt,
+ * environment variables, execution data, and execution environment. It also
+ * ensures that any open pipes are closed and clears the command history.
+ *
+ * @param data A pointer to the shell structure to be freed.
+ */
 void	minishell_free(t_minishell *data)
 {
 	if (data)

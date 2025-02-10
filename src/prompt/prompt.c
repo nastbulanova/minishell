@@ -6,12 +6,18 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:05:08 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 13:06:23 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/10 17:33:46 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
+/**
+ * @brief Concatenates two strings to form the final prompt.
+ *
+ * @param left The left part of the prompt (e.g., user info).
+ * @param right The right part of the prompt (e.g., directory info).
+ * @return A newly allocated string containing the full prompt.
+ */
 char	*get_final_prompt(char *left, char *right)
 {
 	char	*final_prompt;
@@ -39,6 +45,12 @@ char	*get_final_prompt(char *left, char *right)
 	return (final_prompt);
 }
 
+/**
+ * @brief Constructs the left part of the shell prompt based on user and session info.
+ *
+ * @param data Pointer to the Minishell data structure.
+ * @return A newly allocated string containing the left prompt, or NULL if unavailable.
+ */
 char	*get_prompt_left(t_minishell *data)
 {
 	t_env	*user;
@@ -65,6 +77,13 @@ char	*get_prompt_left(t_minishell *data)
 	return (prompt);
 }
 
+/**
+ * @brief Constructs the right part of the shell prompt, handling home directory abbreviation.
+ *
+ * @param pwd The current working directory.
+ * @param data Pointer to the Minishell data structure.
+ * @return A newly allocated string containing the formatted directory path.
+ */
 char	*get_prompt_right(char *pwd, t_minishell *data)
 {
 	size_t	home_len;
@@ -87,7 +106,12 @@ char	*get_prompt_right(char *pwd, t_minishell *data)
 	}
 	return (ft_strdup(pwd));
 }
-
+/**
+ * @brief Formats the working directory string by appending "$ " at the end.
+ *
+ * @param pwd The current working directory.
+ * @return A newly allocated string containing the formatted directory path.
+ */
 char	*get_final_pwd(char *pwd)
 {
 	char	*final_pwd;
@@ -105,7 +129,11 @@ char	*get_final_pwd(char *pwd)
 	free(pwd);
 	return (final_pwd);
 }
-
+/**
+ * @brief Updates the shell prompt by retrieving user, session, and working directory info.
+ *
+ * @param data Pointer to the Minishell data structure.
+ */
 void	update_prompt(t_minishell *data)
 {
 	char	*pwd;

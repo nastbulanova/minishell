@@ -6,12 +6,30 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 12:55:39 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 13:00:11 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/10 17:21:33 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+/**
+ * @file signals.c
+ * @brief Signal handling functions for Minishell.
+ *
+ * This file contains functions to handle signals such as SIGINT
+ * during normal shell operation and within heredoc mode.
+ */
 
+/**
+ * @brief Handles signals received by the main shell process.
+ *
+ * This function is called when the shell receives certain signals,
+ * such as SIGINT (Ctrl+C). It updates the shell's state accordingly
+ * and ensures proper command line redisplay.
+ *
+ * @param signo The signal number received.
+ * @param info Unused parameter (required by signal handler signature).
+ * @param context Unused parameter (required by signal handler signature).
+ */
 void	handler(int signo, siginfo_t *info, void *context)
 {
 	t_minishell	*data;
@@ -28,7 +46,17 @@ void	handler(int signo, siginfo_t *info, void *context)
 		rl_redisplay();
 	}
 }
-
+/**
+ * @brief Handles signals received within a heredoc session.
+ *
+ * This function is specifically used when the shell is in heredoc mode.
+ * It ensures that receiving SIGINT properly updates the shell state
+ * without attempting to redisplay the command line.
+ *
+ * @param signal The signal number received.
+ * @param info Unused parameter (required by signal handler signature).
+ * @param context Unused parameter (required by signal handler signature).
+ */
 void	here_doc_handler(int signal, siginfo_t *info, void *context)
 {
 	t_minishell	*data;
