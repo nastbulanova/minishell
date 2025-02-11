@@ -1,15 +1,38 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/11 13:02:39 by akitsenk          #+#    #+#             */
+/*   Updated: 2025/02/11 14:07:21 by akitsenk         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
-t_parser_error parser_loop(t_minishell *data, t_token **token, int *cmd)
+/**
+ * @brief Processes tokens until a PIPE token is encountered.
+ *
+ * Iterates through tokens, handling words, redirections, and heredocs.
+ * Returns an error if a syntax or memory issue is detected.
+ *
+ * @param data Pointer to the minishell data structure.
+ * @param token Pointer to the current token pointer.
+ * @param cmd Pointer to the command flag.
+ * @return OK on success or an error code.
+ */
+t_parser_error	parser_loop(t_minishell *data, t_token **token, int *cmd)
 {
-	char	*tmp;
-	t_parser_error	error;
+	char				*tmp;
+	t_parser_error		error;
 
 	while (*token && (*token)->type != PIPE)
 	{
-		if ((*token)->type >= WORD && (*token)->type <= EXP_FIELD)
+		if ((*token)->type == WORD)
 		{
-			tmp = opt_check(&data, &token);
+			tmp = open_field(data, *token);
 			if (*cmd == 0)
 				error = cmd_check(&data, tmp, &cmd);
 			error = opt_add(&data, tmp);
@@ -22,36 +45,74 @@ t_parser_error parser_loop(t_minishell *data, t_token **token, int *cmd)
 		if (error == OK)
 			*token = (*token)->next;
 		else
-			return(error);
+			return (error);
 	}
-	return(error);
+	return (error);
 }
 
-t_parser_error parser(t_minishell *data)
+/**
+ * @brief Handles PIPE tokens within the command sequence.
+ *
+ * Validates pipe usage and appends execution data accordingly.
+ * Returns a syntax error if pipe usage is invalid.
+ *
+ * @param data Pointer to the minishell data structure.
+ * @param token Pointer to the current token pointer.
+ * @param cmd Pointer to the command flag.
+ * @return OK on success or an error code.
+ */
+static t_parser_error	handle_pipe(t_minishell *data, t_token **token,
+	int *cmd)
 {
-	t_token *token;
-	int		cmd;
+	if (token && *token && (*token)->type == PIPE)
+	{
+		if (*cmd == 0 || !(*token)->next)
+			return (SYNTAX_ERROR);
+		else
+		{
+			cmd = 0;
+			(*token) = (*token)->next;
+			return (exec_data_append(&data, 1));
+		}
+	}
+	else
+		return (exec_data_append(&data, 0));
+}
+
+/**
+ * @brief Main parser function.
+ *
+ * Initializes execution data and processes tokens by calling parser_loop and
+ * handle_pipe. Returns syntax or memory errors if encountered.
+ *
+ * @param data Pointer to the minishell data structure.
+ * @return OK on success or an error code.
+ */
+t_parser_error	parser(t_minishell *data)
+{
+	t_token			*token;
+	int				cmd;
+	t_parser_error	error;
 
 	(data)->exec_data = exec_data_init();
 	token = data->token_head;
 	while (token)
 	{
 		cmd = 0;
-		if (parser_loop(data, &token, &cmd) != OK)
-			return(exec_data_append(&data, 0), syntax_error(&data, &token));
-		if (token && token->type == PIPE)
-		{
-			if (cmd == 0 || !token->next)
-				return(exec_data_append(&data, 0), syntax_error(&data, &token));
-			else
-			{
-				exec_data_append(&data, 1);
-				cmd = 0;
-				token = token->next;
-			}
-		}
+		error = OK;
+		error = parser_loop(data, &token, &cmd);
+		if (error == SYNTAX_ERROR)
+			return (syntax_error(&data, &token));
+		else if (error == MALLOC_ERROR)
+			return (memory_error(&data));
 		else
-			exec_data_append(&data, 0);
+		{
+			error = handle_pipe(data, &token, &cmd);
+			if (error == SYNTAX_ERROR)
+				return (syntax_error(&data, &token));
+			if (error == MALLOC_ERROR)
+				return (memory_error(&data));
+		}
 	}
-	return(OK);
+	return (OK);
 }

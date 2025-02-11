@@ -1,7 +1,27 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_cmd_utils2.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/11 12:47:43 by akitsenk          #+#    #+#             */
+/*   Updated: 2025/02/11 13:55:08 by akitsenk         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
-
-t_parser_error list_path(t_env *env, char ***paths)
+/**
+ * @brief Retrieves the PATH variable and splits it.
+ *
+ * Searches the environment list for "PATH" and splits its value by ':'.
+ * 
+ * @param env Pointer to the environment list.
+ * @param paths Pointer to store the resulting array of path strings.
+ * @return OK on success, MALLOC_ERROR on failure.
+ */
+t_parser_error	list_path(t_env *env, char ***paths)
 {
 	t_env	*current;
 
@@ -20,7 +40,18 @@ t_parser_error list_path(t_env *env, char ***paths)
 	return (OK);
 }
 
-t_parser_error loop_path(char **paths, char *cmd, char ***cmd_with_path)
+/**
+ * @brief Loops through paths to find the command's full path.
+ *
+ * Iterates over the array of paths, concatenates each with '/' and the command,
+ * and checks for its accessibility.
+ *
+ * @param paths Array of directory paths.
+ * @param cmd The command to locate.
+ * @param cmd_with_path Pointer to store the command's full path.
+ * @return OK on success, MALLOC_ERROR on failure.
+ */
+t_parser_error	loop_path(char **paths, char *cmd, char ***cmd_with_path)
 {
 	char	*tmp1;
 	char	*tmp2;
@@ -46,6 +77,17 @@ t_parser_error loop_path(char **paths, char *cmd, char ***cmd_with_path)
 	return (OK);
 }
 
+/**
+ * @brief Finds the full path of a command.
+ *
+ * Checks direct accessibility of the command or uses the PATH environment
+ * variable to locate it, returning the full path.
+ *
+ * @param env Environment list.
+ * @param cmd The command to search for.
+ * @param cmd_with_path Pointer to store the resulting full path.
+ * @return OK on success, MALLOC_ERROR on failure.
+ */
 t_parser_error	find_path(t_env *env, char *cmd, char **cmd_with_path)
 {
 	char	**paths;
@@ -54,9 +96,9 @@ t_parser_error	find_path(t_env *env, char *cmd, char **cmd_with_path)
 	{
 		*cmd_with_path = ft_strdup(cmd);
 		if (!cmd_with_path)
-			return(MALLOC_ERROR);
+			return (MALLOC_ERROR);
 		else
-			return(OK);
+			return (OK);
 	}
 	paths = NULL;
 	if (env)

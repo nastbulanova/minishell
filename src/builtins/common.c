@@ -1,117 +1,154 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   common.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/10 13:24:26 by joaomigu          #+#    #+#             */
+/*   Updated: 2025/02/11 11:08:18 by joaomigu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/minishell.h"
 
-bool is_multiple_flag(char *arg, char **flags)
+/**
+ * @brief Checks if a given argument contains multiple flags.
+ *
+ * @param arg The argument string to check.
+ * @param flags An array of valid flag characters.
+ * @return true if the argument contains multiple flags, false otherwise.
+ */
+bool	is_mul_flg(char *arg, char **flags)
 {
-    int     i;
-    char    *p;
+	int		i;
+	char	*p;
 
-    if (arg[0] == '-')
-    {
-        i = 0;
-        while(flags[i])
-        {
-            p = ft_strchr(arg, flags[i][0]);
-            if (!p)
-                return (false);
-            i++;
-        }
-    }
-    else
-        return  (false);
-    return (true);
+	if (arg[0] == '-')
+	{
+		i = 0;
+		while (flags[i])
+		{
+			p = ft_strchr(arg, flags[i][0]);
+			if (!p)
+				return (false);
+			i++;
+		}
+	}
+	else
+		return (false);
+	return (true);
 }
 
-int index_arg(char **args, char **flags)
+/**
+ * @brief Finds the index of the first non-flag argument in an array.
+ *
+ * @param args The array of argument strings.
+ * @param flags The array of valid flags.
+ * @return The index of the first non-flag argument, or -1 if none is found.
+ */
+int	index_arg(char **args, char **flags)
 {
-    int i; 
-    int j;
-    int is_flag;
-   
-    if (!args || !args[0])
-        return (-1);
-    i = 0;
-    while (args[++i]) 
-    {
-        is_flag = 0;
-        if (ft_strlen(args[i]) == 1)
-            is_flag = 1;
-        j = -1;
-        while(flags && flags[++j]&& !is_flag)
-        {
-            if (c_strcmp(args[i], flags[j]) == 0 || is_multiple_flag(args[i], flags))
-            {
-                is_flag = 1;
-                break;
-            }
-        }
-        if (!is_flag)
-            return (i);
-    }
-    return (-1);
+	int	i;
+	int	j;
+	int	is_flag;
+
+	if (!args || !args[0])
+		return (-1);
+	i = 0;
+	while (args[++i])
+	{
+		is_flag = 0;
+		if (args[i][0] == '-')
+			is_flag = 1;
+		j = -1;
+		while (flags && flags[++j] && !is_flag)
+		{
+			if (c_strcmp(args[i], flags[j]) == 0 || is_mul_flg(args[i], flags))
+			{
+				is_flag = 1;
+				break ;
+			}
+		}
+		if (!is_flag)
+			return (i);
+	}
+	return (-1);
 }
 
-int array_size(char **array)
+/**
+ * @brief Calculates the size of an array of strings.
+ *
+ * @param array The array of strings.
+ * @return The number of elements in the array.
+ */
+int	array_size(char **array)
 {
-	int result;
+	int	result;
 
 	result = 0;
 	if (!array)
 		return (result);
 	while (array[result])
-        result++;
+		result++;
 	return (result);
 }
 
-bool has_flag(char **args, char *flag)
+/**
+ * @brief Checks if a given flag exists in the argument list.
+ *
+ * @param args The array of argument strings.
+ * @param flag The flag to check for.
+ * @return true if the flag is found, false otherwise.
+ */
+bool	has_flag(char **args, char *flag)
 {
-    int first_arg;
-    int i;
-    char **flags;
+	int		first_arg;
+	int		i;
+	char	**flags;
 
-    if (!args || !args[0])
-        return (false); 
-    if (!flag)
-        return (false); 
-    flags = get_cmd_flags(args[0]);
-    if (!flags)
-        return (false);
-    first_arg = index_arg(args, get_cmd_flags(args[0]));
-    if (first_arg < 0)
-        first_arg = array_size(args);
-    i = -1;
-    while (++i < first_arg)
-    {
-        if (!c_strcmp(flag, args[i]) || ft_strchr(args[i], flag[1]))
-            return (true);
-    }
-    return (false);
+	if (!args || !args[0])
+		return (false);
+	if (!flag)
+		return (false);
+	flags = get_cmd_flags(args[0]);
+	if (!flags)
+		return (false);
+	first_arg = index_arg(args, get_cmd_flags(args[0]));
+	if (first_arg < 0)
+		first_arg = array_size(args);
+	i = -1;
+	while (++i < first_arg)
+	{
+		if (!c_strcmp(flag, args[i]) || ft_strchr(args[i], flag[1]))
+			return (true);
+	}
+	return (false);
 }
 
+/**
+ * @brief Retrieves the valid flags for a given command.
+ *
+ * @param command The command name.
+ * @return An array of strings representing valid flags for the command.
+ */
 char	**get_cmd_flags(char *command)
 {
-	static char	*echo_flags[] = {"-n", "-e", "-E", NULL};
-	static char	*cd_flags[] = {"-L", "-P", NULL};
-	static char	*pwd_flags[] = {NULL};
-	static char	*export_flags[] = {"-p", NULL};
-    static char	*unset_flags[] = {"-v", "-f", NULL};
-	static char	*env_flags[] = {NULL};
-    static char	*exit_flags[] = {NULL};
-
 	if (!command)
 		return (NULL);
 	if (!c_strcmp(command, "echo"))
-		return (echo_flags);
+		return (get_flags_echo());
 	else if (!c_strcmp(command, "cd"))
-		return (cd_flags);
+		return (get_flags_cd());
 	else if (!c_strcmp(command, "pwd"))
-		return (pwd_flags);
+		return (get_flags_null());
 	else if (!c_strcmp(command, "export"))
-		return (export_flags);
+		return (get_flags_export());
 	else if (!c_strcmp(command, "unset"))
-		return (unset_flags);
+		return (get_flags_unset());
 	else if (!c_strcmp(command, "env"))
-		return (env_flags);
+		return (get_flags_null());
 	else if (!c_strcmp(command, "exit"))
-		return (exit_flags);
+		return (get_flags_null());
 	return (NULL);
 }

@@ -1,8 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/10 14:35:02 by joaomigu          #+#    #+#             */
+/*   Updated: 2025/02/10 14:43:16 by joaomigu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef BUILTINS_H
 # define BUILTINS_H
 
 # include "defines.h"
 # include "structs.h"
+
+char	**get_flags_null(void);
+char	**get_flags_cd(void);
+char	**get_flags_echo(void);
+char	**get_flags_export(void);
+char	**get_flags_unset(void);
 
 // builtins/common.c
 int		array_size(char **array);
@@ -10,17 +28,19 @@ int		index_arg(char **args, char **flags);
 char	**get_cmd_flags(char *command);
 bool	has_flag(char **args, char *flag);
 
-//echo.c
+// echo.c
+bool	is_string_flag(char *str, char **flags);
+bool	is_char_in_flag(char c, char **flags);
 int		cmd_echo(char **args);
-//pwd.c
-int     cmd_pwd(int fd);
-//unset.c
-int     cmd_unset(char **args);
+// pwd.c
+int		cmd_pwd(int fd);
+// unset.c
+int		cmd_unset(char **args);
 
-//exit/exit_aux.c
-char ft_exit_atoi(char *str);
-char *built_exit_string(const char* str);
-//exit/exit.c
+// exit/exit_aux.c
+char	ft_exit_atoi(char *str);
+char	*built_exit_string(const char *str);
+// exit/exit.c
 int		cmd_exit(char **args);
 // builtins/cd
 // cd_one_arg
@@ -32,22 +52,22 @@ int		cd_minus(t_env *pwd, t_env *oldpwd, char *working_arg);
 void	cd_error_exit(char *path, int _errno);
 t_env	*get_pwd(t_minishell *shell);
 int		cd_no_args(t_minishell *shell);
-int		cd_multiple_args(char **str);
 int		cmd_cd(char **str);
 
 // builtins/export
 // export/export_aux.c
-void    extract_name_value(char *line, char **name, char **value);
-void    update_env(t_minishell *data, char *var_name, char* var_value);
-void    print_error_export(char *arg);
-//export/export_print.c
+void	extract_name_value(char *line, char **name, char **value);
+void	update_env(t_minishell *data, char *var_name, char *var_value);
+void	print_error_export(char *arg);
+bool	is_valid_variable_name(const char *name);
+// export/export_print.c
 void	exp_print(t_minishell *data);
 // export/export.c
 int		cmd_export(char **str);
 
 // builtins/env
 // env/env.c
-int		cmd_env();
+int		cmd_env(char **argv);
 // env/env_init.c
 
 void	env_init(char **argv, char **envp, t_minishell *shell);

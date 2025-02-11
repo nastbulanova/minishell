@@ -1,35 +1,31 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/10 13:47:08 by joaomigu          #+#    #+#             */
+/*   Updated: 2025/02/10 13:55:42 by joaomigu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../../inc/minishell.h"
 
-static bool is_valid_variable_name(const char *name) 
-{
-	int i;
-
-    if (!name || name[0] == '\0') 
-        return (false);
-    if (!ft_isalpha(name[0]) && name[0] != '_')
-		return (false);
-	i = -1;
-    while (name[++i])
-	{
-        if (!ft_isalnum(name[i]) && name[i] != '_') 
-            return (false);
-	}
-    return (true);
-}
-
-static void free_name_value(char *name, char* value)
+static void	free_name_value(char *name, char *value)
 {
 	if (name)
 		free(name);
-	if(value)
+	if (value)
 		free(value);
 }
-static bool process_arg(char *arg, t_minishell *data)
+
+static bool	process_arg(char *arg, t_minishell *data)
 {
-	char *var_name;
-	char *var_value;
-	char *p;
-	bool result;
+	char	*var_name;
+	char	*var_value;
+	char	*p;
+	bool	result;
 
 	result = false;
 	p = ft_strchr(arg, '=');
@@ -44,7 +40,7 @@ static bool process_arg(char *arg, t_minishell *data)
 			var_value = NULL;
 		}
 		result = is_valid_variable_name(var_name);
-		if (result)
+		if (result && var_value)
 			update_env(data, var_name, var_value);
 		else
 			free_name_value(var_name, var_value);
@@ -52,22 +48,20 @@ static bool process_arg(char *arg, t_minishell *data)
 	return (result);
 }
 
-static void set_process_exit(t_minishell *data, int count_error)
+static void	set_process_exit(t_minishell *data, int count_error)
 {
 	if (count_error == 0)
 		data->exit_code = 0;
 	else
 		data->exit_code = 1;
 }
-int cmd_export(char** args)
-{
-	//export $ANOTHER=thisisateste
-	//zsh: thisisateste not found
 
-	int arg_count;
-	int first_arg;
-	int count_error;
-	t_minishell *data;
+int	cmd_export(char **args)
+{
+	int			arg_count;
+	int			first_arg;
+	int			count_error;
+	t_minishell	*data;
 
 	data = get_shell(false);
 	count_error = 0;
@@ -78,15 +72,15 @@ int cmd_export(char** args)
 	{
 		first_arg = index_arg(args, get_cmd_flags(args[0]));
 		while (first_arg >= 0 && args[first_arg])
-		{			
+		{
 			if (!process_arg(args[first_arg], data) && !count_error)
 			{
 				count_error++;
 				print_error_export(args[first_arg]);
-			}	
-		first_arg++;
+			}
+			first_arg++;
 		}
 	}
 	set_process_exit(data, count_error);
-	return (0);
+	return (data->exit_code);
 }
