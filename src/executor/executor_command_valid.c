@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:08:00 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/11 18:13:58 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/11 18:45:56 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,8 @@ static bool	cmd_valid(t_minishell *data, t_exec_data *cmd, char **end_str)
 		if (!has_slash)
 			*end_str = get_err_str(cmd->cmd, "command not found", false);
 		else if (access(cmd->cmd, F_OK) == -1)
-			*end_str = get_err_str(cmd->cmd, "No such file or\
-			 directory", false);
+			*end_str = get_err_str(cmd->cmd,
+					"No such file or directory", false);
 		return (false);
 	}
 	else
