@@ -6,12 +6,30 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:23:56 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 13:23:58 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/11 11:03:50 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+/**
+ * @file pwd.c
+ * @brief Implementation of the pwd builtin command for Minishell.
+ */
 
+/**
+ * @brief Retrieves and prints the current working directory.
+ *
+ * This function uses `getcwd()` to obtain the absolute path of the 
+ * current working directory. The path is printed to the specified 
+ * file descriptor `fd`. If `fd` is invalid, it defaults to `STDOUT_FILENO`.
+ *
+ * @param fd The file descriptor where the output should be written.
+ * @return Returns 0 on success, or 1 if an error occurs.
+ *
+ * @note If `getcwd()` fails, an error message is printed to STDERR.
+ * @note The function ensures proper memory management by freeing 
+ *       the dynamically allocated string returned by `getcwd()`.
+ */
 int	cmd_pwd(int fd)
 {
 	char	*pwd;

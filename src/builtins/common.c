@@ -6,12 +6,19 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:24:26 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 13:42:28 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/11 11:08:18 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+/**
+ * @brief Checks if a given argument contains multiple flags.
+ *
+ * @param arg The argument string to check.
+ * @param flags An array of valid flag characters.
+ * @return true if the argument contains multiple flags, false otherwise.
+ */
 bool	is_mul_flg(char *arg, char **flags)
 {
 	int		i;
@@ -33,6 +40,13 @@ bool	is_mul_flg(char *arg, char **flags)
 	return (true);
 }
 
+/**
+ * @brief Finds the index of the first non-flag argument in an array.
+ *
+ * @param args The array of argument strings.
+ * @param flags The array of valid flags.
+ * @return The index of the first non-flag argument, or -1 if none is found.
+ */
 int	index_arg(char **args, char **flags)
 {
 	int	i;
@@ -62,6 +76,12 @@ int	index_arg(char **args, char **flags)
 	return (-1);
 }
 
+/**
+ * @brief Calculates the size of an array of strings.
+ *
+ * @param array The array of strings.
+ * @return The number of elements in the array.
+ */
 int	array_size(char **array)
 {
 	int	result;
@@ -74,6 +94,13 @@ int	array_size(char **array)
 	return (result);
 }
 
+/**
+ * @brief Checks if a given flag exists in the argument list.
+ *
+ * @param args The array of argument strings.
+ * @param flag The flag to check for.
+ * @return true if the flag is found, false otherwise.
+ */
 bool	has_flag(char **args, char *flag)
 {
 	int		first_arg;
@@ -99,6 +126,12 @@ bool	has_flag(char **args, char *flag)
 	return (false);
 }
 
+/**
+ * @brief Retrieves the valid flags for a given command.
+ *
+ * @param command The command name.
+ * @return An array of strings representing valid flags for the command.
+ */
 char	**get_cmd_flags(char *command)
 {
 	if (!command)

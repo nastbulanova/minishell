@@ -6,12 +6,23 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:22:53 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 15:29:13 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/11 10:58:20 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+/**
+ * @brief Appends a string to a final string at a given index.
+ *
+ * This function copies the contents of `str` into `final_string`,
+ * starting at `*index_final`, and updates `*index_final` accordingly.
+ *
+ * @param str The source string to append.
+ * @param final_string The destination string where `str` will be appended.
+ * @param index_final Pointer to the current index of `final_string`.
+ * @param index The starting index for `str`.
+ */
 static void	error_string_aux(char *str, char *final_string, size_t *index_final,
 		size_t index)
 {
@@ -26,6 +37,18 @@ static void	error_string_aux(char *str, char *final_string, size_t *index_final,
 	}
 }
 
+/**
+ * @brief Constructs an error message string.
+ *
+ * This function creates an error message string in the format:
+ * "minishell: <filename>: <error_str>". If `newline` is true, a newline
+ * character is appended at the end.
+ *
+ * @param filename The filename related to the error.
+ * @param error_str The error message.
+ * @param newline Whether to append a newline at the end.
+ * @return A dynamically allocated string containing the formatted error message.
+ */
 char	*get_err_str(char *filename, char *error_str, bool newline)
 {
 	size_t	final_length;
@@ -54,6 +77,14 @@ char	*get_err_str(char *filename, char *error_str, bool newline)
 	return (final_string);
 }
 
+/**
+ * @brief Closes the file descriptors associated with a command.
+ *
+ * This function ensures that all open file descriptors linked to a command
+ * are closed properly, including input and output pipes.
+ *
+ * @param cmd The command structure containing file descriptors.
+ */
 void	close_command_fds(t_exec_data *cmd)
 {
 	if (!cmd)
@@ -65,6 +96,16 @@ void	close_command_fds(t_exec_data *cmd)
 		close_fd(&cmd->output_fd);
 }
 
+/**
+ * @brief Executes a built-in command.
+ *
+ * This function checks if a given command is a built-in shell command
+ * and executes it accordingly. If the command is not recognized, it
+ * triggers a critical error and exits with code 2.
+ *
+ * @param cmd The command structure containing the command name and options.
+ * @return The exit code of the executed built-in command.
+ */
 int	execute_builtin(t_exec_data *cmd)
 {
 	int	exit_code;

@@ -6,12 +6,19 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:24:12 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 13:24:14 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/11 11:06:06 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+/**
+ * @brief Checks if a character is present in the flag list.
+ *
+ * @param c The character to check.
+ * @param flags The array of flag strings.
+ * @return true if the character is in the flags list, false otherwise.
+ */
 bool	is_char_in_flag(char c, char **flags)
 {
 	int	i;
@@ -26,6 +33,15 @@ bool	is_char_in_flag(char c, char **flags)
 	return (false);
 }
 
+/**
+ * @brief Checks if a string is a valid flag.
+ *
+ * A valid flag starts with '-' and contains only characters present in the flags list.
+ *
+ * @param str The string to check.
+ * @param flags The array of flag strings.
+ * @return true if the string is a valid flag, false otherwise.
+ */
 bool	is_string_flag(char *str, char **flags)
 {
 	int	i;
@@ -42,6 +58,16 @@ bool	is_string_flag(char *str, char **flags)
 	return (true);
 }
 
+/**
+ * @brief Checks if a specific flag exists in the command arguments.
+ *
+ * Iterates through the arguments to determine if the given character is present in any flag.
+ *
+ * @param c The flag character to check for.
+ * @param flags The array of flag strings.
+ * @param args The array of command arguments.
+ * @return true if the flag exists, false otherwise.
+ */
 static bool	flag_exists(char c, char **flags, char **args)
 {
 	int	i;
@@ -65,6 +91,15 @@ static bool	flag_exists(char c, char **flags, char **args)
 	return (false);
 }
 
+/**
+ * @brief Executes the built-in echo command.
+ *
+ * This function prints the given arguments to the standard output.
+ * If the '-n' flag is detected, it suppresses the trailing newline.
+ *
+ * @param args The array of command arguments.
+ * @return Always returns 0.
+ */
 int	cmd_echo(char **args)
 {
 	bool	newline;

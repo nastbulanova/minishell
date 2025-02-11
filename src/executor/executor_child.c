@@ -6,12 +6,25 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:17:59 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 13:18:01 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/11 10:52:24 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+/**
+ * @file executor_child.c
+ * @brief Handles child process execution in the Minishell project.
+ */
+
+/**
+ * @brief Closes all file descriptors in the execution chain.
+ * 
+ * Iterates through the linked list of execution data and closes any open
+ * input, output, and pipe file descriptors.
+ * 
+ * @param temp Pointer to the first node of the execution data linked list.
+ */
 void	clear_fds(t_exec_data *temp)
 {
 	while (temp)
@@ -28,6 +41,17 @@ void	clear_fds(t_exec_data *temp)
 	}
 }
 
+/**
+ * @brief Handles cleanup and process tracking for the parent process.
+ * 
+ * Closes necessary file descriptors after forking a child process and adds
+ * the child's PID to the tracking list.
+ * 
+ * @param cmd Pointer to the current command execution node.
+ * @param previous Pointer to the previous command execution node (if any).
+ * @param pid_list Pointer to the PID tracking list.
+ * @param pid Process ID of the newly created child process.
+ */
 void	handle_parent(t_exec_data *cmd, t_exec_data *previous,
 		t_pid_list **pid_list, pid_t pid)
 {
@@ -42,6 +66,15 @@ void	handle_parent(t_exec_data *cmd, t_exec_data *previous,
 		close_fd(&cmd->output_fd);
 }
 
+/**
+ * @brief Sets up input redirections for the child process.
+ * 
+ * Redirects input from a file descriptor or a pipe from the previous command.
+ * If the command is a builtin, the input redirection is skipped.
+ * 
+ * @param cmd Pointer to the current command execution node.
+ * @param previous Pointer to the previous command execution node (if any).
+ */
 static void	handle_child_input(t_exec_data *cmd, t_exec_data *previous)
 {
 	if (cmd->input_fd >= 0)
@@ -60,6 +93,13 @@ static void	handle_child_input(t_exec_data *cmd, t_exec_data *previous)
 	}
 }
 
+/**
+ * @brief Sets up output redirections for the child process.
+ * 
+ * Redirects output to a file descriptor or to a pipe for the next command.
+ * 
+ * @param cmd Pointer to the current command execution node.
+ */
 static void	handle_child_output(t_exec_data *cmd)
 {
 	if (cmd->output_fd >= 0)
@@ -77,6 +117,18 @@ static void	handle_child_output(t_exec_data *cmd)
 	}
 }
 
+/**
+ * @brief Executes a command in the child process.
+ * 
+ * Handles input/output redirections, executes builtins directly,
+ * or calls `execve` for external commands. If a command is invalid,
+ * the child process exits with an error code.
+ * 
+ * @param cmd Pointer to the current command execution node.
+ * @param previous Pointer to the previous command execution node (if any).
+ * @param envp Environment variables.
+ * @param head Pointer to the head of the execution data linked list.
+ */
 void	handle_child(t_exec_data *cmd, t_exec_data *previous, char **envp,
 		t_exec_data *head)
 {

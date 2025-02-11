@@ -6,12 +6,22 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:18:15 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 14:55:32 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/11 10:55:34 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+/**
+ * @file executor_child_aux.c
+ * @brief Auxiliary functions for managing child processes in Minishell.
+ */
+
+/**
+ * @brief Frees the memory allocated for a list of process IDs.
+ * 
+ * @param head Pointer to the head of the pid list.
+ */
 void	free_pid_list(t_pid_list **head)
 {
 	t_pid_list	*current;
@@ -27,6 +37,12 @@ void	free_pid_list(t_pid_list **head)
 	*head = NULL;
 }
 
+/**
+ * @brief Creates a new node for storing a process ID.
+ * 
+ * @param pid The process ID to store.
+ * @return Pointer to the newly created node.
+ */
 t_pid_list	*create_pid_node(pid_t pid)
 {
 	t_pid_list	*new_node;
@@ -37,6 +53,12 @@ t_pid_list	*create_pid_node(pid_t pid)
 	return (new_node);
 }
 
+/**
+ * @brief Adds a new process ID node to the end of the pid list.
+ * 
+ * @param head Pointer to the head of the pid list.
+ * @param pid The process ID to add.
+ */
 void	add_pid(t_pid_list **head, pid_t pid)
 {
 	t_pid_list	*new_node;
@@ -56,6 +78,13 @@ void	add_pid(t_pid_list **head, pid_t pid)
 	current->next = new_node;
 }
 
+/**
+ * @brief Determines and updates the exit status of the shell.
+ * 
+ * @param data Pointer to the Minishell structure.
+ * @param head Pointer to the execution data list.
+ * @param status The status returned by waitpid.
+ */
 static void	exit_status_aux(t_minishell *data, t_exec_data *head, int status)
 {
 	int	signal;
@@ -76,6 +105,15 @@ static void	exit_status_aux(t_minishell *data, t_exec_data *head, int status)
 	}
 }
 
+/**
+ * @brief Handles the exit statuses of all child processes.
+ * 
+ * Waits for all child processes in the pid list to finish and updates the
+ * shell's exit status accordingly.
+ * 
+ * @param data Pointer to the Minishell structure.
+ * @param pid_list Pointer to the list of process IDs.
+ */
 void	handle_exit_status(t_minishell *data, t_pid_list *pid_list)
 {
 	int			status;
