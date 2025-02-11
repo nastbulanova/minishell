@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:15:59 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/11 18:15:56 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/11 18:36:31 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ static void	process_io_output(t_exec_data *cmd, t_redir *current,
 		else if (errno == EACCES)
 		{
 			cmd->exit_status = 1;
-			current->error = get_err_str(current->str, "Permission \
-			denied", false);
+			current->error = get_err_str(current->str,
+					"Permission denied", false);
 		}
 		else
 			current->error = get_err_str(current->str, "Unknown error", false);
@@ -74,8 +74,8 @@ static void	process_io_input(t_exec_data *cmd, t_redir *current,
 			current->error = get_err_str(current->str,
 					"No such file or directory", false);
 		else if (errno == EACCES)
-			current->error = get_err_str(current->str, "Permission \
-			denied", false);
+			current->error = get_err_str(current->str,
+					"Permission denied", false);
 		else
 			current->error = get_err_str(current->str, "Unknown error", false);
 	}
