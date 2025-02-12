@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:35:02 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 14:43:16 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/12 13:08:51 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int		cd_home(t_env **pwd, t_env **oldpwd, t_env **home, char *working_arg);
 int		cd_minus(t_env *pwd, t_env *oldpwd, char *working_arg);
 // cd.c
 void	cd_error_exit(char *path, int _errno);
+void	free_partial_envs(t_env *oldpwd, t_env *pwd, t_env *home);
 t_env	*get_pwd(t_minishell *shell);
 int		cd_no_args(t_minishell *shell);
 int		cmd_cd(char **str);

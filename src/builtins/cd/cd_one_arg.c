@@ -6,20 +6,32 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:30:24 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 14:30:35 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/12 13:42:38 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../inc/minishell.h"
 
-void	free_partial_envs(t_env *oldpwd, t_env *pwd, t_env *home)
+static int	cd_remainder_aux(t_env **oldpwd, t_env **pwd)
 {
-	if (oldpwd)
-		free(oldpwd);
-	if (pwd)
-		free(pwd);
-	if (home)
-		free(home);
+	char	*pwd_str;
+
+	if (*oldpwd && *pwd)
+	{
+		pwd_str = NULL;
+		pwd_str = getcwd(pwd_str, 0);
+		if (!pwd_str)
+		{
+			ft_putstr_fd("Error: ", STDERR_FILENO);
+			ft_putstr_fd(strerror(errno), STDERR_FILENO);
+			ft_putstr_fd("\n", STDERR_FILENO);
+			return (1);
+		}
+		env_update(*oldpwd, (*pwd)->value);
+		env_update(*pwd, pwd_str);
+		free(pwd_str);
+	}
+	return (0);
 }
 
 int	cd_minus(t_env *pwd, t_env *oldpwd, char *working_arg)
@@ -80,13 +92,7 @@ int	cd_remainder(t_env **oldpwd, t_env **pwd, char *working_arg)
 			return (1);
 		}
 		else
-		{
-			if (*oldpwd && *pwd)
-			{
-				env_update(*oldpwd, (*pwd)->value);
-				env_update(*pwd, working_arg);
-			}
-		}
+			return (cd_remainder_aux(oldpwd, pwd));
 	}
 	return (0);
 }

@@ -6,11 +6,21 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:30:01 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 14:30:02 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/12 13:07:57 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../inc/minishell.h"
+
+void	free_partial_envs(t_env *oldpwd, t_env *pwd, t_env *home)
+{
+	if (oldpwd)
+		free(oldpwd);
+	if (pwd)
+		free(pwd);
+	if (home)
+		free(home);
+}
 
 void	cd_error_exit(char *path, int _errno)
 {
