@@ -6,7 +6,7 @@
 /*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 12:51:20 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/11 15:13:27 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/02/12 11:26:50 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,14 +104,14 @@ t_exec_data	*exec_data_init(void)
  * @param list_head Pointer to the head of the execution data list.
  * @param exec_data Pointer to the execution data to append.
  */
-static void	put_last(t_exec_data **list_head, t_exec_data **exec_data)
+static void	put_last(t_exec_data **list_head, t_exec_data *exec_data)
 {
-	t_exec_data	**tmp;
+	t_exec_data	*tmp;
 
-	tmp = list_head;
-	while ((*tmp)->next)
-		(*tmp) = (*tmp)->next;
-	(*tmp)->next = *exec_data;
+	tmp = *list_head;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = exec_data;
 }
 
 /**
@@ -139,7 +139,7 @@ t_parser_error	exec_data_append(t_minishell **data, int create)
 		(*data)->list_exec_data = (*data)->exec_data;
 	else
 	{
-		put_last(&((*data)->list_exec_data), &((*data)->exec_data));
+		put_last(&((*data)->list_exec_data), (*data)->exec_data);
 		(*data)->exec_data = NULL;
 	}
 	if (create)
