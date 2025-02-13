@@ -6,7 +6,7 @@
 /*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:28:47 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/11 15:31:21 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/02/13 18:42:38 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,17 @@ t_parser_error	opt_add(t_minishell **data, char *opt);
 t_opt_llist		*opt_create(char *opt);
 
 //parser_exp_field_utils_0
+char			*expand_field_string(t_minishell *data, const char *input);
 char			*open_field(t_minishell *data, t_token *token);
 
 //parser_exp_field_utils_1
 char			*env_var_replace(t_minishell *data, char *name);
-t_parser_error	end_code_exp(t_exp_field **field, char *str);
-char			*get_env_var_value(t_exp_field **field, char *str);
-t_parser_error	env_var_exp(t_exp_field **field, char *str);
+char			*expand_variable(t_minishell *data, const char *input, int *i);
+char			*process_unquoted(const char *input, int *i);
 
 //parser_exp_field_utils_2
-t_parser_error	handle_quotes(t_exp_field *f, char *str, char quote);
+char			*append_char_to_str(char *s, char c);
+char			*append_str_to_str(char *s, const char *t);
 
 //parser_redir_utils
 t_redir			*redir_create(char *str, t_token_type type);

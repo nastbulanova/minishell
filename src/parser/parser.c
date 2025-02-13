@@ -6,7 +6,7 @@
 /*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 13:02:39 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/11 14:07:21 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/02/13 17:45:22 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ t_parser_error	parser_loop(t_minishell *data, t_token **token, int *cmd)
 		if ((*token)->type == WORD)
 		{
 			tmp = open_field(data, *token);
-			if (*cmd == 0)
+			if (!(data->exec_data->cmd))
 				error = cmd_check(&data, tmp, &cmd);
 			error = opt_add(&data, tmp);
 			tmp = NULL;
@@ -66,17 +66,18 @@ static t_parser_error	handle_pipe(t_minishell *data, t_token **token,
 {
 	if (token && *token && (*token)->type == PIPE)
 	{
-		if (*cmd == 0 || !(*token)->next)
+		if (!(data->exec_data->cmd) && !(*token)->next)
 			return (SYNTAX_ERROR);
-		else
+		if ((*token)->next)
 		{
-			cmd = 0;
+			*cmd = 0;
 			(*token) = (*token)->next;
 			return (exec_data_append(&data, 1));
 		}
 	}
 	else
 		return (exec_data_append(&data, 0));
+	return (OK);
 }
 
 /**

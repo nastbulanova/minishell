@@ -1,169 +1,175 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_exp_field_utils_test.c                      :+:      :+:    :+:   */
+/*   parser_exp_field_utils_0.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/11 12:53:03 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/11 14:06:09 by akitsenk         ###   ########.fr       */
+/*   Created: 2025/02/13 13:25:14 by akitsenk          #+#    #+#             */
+/*   Updated: 2025/02/13 18:39:25 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
 /**
- * @brief Initializes a new expansion field.
+ * @brief Processes a quoted segment.
  *
- * Allocates and sets default values for a t_exp_field structure.
+ * Processes a segment enclosed by the given quote.
+ * In double quotes, variable expansion is performed;
+ * in single quotes, the content is taken literally.
  *
- * @param data Pointer to the minishell data structure.
- * @return Pointer to the initialized field, or NULL on failure.
+ * @param data Pointer to minishell data.
+ * @param input The input string.
+ * @param i Pointer to the current index (at opening quote).
+ * @param quote The quote character.
+ * @return A new string with the processed segment, or NULL on failure.
  */
-static t_exp_field	*init_field(t_minishell *data)
+static char	*process_quote(t_minishell *data, const char *input, int *i,
+	char quote)
 {
-	t_exp_field	*field;
+	char	*res;
+	char	*temp;
 
-	field = NULL;
-	field = (t_exp_field *)malloc(sizeof(t_exp_field));
-	if (!field)
+	res = ft_strdup("");
+	if (res == NULL)
 		return (NULL);
-	field->i = 0;
-	field->j = 0;
-	field->start = 0;
-	field->data = data;
-	field->result = ft_strdup("");
-	if (!field->result)
+	(*i)++;
+	while (input[*i] != '\0' && input[*i] != quote)
 	{
-		free(field);
-		return (NULL);
-	}
-	return (field);
-}
-
-/**
- * @brief Finalizes a substring expansion.
- *
- * Extracts a substring from 'str' based on current indices and appends it to
- * the result.
- *
- * @param f Pointer to the expansion field.
- * @param str The input string.
- * @return OK on success, or MALLOC_ERROR if memory allocation fails.
- */
-static t_parser_error	finalize_substr(t_exp_field *f, char *str)
-{
-	t_parser_error	error;
-	char			*frag;
-	char			*joined;
-	int				len;
-
-	error = OK;
-	len = f->i - f->start;
-	frag = ft_substr(str, f->start, len);
-	if (!frag)
-		return (MALLOC_ERROR);
-	joined = ft_strjoin(f->result, frag);
-	free(frag);
-	free(f->result);
-	if (!joined)
-		return (MALLOC_ERROR);
-	f->result = joined;
-	return (error);
-}
-
-/**
- * @brief Fills the expansion field with processed data.
- *
- * Processes the input string by expanding variables and quotes.
- *
- * @param f Pointer to the expansion field.
- * @param str The input string.
- * @param len Length of the input string.
- * @return OK on success, or an error code on failure.
- */
-static t_parser_error	fill_field(t_exp_field *f, char *str, int len)
-{
-	t_parser_error	error;
-
-	error = OK;
-	while (f->i < len && error == OK)
-	{
-		if (str[f->i] == '$' && (f->i + 1 < len) && str[f->i + 1] == '?')
-			error = end_code_exp(&f, str);
-		else if (str[f->i] == '$' && (f->i + 1 < len) && str[f->i + 1] != ' '
-			&& str[f->i + 1] != '$')
-			error = env_var_exp(&f, str);
-		else if (str[f->i] == '\'' || str[f->i] == '"')
+		if (quote == '"' && input[*i] == '$')
 		{
-			error = finalize_substr(f, str);
-			if (error != OK)
-				break ;
-			error = handle_quotes(f, str, str[f->i]);
-			f->i++;
-			f->start = f->i;
+			temp = expand_variable(data, input, i);
+			res = append_str_to_str(res, temp);
+			free(temp);
 		}
 		else
-			f->i++;
+		{
+			res = append_char_to_str(res, input[*i]);
+			(*i)++;
+		}
 	}
-	return (error);
+	if (input[*i] == quote)
+		(*i)++;
+	return (res);
 }
 
 /**
- * @brief Finalizes the expansion field.
+ * @brief Processes an unquoted segment and appends its result.
  *
- * Appends any remaining substring to the result and returns the final string.
+ * Calls process_unquoted, then appends the returned string to result.
  *
- * @param field Pointer to the expansion field.
- * @param str The input string.
- * @return The final expanded string, or NULL on failure.
+ * @param input The input string.
+ * @param i Pointer to the current index.
+ * @param result Pointer to the result string.
+ * @return OK on success, or MALLOC_ERROR on failure.
  */
-static char	*finalize_field(t_exp_field *field, char *str)
+static t_parser_error	process_unquoted_segment(const char *input, int *i,
+	char **result)
 {
-	t_parser_error	err;
-	char			*res;
+	char	*temp;
 
-	err = finalize_substr(field, str);
-	if (err != OK)
+	temp = process_unquoted(input, i);
+	if (temp == NULL)
+		return (MALLOC_ERROR);
+	*result = append_str_to_str(*result, temp);
+	free(temp);
+	return (OK);
+}
+
+/**
+ * @brief Processes a special segment (quoted or variable) and appends its
+ * result.
+ *
+ * If the current character is a quote or '$', processes it accordingly.
+ *
+ * @param data Pointer to minishell data.
+ * @param input The input string.
+ * @param i Pointer to the current index.
+ * @param result Pointer to the result string.
+ * @return OK on success, or MALLOC_ERROR on failure.
+ */
+static t_parser_error	process_special_segment(t_minishell *data,
+						const char *input, int *i, char **result)
+{
+	char	*temp;
+
+	if (input[*i] == '\'' || input[*i] == '"')
 	{
-		free(field->result);
-		return (NULL);
+		temp = process_quote(data, input, i, input[*i]);
+		if (temp == NULL)
+			return (MALLOC_ERROR);
+		*result = append_str_to_str(*result, temp);
+		free(temp);
 	}
-	res = field->result;
-	return (res);
+	else if (input[*i] == '$')
+	{
+		temp = expand_variable(data, input, i);
+		if (temp == NULL)
+			return (MALLOC_ERROR);
+		*result = append_str_to_str(*result, temp);
+		free(temp);
+	}
+	return (OK);
+}
+
+/**
+ * @brief Expands a field string with Bash-like quoting rules.
+ *
+ * Processes unquoted text, then special segments (quotes and variables).
+ * Variables are expanded only in double quotes or unquoted text.
+ *
+ * @param data Pointer to minishell data.
+ * @param input The input field string.
+ * @return The expanded string, or NULL on failure.
+ */
+char	*expand_field_string(t_minishell *data, const char *input)
+{
+	int				i;
+	char			*result;
+	t_parser_error	err;
+
+	i = 0;
+	result = NULL;
+	result = ft_strdup("");
+	if (!result)
+		return (NULL);
+	while (input[i] != '\0')
+	{
+		err = process_unquoted_segment(input, &i, &result);
+		if (err != OK)
+			return (free(result), NULL);
+		if (input[i] == '\0')
+			break ;
+		err = process_special_segment(data, input, &i, &result);
+		if (err != OK)
+			return (free(result), NULL);
+	}
+	return (result);
 }
 
 /**
  * @brief Expands a token field.
  *
- * Processes the token's string using expansion rules and returns the expanded
- * result.
+ * Processes the token's string using Bash-like expansion rules.
+ * Outer quotes are removed while inner quotes are preserved.
+ * In single quotes, no variable expansion is performed.
  *
- * @param data Pointer to the minishell data structure.
+ * @param data Pointer to minishell data.
  * @param token Pointer to the token to be expanded.
  * @return The expanded string, or NULL on failure.
  */
 char	*open_field(t_minishell *data, t_token *token)
 {
-	t_exp_field		*field;
-	t_parser_error	error;
-	char			*final_str;
-	int				length;
+	char	*input;
+	char	*final_str;
 
-	field = NULL;
-	field = init_field(data);
-	if (!field)
+	input = NULL;
+	final_str = NULL;
+	input = ft_substr(token->start, 0, token->len);
+	if (!input)
 		return (NULL);
-	length = token->len;
-	error = fill_field(field, token->start, length);
-	if (error != OK)
-	{
-		free(field->result);
-		free(field);
-		return (NULL);
-	}
-	final_str = finalize_field(field, token->start);
-	if (!final_str)
-		return (free(field), NULL);
-	return (free(field), final_str);
+	final_str = expand_field_string(data, input);
+	free(input);
+	return (final_str);
 }

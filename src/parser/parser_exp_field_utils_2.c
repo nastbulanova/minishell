@@ -6,103 +6,67 @@
 /*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 14:02:02 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/11 15:17:07 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/02/13 18:31:06 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
 /**
- * @brief Processes a single quoted fragment.
+ * @brief Appends a single character to a string.
  *
- * Appends the extracted fragment to the result stored in the expansion field.
+ * Allocates a new string with the appended character,
+ * frees the old string, and returns the new string.
  *
- * @param f Pointer to the expansion field.
- * @param frag The fragment extracted from single quotes.
- * @return OK on success, or MALLOC_ERROR if allocation fails.
+ * @param s The original string.
+ * @param c The character to append.
+ * @return The new string, or NULL on failure.
  */
-static t_parser_error	process_single_quote(t_exp_field *f, char *frag)
+char	*append_char_to_str(char *s, char c)
 {
-	t_parser_error	error;
-	char			*tmp;
+	char	*new_str;
+	int		len;
+	int		i;
 
-	error = OK;
-	tmp = ft_strjoin(f->result, frag);
-	free(frag);
-	free(f->result);
-	if (tmp == NULL)
-		return (MALLOC_ERROR);
-	f->result = tmp;
-	return (error);
+	if (!s || !c)
+		return (NULL);
+	len = 0;
+	len = ft_strlen(s);
+	new_str = NULL;
+	new_str = (char *)malloc(sizeof(char) * (len + 2));
+	if (!new_str)
+		return (free(s), NULL);
+	i = 0;
+	while (s[i] != '\0')
+	{
+		new_str[i] = s[i];
+		i++;
+	}
+	new_str[i] = c;
+	new_str[i + 1] = '\0';
+	free(s);
+	return (new_str);
 }
 
 /**
- * @brief Processes a double quoted fragment.
+ * @brief Appends one string to another.
  *
- * Expands the fragment (processing environment variables) and appends it to
- * the result.
+ * Joins s and t, frees s, and returns the concatenated string.
  *
- * @param f Pointer to the expansion field.
- * @param frag The fragment extracted from double quotes.
- * @return OK on success, or MALLOC_ERROR if allocation fails.
+ * @param s The original string.
+ * @param t The string to append.
+ * @return The concatenated string, or NULL on failure.
  */
-static t_parser_error	process_double_quote(t_exp_field *f, char *frag)
+char	*append_str_to_str(char *s, const char *t)
 {
-	t_parser_error	error;
-	char			*tmp;
-	char			*new_frag;
-	t_token			tmp_token;
+	char	*new_str;
 
-	error = OK;
-	tmp_token.start = frag;
-	tmp_token.len = (int)ft_strlen(frag);
-	tmp_token.type = WORD;
-	tmp_token.group = 0;
-	tmp_token.prev = NULL;
-	tmp_token.next = NULL;
-	tmp = open_field(f->data, &tmp_token);
-	free(frag);
-	if (tmp == NULL)
-		return (MALLOC_ERROR);
-	new_frag = ft_strjoin(f->result, tmp);
-	free(tmp);
-	free(f->result);
-	if (new_frag == NULL)
-		return (MALLOC_ERROR);
-	f->result = new_frag;
-	return (error);
-}
-
-/**
- * @brief Handles quoted substrings.
- *
- * Extracts the fragment enclosed by the given quote and processes it
- * accordingly.
- *
- * @param f Pointer to the expansion field.
- * @param str The input string.
- * @param quote The quote character (' or ").
- * @return OK on success, or MALLOC_ERROR if memory allocation fails.
- */
-t_parser_error	handle_quotes(t_exp_field *f, char *str, char quote)
-{
-	t_parser_error	error;
-	char			*frag;
-	int				start_pos;
-	int				len;
-
-	error = OK;
-	start_pos = f->i + 1;
-	f->i = f->i + 1;
-	while (str[f->i] != '\0' && str[f->i] != quote)
-		f->i = f->i + 1;
-	len = f->i - start_pos;
-	frag = ft_substr(str, start_pos, len);
-	if (frag == NULL)
-		return (MALLOC_ERROR);
-	if (quote == '\'')
-		error = process_single_quote(f, frag);
-	else
-		error = process_double_quote(f, frag);
-	return (error);
+	if (!s || !t)
+		return (NULL);
+	new_str = NULL;
+	new_str = ft_strjoin(s, t);
+	free(s);
+	if (!new_str)
+		return (NULL);
+	return (new_str);
 }

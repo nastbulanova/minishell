@@ -6,48 +6,11 @@
 /*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 12:27:34 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/11 14:05:08 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/02/13 18:29:40 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-/**
- * @brief Expands the exit code variable.
- *
- * Replaces the '$?' placeholder with the exit code value in the expansion field.
- * Updates the field indices accordingly.
- *
- * @param field Pointer to the expansion field pointer.
- * @param str The input string.
- * @return OK on success, or MALLOC_ERROR on allocation failure.
- */
-t_parser_error	end_code_exp(t_exp_field **field, char *str)
-{
-	char	*code;
-	char	*temp_result;
-	char	*tmp;
-
-	code = ft_itoa((*field)->data->exit_code);
-	if (!code)
-		return (MALLOC_ERROR);
-	tmp = ft_substr(str, (*field)->start, (*field)->i - (*field)->start);
-	if (!tmp)
-		return (free(code), MALLOC_ERROR);
-	temp_result = ft_strjoin((*field)->result, tmp);
-	free(tmp);
-	free((*field)->result);
-	if (!temp_result)
-		return (free(code), MALLOC_ERROR);
-	(*field)->result = ft_strjoin(temp_result, code);
-	free(temp_result);
-	free(code);
-	if (!(*field)->result)
-		return (MALLOC_ERROR);
-	(*field)->i += 1;
-	(*field)->start = (*field)->i + 1;
-	return (OK);
-}
 
 /**
  * @brief Retrieves the value of an environment variable.
@@ -85,66 +48,65 @@ char	*env_var_replace(t_minishell *data, char *name)
 }
 
 /**
- * @brief Extracts an environment variable's value from the input string.
+ * @brief Expands a variable if in unquoted or double quoted context.
  *
- * Parses the variable name from the string starting after '$' and retrieves
- * its value.
+ * If the variable is "$?", returns the exit code as a string.
+ * Otherwise extracts the variable name and returns its value.
  *
- * @param field Pointer to the expansion field pointer.
- * @param str The input string.
- * @return A duplicated string with the variable's value, or NULL on failure.
+ * @param data Pointer to minishell data.
+ * @param input The input string.
+ * @param i Pointer to the current index.
+ * @return The expanded variable value, or NULL on failure.
  */
-char	*get_env_var_value(t_exp_field **field, char *str)
+char	*expand_variable(t_minishell *data, const char *input, int *i)
 {
-	char	*name;
+	char	*var_name;
 	char	*var_value;
+	int		start;
+	int		j;
 
-	(*field)->j = (*field)->i + 1;
-	while (ft_isalpha(str[(*field)->j]) || str[(*field)->j] == '_'
-		|| ft_isalnum(str[(*field)->j]))
-		(*field)->j++;
-	name = ft_substr(str, (*field)->i + 1, (*field)->j - (*field)->i - 1);
-	if (!name)
+	if (input[*i + 1] == '?')
+	{
+		*i = *i + 2;
+		return (ft_itoa(data->exit_code));
+	}
+	start = *i + 1;
+	j = start;
+	while (input[j] != '\0' && (ft_isalnum(input[j]) || input[j] == '_'))
+		j++;
+	var_name = ft_substr(input, start, j - start);
+	if (var_name == NULL)
 		return (NULL);
-	var_value = env_var_replace((*field)->data, name);
-	free(name);
+	var_value = env_var_replace(data, var_name);
+	free(var_name);
+	*i = j;
 	return (var_value);
 }
 
 /**
- * @brief Expands an environment variable in the expansion field.
+ * @brief Processes an unquoted segment.
  *
- * Replaces the variable placeholder in the string with its value and updates
- * the field.
+ * Copies characters until a quote or '$' is encountered.
  *
- * @param field Pointer to the expansion field pointer.
- * @param str The input string.
- * @return OK on success, or MALLOC_ERROR on allocation failure.
+ * @param input The input string.
+ * @param i Pointer to the current index.
+ * @return A new string with the copied segment, or NULL on failure.
  */
-t_parser_error	env_var_exp(t_exp_field **field, char *str)
+char	*process_unquoted(const char *input, int *i)
 {
-	char	*var_value;
-	char	*temp_result;
-	char	*substr_result;
+	char	*res;
 
-	var_value = get_env_var_value(field, str);
-	if (!var_value)
-		return (MALLOC_ERROR);
-	substr_result = ft_substr(str, (*field)->start, (*field)->i
-			- (*field)->start);
-	if (!substr_result)
-		return (free(var_value), MALLOC_ERROR);
-	temp_result = ft_strjoin((*field)->result, substr_result);
-	free(substr_result);
-	free((*field)->result);
-	if (!temp_result)
-		return (free(var_value), MALLOC_ERROR);
-	(*field)->result = ft_strjoin(temp_result, var_value);
-	free(var_value);
-	free(temp_result);
-	if (!(*field)->result)
-		return (MALLOC_ERROR);
-	(*field)->i = (*field)->j - 1;
-	(*field)->start = (*field)->i + 1;
-	return (OK);
+	res = NULL;
+	res = ft_strdup("");
+	if (!res)
+		return (NULL);
+	while (input[*i] != '\0' && input[*i] != '\''
+		&& input[*i] != '"' && input[*i] != '$')
+	{
+		res = append_char_to_str(res, input[*i]);
+		if (res == NULL)
+			return (NULL);
+		(*i)++;
+	}
+	return (res);
 }
