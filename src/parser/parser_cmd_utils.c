@@ -6,7 +6,7 @@
 /*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 12:41:16 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/11 15:32:44 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/02/13 17:47:06 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ t_parser_error	cmd_check(t_minishell **data, char *cmd, int **int_cmd)
 	char	*cmd_with_path;
 
 	if (ft_strlen(cmd) == 0)
-		return (**int_cmd = 1, OK);
+		return (**int_cmd = 0, OK);
 	if (!cmd)
 		return (MALLOC_ERROR);
 	cmd_with_path = NULL;

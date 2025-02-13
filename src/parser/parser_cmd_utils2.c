@@ -6,7 +6,7 @@
 /*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 12:47:43 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/11 13:55:08 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/02/13 17:44:56 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ t_parser_error	find_path(t_env *env, char *cmd, char **cmd_with_path)
 {
 	char	**paths;
 
-	if (!access(cmd, 0))
+	if (ft_strchr(cmd, '/') && !access(cmd, 0))
 	{
 		*cmd_with_path = ft_strdup(cmd);
 		if (!cmd_with_path)
