@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:36:56 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 14:40:45 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/14 15:09:19 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ t_parser_error	lexer(t_minishell *data, char *line);
 
 // parser
 t_parser_error	parser(t_minishell *data);
+bool dirty_check(t_token *input);
 
 // aux.c
 void			error_exit(const char *error, const char *function_name);

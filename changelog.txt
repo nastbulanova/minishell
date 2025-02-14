@@ -1,0 +1,20 @@
+Added:
+minishell.h
+bool dirty_check(t_token *input);
+debug.c
+bool dirty_check(t_token *input)
+{
+	if (c_strcmp(input->start, "\"$\""))
+		return (true);
+	if (c_strcmp(input->start, "$"))
+		return (true);
+	return (false);
+}
+
+Changed
+parser_exp_field_utils_0.c
+char	*open_field(t_minishell *data, t_token *token)
+    if (dirty_check(token))
+		final_str = ft_strdup("$");
+	else
+		final_str = expand_field_string(data, input);

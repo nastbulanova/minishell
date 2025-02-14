@@ -3,15 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 12:54:23 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 12:54:24 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/14 15:14:45 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
+bool dirty_check(t_token *input)
+{
+	if (c_strcmp(input->start, "\"$\"") == 0)
+		return (true);
+	if (c_strcmp(input->start, "$") == 0)
+		return (true);
+	return (false);
+}
 void	print_array(char **arr)
 {
 	int	i;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_exp_field_utils_0.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 13:25:14 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/13 18:39:25 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/02/14 15:12:39 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,10 @@ char	*open_field(t_minishell *data, t_token *token)
 	input = ft_substr(token->start, 0, token->len);
 	if (!input)
 		return (NULL);
-	final_str = expand_field_string(data, input);
+	if (dirty_check(token))
+		final_str = ft_strdup("$");
+	else
+		final_str = expand_field_string(data, input);
 	free(input);
 	return (final_str);
 }
