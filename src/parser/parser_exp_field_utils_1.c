@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_exp_field_utils_1.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 12:27:34 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/17 10:53:33 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/02/17 12:06:55 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ char	*process_unquoted(const char *input, int *i)
 	if (!res)
 		return (NULL);
 	while (input[*i] != '\0' && input[*i] != '\''
-		&& input[*i] != '"'  && input[*i] != '$')
+		&& input[*i] != '"' && input[*i] != '$')
 	{
 		res = append_char_to_str(res, input[*i]);
 		if (res == NULL)
