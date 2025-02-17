@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_exp_field_utils_1.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 12:27:34 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/14 15:25:41 by joao             ###   ########.fr       */
+/*   Updated: 2025/02/17 10:53:33 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ char	*expand_variable(t_minishell *data, const char *input, int *i)
 	var_name = ft_substr(input, start, j - start);
 	if (var_name == NULL)
 		return (NULL);
+	if (ft_strlen(var_name) == 0)
+		return (*i = j, free(var_name), ft_strdup("$"));
 	var_value = env_var_replace(data, var_name);
 	free(var_name);
 	*i = j;
