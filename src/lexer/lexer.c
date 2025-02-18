@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 12:39:48 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/11 13:41:31 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/02/18 12:27:26 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,10 @@ t_parser_error	get_line(t_minishell *data, int *pipe_fd, char **line)
 	if (data->exit_code == 130)
 	{
 		if (close(pipe_fd[1]) == -1)
+		{
+			pipe_fd = -1;
 			return (CLOSE_FD_ERROR);
+		}
 		return (CTRLC);
 	}
 	rl_getc_function = default_getc_function;
@@ -68,8 +71,11 @@ t_parser_error	process_line(t_minishell *data, int *pipe_fd)
 	}
 	else
 	{
-		if (close(pipe_fd[1]) == -1)
+		if (pipe_fd[1] > 0  && pipe_close(pipe_fd[1]) == -1)
+		{
+			fprintf(stderr, "HIT process_line\n");
 			return (CLOSE_FD_ERROR);
+		}
 		return (error);
 	}
 	if (close(pipe_fd[1]) == -1)
@@ -101,13 +107,19 @@ t_parser_error	finish_line(t_minishell *data, char **new_line)
 	else
 	{
 		if (close(pipe_fd[0]) == -1)
+		{
+			fprintf(stderr, "HIT finish_line\n");
 			return (CLOSE_FD_ERROR);
+		}
 		return (error);
 	}
 	if (!*new_line)
 	{
 		if (close(pipe_fd[0]) == -1)
+		{
+			fprintf(stderr, "HIT finish_line2\n");
 			return (CLOSE_FD_ERROR);
+		}
 		return (MALLOC_ERROR);
 	}
 	if (close(pipe_fd[0]) == -1)

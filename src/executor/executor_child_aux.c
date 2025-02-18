@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:18:15 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/11 10:55:34 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/18 11:01:14 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ static void	exit_status_aux(t_minishell *data, t_exec_data *head, int status)
 {
 	int	signal;
 
+	signal = 0;
 	if (head->exit_status != 0)
 		data->exit_code = head->exit_status;
 	else
@@ -120,6 +121,7 @@ void	handle_exit_status(t_minishell *data, t_pid_list *pid_list)
 	t_pid_list	*current;
 	t_exec_data	*head;
 
+	status = 0;
 	head = data->list_exec_data;
 	current = pid_list;
 	while (current)

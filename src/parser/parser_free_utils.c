@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_free_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 12:55:05 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/11 13:51:57 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/02/18 11:10:54 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ void	free_exec_data(t_exec_data *tmp_exec_data)
 		free_array(tmp_exec_data->opt, NULL);
 		tmp_exec_data->opt = NULL;
 	}
+	free_array(tmp_exec_data->opt, NULL);
 	close_fd(&tmp_exec_data->output_fd);
 	close_fd(&tmp_exec_data->input_fd);
 	close_pipe(tmp_exec_data->outpipe);
@@ -122,5 +123,6 @@ void	free_parser_data(t_minishell **data)
 		free(tmp_token);
 		tmp_token = NULL;
 	}
+	
 	(*data)->token_head = NULL;
 }

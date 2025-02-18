@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_error_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 12:33:49 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/11 13:32:27 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/02/18 12:16:03 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,5 @@ t_parser_error	lexer_error(t_token *token_head, t_parser_error error)
 	else if (error == CLOSE_FD_ERROR)
 		printf("minishell: close fd error\n");
 	token_clean(token_head);
-	if (error == CTRLC)
-		return (OK);
 	return (error);
 }

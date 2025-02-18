@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 12:39:30 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/17 12:12:56 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/18 12:20:34 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,19 +77,22 @@ void	display_splash_screen(void)
  */
 static void	process_input(t_minishell *data, char *input)
 {
-	if (lexer(data, input) != 0)
+	t_parser_error lexer_result;
+	
+	lexer_result = lexer(data, input);
+
+	if (lexer_result == OK)
 	{
-		free(data);
-		exit(0);
+		if (parser(data) == OK)
+		{
+			data->exit_code = 0;
+			if (data->list_exec_data && data->list_exec_data->cmd)
+				execute_command_list(data, data->list_exec_data,
+					env_to_array(data->env));
+			free_parser_data(&data);
+		}
 	}
-	if (parser(data) == OK)
-	{
-		data->exit_code = 0;
-		if (data->list_exec_data && data->list_exec_data->cmd)
-			execute_command_list(data, data->list_exec_data,
-				env_to_array(data->env));
-		free_parser_data(&data);
-	}
+	
 }
 
 /**
@@ -104,8 +107,9 @@ static void	main_loop(t_minishell *data)
 	set_state_signal_handlers(MAIN);
 	while (TRUE)
 	{
-		update_prompt(data);
-		input = readline(data->prompt);
+		//update_prompt(data);
+		//input = readline(data->prompt);
+		input = readline(":");
 		if (!input)
 		{
 			printf("exit\n");
@@ -143,7 +147,7 @@ int	main(int argc, char **argv, char **envp)
 		env_init_default(argv, data);
 	}
 	env_init(argv, envp, data);
-	display_splash_screen();
+	//display_splash_screen();
 	main_loop(data);
 	return (0);
 }

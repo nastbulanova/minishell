@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 12:55:01 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/11 18:18:20 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/18 11:11:20 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	free_array(char **arr, char *temp)
 	while (arr[++i])
 		free(arr[i]);
 	free(arr);
+	arr = NULL;
 }
 
 /**
