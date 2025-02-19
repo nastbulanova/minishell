@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:16:38 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/11 18:11:52 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/19 14:39:32 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@
  * @param envp Environment variables array.
  * @param head Pointer to the head of the execution data list (used for cleanup).
  */
-void	execute_execve(t_exec_data *cmd, char **envp, t_exec_data *head)
+void	execute_execve(t_exec_data *cmd, t_minishell *data, t_exec_data *head)
 {
 	int	exit_code;
 
-	if (execve(cmd->cmd, cmd->opt, envp) < 0)
+	if (execve(cmd->cmd, cmd->opt, env_to_array(data->env)) < 0)
 	{
 		if (errno == ENOENT)
 			exit_code = 1;
@@ -54,8 +54,7 @@ void	execute_execve(t_exec_data *cmd, char **envp, t_exec_data *head)
  * @param cmd Pointer to the command structure.
  * @param envp Environment variables array.
  */
-static void	execute_isolated_aux(t_minishell *data, t_exec_data *cmd,
-		char **envp)
+static void	execute_isolated_aux(t_minishell *data, t_exec_data *cmd)
 {
 	pid_t		pid;
 	t_pid_list	*pid_list;
@@ -70,7 +69,7 @@ static void	execute_isolated_aux(t_minishell *data, t_exec_data *cmd,
 		if (pid < 0)
 			return ;
 		if (pid == 0)
-			execute_execve(cmd, envp, NULL);
+			execute_execve(cmd, data, NULL);
 		else
 		{
 			set_state_signal_handlers(MAIN);
@@ -91,7 +90,7 @@ static void	execute_isolated_aux(t_minishell *data, t_exec_data *cmd,
  * @param cmd Pointer to the command structure.
  * @param envp Environment variables array.
  */
-void	execute_non_pipe(t_minishell *data, t_exec_data *cmd, char **envp)
+void	execute_non_pipe(t_minishell *data, t_exec_data *cmd)
 {
 	int	stdin_backup;
 	int	stdout_backup;
@@ -110,7 +109,7 @@ void	execute_non_pipe(t_minishell *data, t_exec_data *cmd, char **envp)
 			safe_dup_two(cmd->output_fd, STDOUT_FILENO);
 			close_fd(&cmd->output_fd);
 		}
-		execute_isolated_aux(data, cmd, envp);
+		execute_isolated_aux(data, cmd);
 		dup2(stdin_backup, STDIN_FILENO);
 		dup2(stdout_backup, STDOUT_FILENO);
 		close_fd(&stdin_backup);

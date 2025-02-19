@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 12:39:30 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/18 12:20:34 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/19 14:32:24 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,15 +80,13 @@ static void	process_input(t_minishell *data, char *input)
 	t_parser_error lexer_result;
 	
 	lexer_result = lexer(data, input);
-
 	if (lexer_result == OK)
 	{
 		if (parser(data) == OK)
 		{
 			data->exit_code = 0;
 			if (data->list_exec_data && data->list_exec_data->cmd)
-				execute_command_list(data, data->list_exec_data,
-					env_to_array(data->env));
+				execute_command_list(data, data->list_exec_data);
 			free_parser_data(&data);
 		}
 	}

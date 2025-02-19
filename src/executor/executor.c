@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:08:00 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/11 18:16:58 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/19 14:30:46 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
  * @param head Pointer to the first command in the execution list.
  * @param envp The environment variables array.
  */
-void	execute_pipe(t_minishell *data, t_exec_data *head, char **envp)
+void	execute_pipe(t_minishell *data, t_exec_data *head)
 {
 	t_exec_data	*current;
 	t_exec_data	*previous;
@@ -45,7 +45,10 @@ void	execute_pipe(t_minishell *data, t_exec_data *head, char **envp)
 		if (pid < 0)
 			break ;
 		if (pid == 0)
-			handle_child(current, previous, envp, head);
+		{
+			free_pid_list(&pid_list);
+			handle_child(current, previous, head);
+		}
 		else
 			handle_parent(current, previous, &pid_list, pid);
 		close_command_fds(previous);
@@ -66,7 +69,7 @@ void	execute_pipe(t_minishell *data, t_exec_data *head, char **envp)
  * @param head Pointer to the first command in the execution list.
  * @param envp The environment variables array.
  */
-void	execute_command_list(t_minishell *data, t_exec_data *head, char **envp)
+void	execute_command_list(t_minishell *data, t_exec_data *head)
 {
 	t_exec_data	*current;
 
@@ -82,8 +85,8 @@ void	execute_command_list(t_minishell *data, t_exec_data *head, char **envp)
 	if (data->exit_code == 130)
 		return ;
 	if (!head->next)
-		execute_non_pipe(data, head, envp);
+		execute_non_pipe(data, head);
 	else
-		execute_pipe(data, head, envp);
-	free_array(envp, NULL);
+		execute_pipe(data, head);
+	//free_array(envp, NULL);
 }

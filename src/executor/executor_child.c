@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:17:59 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/11 10:52:24 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/19 14:36:19 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ static void	handle_child_output(t_exec_data *cmd)
  * @param envp Environment variables.
  * @param head Pointer to the head of the execution data linked list.
  */
-void	handle_child(t_exec_data *cmd, t_exec_data *previous, char **envp,
+void	handle_child(t_exec_data *cmd, t_exec_data *previous,
 		t_exec_data *head)
 {
 	int			exit_code;
@@ -152,7 +152,7 @@ void	handle_child(t_exec_data *cmd, t_exec_data *previous, char **envp,
 	else
 	{
 		if (command_is_valid(cmd, data))
-			execute_execve(cmd, envp, head);
+			execute_execve(cmd, data, head);
 		else
 			minishell_exit(NULL, data->exit_code, STDERR_FILENO, true);
 	}

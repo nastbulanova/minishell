@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:36:04 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 16:58:50 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/19 14:36:41 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 # include "defines.h"
 # include "structs.h"
 
-void		execute_execve(t_exec_data *cmd, char **envp, t_exec_data *head);
-void		execute_non_pipe(t_minishell *data, t_exec_data *cmd, char **envp);
+void		execute_execve(t_exec_data *cmd, t_minishell *data, t_exec_data *head);
+void		execute_non_pipe(t_minishell *data, t_exec_data *cmd);
 void		clear_fds(t_exec_data *temp);
 bool		command_is_valid(t_exec_data *cmd, t_minishell *data);
 
@@ -45,7 +45,7 @@ void		add_pid(t_pid_list **head, pid_t pid);
 void		handle_exit_status(t_minishell *data, t_pid_list *pid_list);
 
 // executor/executor_child.c
-void		handle_child(t_exec_data *cmd, t_exec_data *previous, char **envp,
+void		handle_child(t_exec_data *cmd, t_exec_data *previous,
 				t_exec_data *head);
 void		handle_parent(t_exec_data *cmd, t_exec_data *previous,
 				t_pid_list **pid_list, pid_t pid);
@@ -53,8 +53,6 @@ void		handle_parent(t_exec_data *cmd, t_exec_data *previous,
 // executor/executor_free.c
 void		free_pid_list(t_pid_list **head);
 
-// void free_redir(t_redir *redirs); DELETED on fist MERGE
-// void free_exec_data_list(t_exec_data *head); DELETED on fist MERGE
 
 // executor/executor_heredoc.c
 void		heredoc_loop(t_redir *current, int fd);
@@ -66,8 +64,7 @@ void		handle_io_redirections(t_exec_data *cmd);
 // executor/setup_fd.c
 
 // executor/executor
-void		execute_command_list(t_minishell *data, t_exec_data *head,
-				char **envp);
+void		execute_command_list(t_minishell *data, t_exec_data *head);
 bool		command_is_valid(t_exec_data *cmd, t_minishell *data);
 
 // executor/mock_parser.c

@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 12:39:48 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/18 12:27:26 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/19 11:33:12 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_parser_error	get_line(t_minishell *data, int *pipe_fd, char **line)
 	{
 		if (close(pipe_fd[1]) == -1)
 		{
-			pipe_fd = -1;
+			pipe_fd[1] = -1;
 			return (CLOSE_FD_ERROR);
 		}
 		return (CTRLC);
@@ -71,7 +71,7 @@ t_parser_error	process_line(t_minishell *data, int *pipe_fd)
 	}
 	else
 	{
-		if (pipe_fd[1] > 0  && pipe_close(pipe_fd[1]) == -1)
+		if (close(pipe_fd[1]) == -1)
 		{
 			fprintf(stderr, "HIT process_line\n");
 			return (CLOSE_FD_ERROR);
