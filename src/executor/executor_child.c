@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:17:59 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/19 14:36:19 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/21 15:10:27 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,22 +139,30 @@ void	handle_child(t_exec_data *cmd, t_exec_data *previous,
 	exit_code = 0;
 	handle_child_input(cmd, previous);
 	handle_child_output(cmd);
-	if (cmd->next)
-		close_fd(&cmd->outpipe[0]);
-	if (previous)
-		close_fd(&previous->outpipe[1]);
+		//if (cmd->next)
+		//	close_fd(&cmd->outpipe[0]);
+	
 	if (cmd->is_builtin)
 	{
+		if (previous)
+			close_fd(&previous->outpipe[1]);
 		if (command_is_valid(cmd, data))
 			exit_code = execute_builtin(cmd);
-		minishell_exit(NULL, exit_code, STDOUT_FILENO, false);
+		data->exit_code = exit_code;
+		//minishell_free(data);
+		//exit(exit_code);
+		minishell_exit(NULL, exit_code, STDERR_FILENO, false);
 	}
 	else
 	{
+		if (cmd->next)
+			close_fd(&cmd->outpipe[0]);
+		if (previous)
+			close_fd(&previous->outpipe[1]);
 		if (command_is_valid(cmd, data))
 			execute_execve(cmd, data, head);
 		else
 			minishell_exit(NULL, data->exit_code, STDERR_FILENO, true);
 	}
-	clear_fds(head);
+	//clear_fds(head);
 }

@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:21:20 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 14:26:35 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/20 15:56:42 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,11 @@ void	env_print(t_env *head)
 		return ;
 	while (head)
 	{
-		if (head->name)
+		
+		if (head->name && head->value)
 		{
-			if (head->name && head->value)
-				ft_printf("%s=%s\n", head->name, head->value);
-			else
-				ft_printf("%s=\n", head->name);
+			if (head->value[0] != '\0')
+				printf("%s=%s\n", head->name, head->value);
 		}
 		head = head->next;
 	}

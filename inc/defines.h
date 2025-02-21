@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:35:15 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/11 18:06:11 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/20 14:21:12 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <termios.h>
 
 # define CONST_PATH "/usr/local/sbin:/usr/local/bin:/usr/sbin:\
 /usr/bin:/sbin:/bin:/snap/bin"
@@ -60,7 +61,8 @@ typedef enum e_signal_state
 {
 	MAIN,
 	CHILD,
-	HERE_DOC
+	HERE_DOC,
+	IGNORE
 }	t_signal_state;
 
 typedef enum s_redir_type

@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:08:00 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/19 14:30:46 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/21 14:50:35 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,10 @@ void	execute_pipe(t_minishell *data, t_exec_data *head)
 			handle_child(current, previous, head);
 		}
 		else
+		{
+			//fprintf(stderr, "CMD:%s PID %d \n", current->cmd, pid);	
 			handle_parent(current, previous, &pid_list, pid);
+		}
 		close_command_fds(previous);
 		previous = current;
 		current = current->next;
@@ -88,5 +91,4 @@ void	execute_command_list(t_minishell *data, t_exec_data *head)
 		execute_non_pipe(data, head);
 	else
 		execute_pipe(data, head);
-	//free_array(envp, NULL);
 }

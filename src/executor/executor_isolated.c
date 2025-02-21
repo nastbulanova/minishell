@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:16:38 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/19 14:39:32 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/20 15:00:10 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,17 +64,21 @@ static void	execute_isolated_aux(t_minishell *data, t_exec_data *cmd)
 		data->exit_code = execute_builtin(cmd);
 	else
 	{
-		set_state_signal_handlers(CHILD);
+		set_state_signal_handlers(IGNORE);
 		pid = fork();
 		if (pid < 0)
 			return ;
 		if (pid == 0)
+		{	
+			//restore_terminal(data);
+			set_state_signal_handlers(CHILD);
 			execute_execve(cmd, data, NULL);
+		}
 		else
 		{
-			set_state_signal_handlers(MAIN);
 			add_pid(&pid_list, pid);
 			handle_exit_status(data, pid_list);
+			set_state_signal_handlers(MAIN);
 		}
 	}
 }
@@ -97,6 +101,7 @@ void	execute_non_pipe(t_minishell *data, t_exec_data *cmd)
 
 	if (command_is_valid(cmd, data))
 	{
+		
 		stdin_backup = dup(STDIN_FILENO);
 		stdout_backup = dup(STDOUT_FILENO);
 		if (cmd->input_fd >= 0)
@@ -114,5 +119,6 @@ void	execute_non_pipe(t_minishell *data, t_exec_data *cmd)
 		dup2(stdout_backup, STDOUT_FILENO);
 		close_fd(&stdin_backup);
 		close_fd(&stdout_backup);
+		
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 12:55:21 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/11 18:18:37 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/20 15:02:41 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	error_exit(const char *error, const char *function_name)
  */
 void	minishell_free(t_minishell *data)
 {
+	clear_history();
 	if (data)
 	{
 		if (data->prompt)
@@ -83,5 +84,4 @@ void	minishell_free(t_minishell *data)
 			free_array(data->exec_env, NULL);
 		close_pipe(data->heredoc_pipe);
 	}
-	clear_history();
 }

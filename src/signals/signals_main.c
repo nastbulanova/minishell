@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 12:55:39 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/11 18:17:52 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/20 14:23:54 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,18 @@ void	set_state_signal_handlers(enum e_signal_state state)
 		set_signal_child(sa);
 	else if (state == HERE_DOC)
 		set_signal_here_doc(sa);
+	else if (state == IGNORE)
+		set_signal_ignore(sa);
+}
+
+void	set_signal_ignore(struct sigaction sa)
+{
+	sa.sa_sigaction = handler;
+	sa.sa_flags = SA_SIGINFO;
+	if (sigemptyset(&sa.sa_mask) != 0)
+		return ;
+	set_sig_ignore(&sa, SIGINT);
+	set_sig_ignore(&sa, SIGQUIT);
 }
 
 /**

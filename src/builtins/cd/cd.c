@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:30:01 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/12 13:07:57 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/20 12:29:17 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,11 @@ int	cd_no_args(t_minishell *data)
 	pwd = get_pwd(data);
 	if (home)
 	{
-		errno = 0;
+		if (home->value[0] == '\0')
+		{
+			ft_putstr_fd("minishell: cd: HOME not set\n", STDERR_FILENO);
+			return (1);
+		}
 		chdir(home->value);
 		if (errno)
 		{
