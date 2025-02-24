@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:36:56 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/20 15:02:54 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/24 13:27:03 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@
 # include "mini_signals.h"
 # include "parser.h"
 # include "structs.h"
-
-
 
 // lexer
 

@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 12:55:05 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/18 11:10:54 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/24 13:29:16 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,5 @@ void	free_parser_data(t_minishell **data)
 		free(tmp_token);
 		tmp_token = NULL;
 	}
-	
 	(*data)->token_head = NULL;
 }

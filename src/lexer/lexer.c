@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 12:39:48 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/19 11:33:12 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/24 13:28:51 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,19 +107,13 @@ t_parser_error	finish_line(t_minishell *data, char **new_line)
 	else
 	{
 		if (close(pipe_fd[0]) == -1)
-		{
-			fprintf(stderr, "HIT finish_line\n");
 			return (CLOSE_FD_ERROR);
-		}
 		return (error);
 	}
 	if (!*new_line)
 	{
 		if (close(pipe_fd[0]) == -1)
-		{
-			fprintf(stderr, "HIT finish_line2\n");
 			return (CLOSE_FD_ERROR);
-		}
 		return (MALLOC_ERROR);
 	}
 	if (close(pipe_fd[0]) == -1)

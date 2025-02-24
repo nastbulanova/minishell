@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:36:04 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/19 14:36:41 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/24 13:28:08 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 # include "defines.h"
 # include "structs.h"
 
-void		execute_execve(t_exec_data *cmd, t_minishell *data, t_exec_data *head);
+void		execute_execve(t_exec_data *cmd, t_minishell *data,
+				t_exec_data *head);
 void		execute_non_pipe(t_minishell *data, t_exec_data *cmd);
 void		clear_fds(t_exec_data *temp);
 bool		command_is_valid(t_exec_data *cmd, t_minishell *data);
@@ -52,7 +53,6 @@ void		handle_parent(t_exec_data *cmd, t_exec_data *previous,
 
 // executor/executor_free.c
 void		free_pid_list(t_pid_list **head);
-
 
 // executor/executor_heredoc.c
 void		heredoc_loop(t_redir *current, int fd);

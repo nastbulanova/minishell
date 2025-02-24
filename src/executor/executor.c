@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:08:00 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/21 14:50:35 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/24 13:52:03 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,24 @@
  * @file executor.c
  * @brief Executes commands and handles piping in the minishell project.
  */
+
+static void	execute_pipe_aux(t_pid_list	**pid_list, t_exec_data *current,
+		t_exec_data *previous, t_exec_data *head)
+{
+	pid_t		pid;
+
+	pid = fork();
+	if (pid < 0)
+		return ;
+	if (pid == 0)
+	{
+		free_pid_list(pid_list);
+		handle_child(current, previous, head);
+	}
+	else
+		handle_parent(current, previous, pid_list, pid);
+	close_command_fds(previous);
+}
 
 /**
  * @brief Executes a sequence of piped commands.
@@ -32,7 +50,6 @@ void	execute_pipe(t_minishell *data, t_exec_data *head)
 	t_exec_data	*current;
 	t_exec_data	*previous;
 	t_pid_list	*pid_list;
-	pid_t		pid;
 
 	current = head;
 	pid_list = NULL;
@@ -41,20 +58,9 @@ void	execute_pipe(t_minishell *data, t_exec_data *head)
 	{
 		if (current->next)
 			safe_pipe(current->outpipe);
-		pid = fork();
-		if (pid < 0)
-			break ;
-		if (pid == 0)
-		{
-			free_pid_list(&pid_list);
-			handle_child(current, previous, head);
-		}
-		else
-		{
-			//fprintf(stderr, "CMD:%s PID %d \n", current->cmd, pid);	
-			handle_parent(current, previous, &pid_list, pid);
-		}
-		close_command_fds(previous);
+		if (!previous)
+			update_last_command(data->env, current->cmd);
+		execute_pipe_aux(&pid_list, current, previous, head);
 		previous = current;
 		current = current->next;
 	}

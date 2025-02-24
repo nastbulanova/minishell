@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:35:02 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/12 13:08:51 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/24 13:27:24 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int		cmd_export(char **str);
 
 // builtins/env
 // env/env.c
+bool	update_last_command(t_env *env_head, char *command);
 int		cmd_env(char **argv);
 // env/env_init.c
 

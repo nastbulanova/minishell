@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 12:55:39 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/11 18:17:22 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/24 13:53:09 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,16 @@
  * This file contains functions to handle signals such as SIGINT
  * during normal shell operation and within heredoc mode.
  */
+
+void	set_signal_ignore(struct sigaction sa)
+{
+	sa.sa_sigaction = handler;
+	sa.sa_flags = SA_SIGINFO;
+	if (sigemptyset(&sa.sa_mask) != 0)
+		return ;
+	set_sig_ignore(&sa, SIGINT);
+	set_sig_ignore(&sa, SIGQUIT);
+}
 
 /**
  * @brief Handles signals received by the main shell process.

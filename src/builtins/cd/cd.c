@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:30:01 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/20 12:29:17 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/24 13:34:46 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,16 +62,11 @@ int	cd_no_args(t_minishell *data)
 	if (home)
 	{
 		if (home->value[0] == '\0')
-		{
-			ft_putstr_fd("minishell: cd: HOME not set\n", STDERR_FILENO);
-			return (1);
-		}
+			return (ft_putstr_fd("minishell: cd: HOME not set\n",
+					STDERR_FILENO), 1);
 		chdir(home->value);
 		if (errno)
-		{
-			cd_error_exit(home->value, errno);
-			return (1);
-		}
+			return (cd_error_exit(home->value, errno), 1);
 		if (oldpwd)
 			env_update(oldpwd, pwd->value);
 		else

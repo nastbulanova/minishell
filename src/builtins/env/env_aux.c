@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:21:20 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/20 15:56:42 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/24 13:30:30 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ char	**env_to_array(t_env *env)
 		temp = ft_strjoin(env->name, "=");
 		if (temp && env->value)
 			list[i] = ft_strjoin(temp, env->value);
+		else if (temp)
+			list[i] = ft_strdup(temp);
 		if (!list[i] || !temp)
 		{
 			free_array(list, temp);
@@ -56,7 +58,6 @@ void	env_print(t_env *head)
 		return ;
 	while (head)
 	{
-		
 		if (head->name && head->value)
 		{
 			if (head->value[0] != '\0')

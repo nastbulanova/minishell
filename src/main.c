@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 12:39:30 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/20 12:23:53 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/24 13:53:46 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,8 @@ void	display_splash_screen(void)
  */
 static void	process_input(t_minishell *data, char *input)
 {
-	t_parser_error lexer_result;
-	
+	t_parser_error	lexer_result;
+
 	lexer_result = lexer(data, input);
 	if (lexer_result == OK)
 	{
@@ -90,7 +90,6 @@ static void	process_input(t_minishell *data, char *input)
 			free_parser_data(&data);
 		}
 	}
-	
 }
 
 /**
