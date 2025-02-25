@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_exp_field_utils_0.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 13:25:14 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/14 15:12:39 by joao             ###   ########.fr       */
+/*   Updated: 2025/02/25 11:20:54 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static t_parser_error	process_unquoted_segment(const char *input, int *i,
  * @param result Pointer to the result string.
  * @return OK on success, or MALLOC_ERROR on failure.
  */
-static t_parser_error	process_special_segment(t_minishell *data,
+t_parser_error	process_special_segment(t_minishell *data,
 						const char *input, int *i, char **result)
 {
 	char	*temp;

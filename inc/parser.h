@@ -6,7 +6,7 @@
 /*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:28:47 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/13 18:42:38 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/02/25 11:21:48 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ t_opt_llist		*opt_create(char *opt);
 
 //parser_exp_field_utils_0
 char			*expand_field_string(t_minishell *data, const char *input);
+t_parser_error	process_special_segment(t_minishell *data,
+						const char *input, int *i, char **result);
 char			*open_field(t_minishell *data, t_token *token);
 
 //parser_exp_field_utils_1

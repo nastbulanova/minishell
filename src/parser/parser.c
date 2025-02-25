@@ -6,7 +6,7 @@
 /*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 13:02:39 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/13 17:45:22 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/02/25 12:03:57 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ t_parser_error	parser_loop(t_minishell *data, t_token **token, int *cmd)
 		if ((*token)->type == WORD)
 		{
 			tmp = open_field(data, *token);
+			//tmp = (*token)->start;//////////////////
 			if (!(data->exec_data->cmd))
 				error = cmd_check(&data, tmp, &cmd);
 			error = opt_add(&data, tmp);

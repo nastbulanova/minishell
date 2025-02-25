@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 12:39:48 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/24 13:28:51 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/25 13:42:47 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,13 +107,19 @@ t_parser_error	finish_line(t_minishell *data, char **new_line)
 	else
 	{
 		if (close(pipe_fd[0]) == -1)
+		{
+			fprintf(stderr, "HIT finish_line\n");
 			return (CLOSE_FD_ERROR);
+		}
 		return (error);
 	}
 	if (!*new_line)
 	{
 		if (close(pipe_fd[0]) == -1)
+		{
+			fprintf(stderr, "HIT finish_line2\n");
 			return (CLOSE_FD_ERROR);
+		}
 		return (MALLOC_ERROR);
 	}
 	if (close(pipe_fd[0]) == -1)
@@ -159,15 +165,20 @@ t_parser_error	tokenize_str(t_token **token_head, char *line)
  * @param line The input string to analyze.
  * @return OK on success or an error code.
  */
+
 t_parser_error	lexer(t_minishell *data, char *line)
 {
 	char			*new_line;
+	char			*op_line;
 	t_parser_error	er;
 	t_token			*tmp;
 
 	er = OK;
 	tmp = NULL;
-	er = tokenize_str(&(data->token_head), line);
+	new_line = NULL;
+	op_line = NULL;
+	op_line = first_line_exp(data, line);
+	er = tokenize_str(&(data->token_head), op_line);
 	if (er != OK)
 		return (lexer_error((data->token_head), er));
 	while (is_last_token_pipe(data->token_head))
@@ -185,5 +196,6 @@ t_parser_error	lexer(t_minishell *data, char *line)
 		else
 			return (lexer_error(data->token_head, MALLOC_ERROR));
 	}
+	free(op_line);
 	return (OK);
 }

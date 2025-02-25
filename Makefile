@@ -28,7 +28,7 @@ SRCS =	${SRC_DIR}/main.c 								${SRC_DIR}/aux.c 								${SRC_DIR}/common.c			
 		${SRC_DIR}/executor/executor_heredoc.c 			${SRC_DIR}/executor/executor_isolated.c 		${SRC_DIR}/executor/executor_redir.c 			\
 		${SRC_DIR}/executor/executor.c 																													\
 		${SRC_DIR}/lexer/lexer_char_utils.c 			${SRC_DIR}/lexer/lexer_error_utils.c  			${SRC_DIR}/lexer/lexer_search_utils.c 			\
-		${SRC_DIR}/lexer/lexer_token_utils.c 	 		${SRC_DIR}/lexer/lexer.c 																		\
+		${SRC_DIR}/lexer/lexer_token_utils.c 	 		${SRC_DIR}/lexer/lexer.c					${SRC_DIR}/lexer/lexer_env_var_exp.c 																		\
 		${SRC_DIR}/parser/parser_cmd_utils.c			${SRC_DIR}/parser/parser_cmd_utils2.c			${SRC_DIR}/parser/parser_error_utils.c			\
 		${SRC_DIR}/parser/parser_exec_data_utils.c		${SRC_DIR}/parser/parser_exp_field_utils_0.c	${SRC_DIR}/parser/parser_exp_field_utils_1.c	\
 		${SRC_DIR}/parser/parser_exp_field_utils_2.c	${SRC_DIR}/parser/parser_free_utils.c			${SRC_DIR}/parser/parser_heredoc_utils.c		\
