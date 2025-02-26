@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:30:01 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/24 13:34:46 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/26 14:31:57 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,20 +59,17 @@ int	cd_no_args(t_minishell *data)
 	home = env_retrieve(data->env, "HOME");
 	oldpwd = env_retrieve(data->env, "OLDPWD");
 	pwd = get_pwd(data);
-	if (home)
-	{
-		if (home->value[0] == '\0')
-			return (ft_putstr_fd("minishell: cd: HOME not set\n",
-					STDERR_FILENO), 1);
-		chdir(home->value);
-		if (errno)
-			return (cd_error_exit(home->value, errno), 1);
-		if (oldpwd)
-			env_update(oldpwd, pwd->value);
-		else
-			env_add(&data->env, env_create("OLDPWD", pwd->value));
-		env_update(pwd, home->value);
-	}
+	if (!home || home->value[0] == '\0')
+		return (ft_putstr_fd("minishell: cd: HOME not set\n",
+			STDERR_FILENO), 1);
+	chdir(home->value);
+	if (errno)
+		return (cd_error_exit(home->value, errno), 1);
+	if (oldpwd)
+		env_update(oldpwd, pwd->value);
+	else
+		env_add(&data->env, env_create("OLDPWD", pwd->value));
+	env_update(pwd, home->value);	
 	return (0);
 }
 

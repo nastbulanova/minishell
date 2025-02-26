@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:57:16 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/26 13:28:16 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/26 14:21:58 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	handle_more(char **args, int stdin_backup, int stdout_backup)
 	{
 		close_fd(&stdin_backup);
 		close_fd(&stdout_backup);
-		minishell_exit(built_exit_string(args[1]), 2, STDERR_FILENO, false);
+		minishell_exit(built_exit_string(args[1]), 2, STDERR_FILENO, true);
 		return (2);
 	}
 	else
@@ -61,7 +61,7 @@ static void	handle_one(char **args, int stdin_backup, int stdout_backup)
 		minishell_exit(NULL, data->exit_code, STDOUT_FILENO, false);
 	}
 	else
-		minishell_exit(built_exit_string(args[1]), 2, STDERR_FILENO, false);
+		minishell_exit(built_exit_string(args[1]), 2, STDERR_FILENO, true);
 }
 
 int	cmd_exit(char **args, int stdin_backup, int stdout_backup)

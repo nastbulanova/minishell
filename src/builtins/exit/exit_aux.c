@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:57:52 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 15:29:50 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/26 14:25:33 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ static void	check_sign(const char *str, int *index, int *sign)
 
 static void	ft_exit_atoi_aux(char *str)
 {
-	ft_putstr_fd("exit\n", STDOUT_FILENO);
 	minishell_exit(built_exit_string(str), 2, STDERR_FILENO, true);
 }
 
