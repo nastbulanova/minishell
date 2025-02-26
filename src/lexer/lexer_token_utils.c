@@ -6,7 +6,7 @@
 /*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 12:35:13 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/11 13:42:05 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/02/26 17:15:21 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,4 +114,32 @@ int	is_last_token_pipe(t_token *head)
 	while (current->next)
 		current = current->next;
 	return (current->type == PIPE);
+}
+
+/**
+ * @brief Tokenizes an input string into a list of tokens.
+ *
+ * Iterates over the string, using check_char() to build tokens.
+ * On success, appends the token list; on error, cleans up tokens.
+ *
+ * @param token_head Pointer to the head of the token list.
+ * @param line The input string to tokenize.
+ * @return OK on success or an error code.
+ */
+t_parser_error	tokenize_str(t_token **token_head, char *line)
+{
+	int				i;
+	t_parser_error	error;
+	t_token			*token;
+
+	error = OK;
+	token = NULL;
+	i = 0;
+	while (line[i] != '\0' && error == OK)
+		error = check_char(&token, line, &i);
+	if (error == OK)
+		token_append(token_head, token);
+	else
+		token_clean(token);
+	return (error);
 }

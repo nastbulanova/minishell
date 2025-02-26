@@ -6,7 +6,7 @@
 /*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:00:44 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/25 11:59:14 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/02/26 17:34:05 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ t_parser_error	token_add(t_token **token_head, char *start, int len,
 t_token			*token_create(char *start, int len, int type);
 void			token_append(t_token **token_head, t_token *token);
 int				is_last_token_pipe(t_token *head);
+t_parser_error	tokenize_str(t_token **token_head, char *line);
 
 //lexer_char_utils
 int				ft_isspace(int c);
@@ -41,8 +42,8 @@ void			token_clean(t_token *token_head);
 t_parser_error	lexer_error(t_token *token_head, t_parser_error error);
 
 //lexer_env_var_exp
-char	*exp_loop(t_minishell *data, char *line, int *i, bool *squote);
-char	*first_line_exp(t_minishell *data, char *line);
+char			*exp_loop(t_minishell *data, char *line, int *i, bool *squote);
+char			*first_line_exp(t_minishell *data, char *line);
 
 //lexer
 t_parser_error	get_line(t_minishell *data, int *pipe_fd, char **line);

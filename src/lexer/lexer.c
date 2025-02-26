@@ -6,7 +6,7 @@
 /*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 12:39:48 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/25 13:42:47 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/02/26 17:14:45 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,19 @@ t_parser_error	get_line(t_minishell *data, int *pipe_fd, char **line)
 	default_getc_function = rl_getc_function;
 	rl_getc_function = getc;
 	*line = readline(">");
+	rl_getc_function = default_getc_function;
+	set_state_signal_handlers(MAIN);
 	if (data->exit_code == 130)
 	{
 		if (close(pipe_fd[1]) == -1)
 		{
 			pipe_fd[1] = -1;
-			return (CLOSE_FD_ERROR);
+			return (free(*line), line = NULL, CLOSE_FD_ERROR);
 		}
+		free(*line);
+		line = NULL;
 		return (CTRLC);
 	}
-	rl_getc_function = default_getc_function;
-	set_state_signal_handlers(MAIN);
 	return (OK);
 }
 
@@ -70,14 +72,7 @@ t_parser_error	process_line(t_minishell *data, int *pipe_fd)
 		free(line);
 	}
 	else
-	{
-		if (close(pipe_fd[1]) == -1)
-		{
-			fprintf(stderr, "HIT process_line\n");
-			return (CLOSE_FD_ERROR);
-		}
 		return (error);
-	}
 	if (close(pipe_fd[1]) == -1)
 		return (CLOSE_FD_ERROR);
 	return (OK);
@@ -107,19 +102,13 @@ t_parser_error	finish_line(t_minishell *data, char **new_line)
 	else
 	{
 		if (close(pipe_fd[0]) == -1)
-		{
-			fprintf(stderr, "HIT finish_line\n");
 			return (CLOSE_FD_ERROR);
-		}
 		return (error);
 	}
 	if (!*new_line)
 	{
 		if (close(pipe_fd[0]) == -1)
-		{
-			fprintf(stderr, "HIT finish_line2\n");
 			return (CLOSE_FD_ERROR);
-		}
 		return (MALLOC_ERROR);
 	}
 	if (close(pipe_fd[0]) == -1)
@@ -127,32 +116,29 @@ t_parser_error	finish_line(t_minishell *data, char **new_line)
 	return (OK);
 }
 
-/**
- * @brief Tokenizes an input string into a list of tokens.
- *
- * Iterates over the string, using check_char() to build tokens.
- * On success, appends the token list; on error, cleans up tokens.
- *
- * @param token_head Pointer to the head of the token list.
- * @param line The input string to tokenize.
- * @return OK on success or an error code.
- */
-t_parser_error	tokenize_str(t_token **token_head, char *line)
+t_parser_error	finish_line_loop(t_minishell *data)
 {
-	int				i;
-	t_parser_error	error;
-	t_token			*token;
+	t_parser_error	er;
+	char			*new_line;
+	char			*op_line;
 
-	error = OK;
-	token = NULL;
-	i = 0;
-	while (line[i] != '\0' && error == OK)
-		error = check_char(&token, line, &i);
-	if (error == OK)
-		token_append(token_head, token);
+	new_line = NULL;
+	op_line = NULL;
+	er = finish_line(data, &new_line);
+	if (new_line && er == OK)
+	{
+		op_line = first_line_exp(data, new_line);
+		free(new_line);
+		if (!op_line)
+			return (MALLOC_ERROR);
+		er = tokenize_str(&(data->token_head), op_line);
+		free(op_line);
+		if (er != OK)
+			return (er);
+	}
 	else
-		token_clean(token);
-	return (error);
+		return (er);
+	return (er);
 }
 
 /**
@@ -168,34 +154,21 @@ t_parser_error	tokenize_str(t_token **token_head, char *line)
 
 t_parser_error	lexer(t_minishell *data, char *line)
 {
-	char			*new_line;
 	char			*op_line;
 	t_parser_error	er;
-	t_token			*tmp;
 
 	er = OK;
-	tmp = NULL;
-	new_line = NULL;
 	op_line = NULL;
 	op_line = first_line_exp(data, line);
 	er = tokenize_str(&(data->token_head), op_line);
+	free(op_line);
 	if (er != OK)
 		return (lexer_error((data->token_head), er));
 	while (is_last_token_pipe(data->token_head))
 	{
-		er = finish_line(data, &new_line);
+		er = finish_line_loop(data);
 		if (er != OK)
 			return (lexer_error((data->token_head), er));
-		if (new_line)
-		{
-			er = tokenize_str(&(data->token_head), new_line);
-			free(new_line);
-			if (er != OK)
-				return (token_clean(tmp), lexer_error((data->token_head), er));
-		}
-		else
-			return (lexer_error(data->token_head, MALLOC_ERROR));
 	}
-	free(op_line);
 	return (OK);
 }

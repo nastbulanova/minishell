@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer_env_var_exp.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/26 17:16:46 by akitsenk          #+#    #+#             */
+/*   Updated: 2025/02/26 18:15:51 by akitsenk         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	*exp_variable(t_minishell *data, const char *input, int **i)
@@ -30,13 +42,13 @@ char	*exp_variable(t_minishell *data, const char *input, int **i)
 char	*exp_loop(t_minishell *data, char *line, int *i, bool *squote)
 {
 	if (line[*i] == '\'' && *squote == 0)
-		return(*squote = 1, (*i)++, ft_strdup("\'"));
+		return (*squote = 1, (*i)++, ft_strdup("\'"));
 	else if (line[*i] == '\'' && *squote == 1)
-		return(*squote = 0, (*i)++, ft_strdup("\'"));
+		return (*squote = 0, (*i)++, ft_strdup("\'"));
 	else if (line[*i] == '$' && *squote == 0)
-		return(exp_variable(data, line, &i));
+		return (exp_variable(data, line, &i));
 	else
-		return((*i)++, ft_substr(line, *i - 1, 1));
+		return ((*i)++, ft_substr(line, *i - 1, 1));
 }
 
 char	*first_line_exp(t_minishell *data, char *line)
@@ -45,18 +57,25 @@ char	*first_line_exp(t_minishell *data, char *line)
 	int		i;
 	char	*result;
 	char	*tmp;
+	char	*tmp_result;
 
 	result = ft_strdup("");
 	if (!result)
-		return(NULL);
+		return (NULL);
+	tmp = NULL;
 	squote = 0;
 	i = 0;
 	while (line[i] != '\0')
 	{
 		tmp = exp_loop(data, line, &i, &squote);
-		result = append_str_to_str(result, tmp);
+		if (!tmp)
+			return (free(result), NULL);
+		tmp_result = ft_strjoin(result, tmp);
 		free(tmp);
+		tmp = NULL;
+		free(result);
+		result = NULL;
+		result = tmp_result;
 	}
-
-	return(result);
+	return (result);
 }
