@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:36:56 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/24 13:27:03 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/26 13:56:40 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ t_parser_error	parser(t_minishell *data);
 bool			dirty_check(t_token *input);
 
 // aux.c
+bool			is_string_empty(char *input);
 void			error_exit(const char *error, const char *function_name);
 void			*safe_malloc(size_t bytes);
 void			minishell_free(t_minishell *shell);

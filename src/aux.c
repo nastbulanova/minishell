@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 12:55:21 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/20 15:02:41 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/26 14:01:31 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,4 +84,18 @@ void	minishell_free(t_minishell *data)
 			free_array(data->exec_env, NULL);
 		close_pipe(data->heredoc_pipe);
 	}
+}
+
+bool	is_string_empty(char *input)
+{
+	size_t idx;
+	
+	idx = 0;
+	while (input[idx])
+	{
+		if (!ft_iswhitespace(input[idx]))
+			return (false);
+		idx++;
+	}
+	return (true);
 }
