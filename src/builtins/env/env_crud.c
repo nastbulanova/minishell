@@ -6,12 +6,22 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:26:47 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 14:27:08 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/26 15:56:46 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../inc/minishell.h"
 
+/**
+ * @brief Updates the value of an environment variable.
+ *
+ * @param target Pointer to the environment variable to update.
+ * @param new_value The new value to assign to the variable.
+ *
+ * If the target is NULL, the function does nothing. The old value is freed
+ * before assigning the new one. If memory allocation fails for the new value,
+ * the function calls error_exit.
+ */
 void	env_update(t_env *target, const char *new_value)
 {
 	if (!target)
@@ -26,6 +36,13 @@ void	env_update(t_env *target, const char *new_value)
 		error_exit(RB "" RST, "env_update in env_crud.c");
 }
 
+/**
+ * @brief Frees the memory allocated for an environment variable.
+ *
+ * @param current Pointer to the environment variable to be deleted.
+ *
+ * This function frees the memory for the name, value, and the structure itself.
+ */
 static void	delete_aux(t_env *current)
 {
 	if (current)
@@ -38,6 +55,15 @@ static void	delete_aux(t_env *current)
 	}
 }
 
+/**
+ * @brief Deletes an environment variable from the linked list.
+ *
+ * @param head Pointer to the head of the environment variable list.
+ * @param name The name of the variable to delete.
+ *
+ * If the variable is found, it is removed from the list and its memory is freed.
+ * If the list is empty or the variable is not found, the function does nothing.
+ */
 void	env_delete(t_env **head, char *name)
 {
 	t_env	*current;
@@ -63,6 +89,18 @@ void	env_delete(t_env **head, char *name)
 	}
 }
 
+/**
+ * @brief Creates a new environment variable.
+ *
+ * @param name The name of the variable.
+ * @param value The value of the variable.
+ *
+ * @return Pointer to the newly created environment variable.
+ *
+ * The function allocates memory for a new environment variable 
+ * and its name/value.
+ * If value is NULL, the variable is created with a NULL value.
+ */
 t_env	*env_create(char *name, char *value)
 {
 	t_env	*new;
@@ -77,6 +115,14 @@ t_env	*env_create(char *name, char *value)
 	return (new);
 }
 
+/**
+ * @brief Retrieves an environment variable from the linked list.
+ *
+ * @param head Pointer to the head of the environment variable list.
+ * @param name The name of the variable to retrieve.
+ *
+ * @return Pointer to the environment variable if found, otherwise NULL.
+ */
 t_env	*env_retrieve(t_env *head, char *name)
 {
 	if (!name || !*name)

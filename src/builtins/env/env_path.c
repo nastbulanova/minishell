@@ -6,12 +6,25 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:29:15 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 14:29:36 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/26 15:58:17 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../inc/minishell.h"
 
+/**
+ * @brief Calculates the required size for concatenating two 
+ * arrays of strings.
+ *
+ * This function determines the total size needed to store the 
+ * concatenation
+ * of `split_pwd` and `split_arg`, including necessary separators.
+ *
+ * @param split_pwd First array of strings (e.g., representing a path 
+ * split by '/').
+ * @param split_arg Second array of strings to append.
+ * @return The total required size in bytes.
+ */
 static size_t	get_arrays_size(char **split_pwd, char **split_arg)
 {
 	size_t	size;
@@ -33,6 +46,18 @@ static size_t	get_arrays_size(char **split_pwd, char **split_arg)
 	return (size);
 }
 
+/**
+ * @brief Copies and concatenates two arrays of strings into a single 
+ * buffer.
+ *
+ * This function constructs a new path-like string by appending `split_pwd`
+ * to `split_arg`, adding '/' separators between components.
+ *
+ * @param result The destination buffer for the concatenated string.
+ * @param split_pwd First array of strings (e.g., representing a path 
+ * split by '/').
+ * @param split_arg Second array of strings to append.
+ */
 static void	copy_arrays(char *result, char **split_pwd, char **split_arg)
 {
 	int		i;
@@ -60,6 +85,17 @@ static void	copy_arrays(char *result, char **split_pwd, char **split_arg)
 	}
 }
 
+/**
+ * @brief Constructs a path string from two arrays of strings.
+ *
+ * This function allocates and returns a new string formed by concatenating
+ * `split_pwd` and `split_arg` with '/' separators.
+ *
+ * @param split_pwd First array of strings (e.g., representing a path 
+ * split by '/').
+ * @param split_arg Second array of strings to append.
+ * @return A dynamically allocated string representing the full path.
+ */
 char	*get_path_from_arrays(char **split_pwd, char **split_arg)
 {
 	char	*result;
@@ -70,6 +106,15 @@ char	*get_path_from_arrays(char **split_pwd, char **split_arg)
 	return (result);
 }
 
+/**
+ * @brief Constructs a path string from a single array of strings.
+ *
+ * This function allocates and returns a new string formed by joining `split`
+ * components with '/' separators.
+ *
+ * @param split Array of strings representing path components.
+ * @return A dynamically allocated string representing the full path.
+ */
 char	*get_path_from_single_array(char **split)
 {
 	int		i;
@@ -98,6 +143,20 @@ char	*get_path_from_single_array(char **split)
 	return (result);
 }
 
+/**
+ * @brief Generates a final path string from a sanitized argument path and
+ *  the current working directory.
+ *
+ * If `sanitized_arg_path[0]` is "home", the function constructs the path
+  using `get_path_from_single_array`.
+ * Otherwise, it splits `pwd` into an array and constructs the path using 
+ * `get_path_from_arrays`.
+ *
+ * @param sanitized_arg_path Array of strings representing the sanitized 
+ * argument path.
+ * @param pwd Current working directory as a string.
+ * @return A dynamically allocated string representing the final path.
+ */
 char	*final_path_one(char **sanitized_arg_path, char *pwd)
 {
 	char	*final_path;

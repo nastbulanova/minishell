@@ -6,12 +6,18 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:21:20 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/24 13:30:30 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/26 15:55:20 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../inc/minishell.h"
 
+/**
+ * @brief Calculates the number of environment variables in the linked list.
+ *
+ * @param env Pointer to the head of the environment variable linked list.
+ * @return The number of environment variables in the list.
+ */
 size_t	env_len(t_env *env)
 {
 	size_t	count;
@@ -25,6 +31,15 @@ size_t	env_len(t_env *env)
 	return (count);
 }
 
+/**
+ * @brief Converts the environment variable linked list into an array of strings.
+ *
+ * Each string in the resulting array follows the format "NAME=VALUE".
+ *
+ * @param env Pointer to the head of the environment variable linked list.
+ * @return A dynamically allocated NULL-terminated array of environment strings.
+ *         The caller is responsible for freeing this array.
+ */
 char	**env_to_array(t_env *env)
 {
 	char	**list;
@@ -52,6 +67,13 @@ char	**env_to_array(t_env *env)
 	return (list);
 }
 
+/**
+ * @brief Prints the environment variables to standard output.
+ *
+ * Only prints variables that have a non-empty name and a non-empty value.
+ *
+ * @param head Pointer to the head of the environment variable linked list.
+ */
 void	env_print(t_env *head)
 {
 	if (!head)
@@ -67,6 +89,12 @@ void	env_print(t_env *head)
 	}
 }
 
+/**
+ * @brief Adds a new environment variable to the end of the linked list.
+ *
+ * @param head Pointer to the pointer of the head of the linked list.
+ * @param new Pointer to the new environment variable node to add.
+ */
 void	env_add(t_env **head, t_env *new)
 {
 	t_env	*tmp;
@@ -87,6 +115,14 @@ void	env_add(t_env **head, t_env *new)
 	}
 }
 
+/**
+ * @brief Frees all memory associated with the environment variable linked list.
+ *
+ * This function iterates through the list, freeing each node and its associated
+ * name and value strings.
+ *
+ * @param head Pointer to the head of the environment variable linked list.
+ */
 void	env_free(t_env *head)
 {
 	t_env	*tmp;

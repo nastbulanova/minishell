@@ -6,12 +6,18 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:27:40 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 14:28:53 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/26 15:57:13 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../inc/minishell.h"
 
+/**
+ * @brief Sanitizes the argument path by removing '.' and '..' components.
+ *
+ * @param split_arg_path Array of strings representing the split argument path.
+ * @return A newly allocated array of strings with sanitized paths.
+ */
 char	**sanitize_arg_path(char **split_arg_path)
 {
 	int		sanitized_size;
@@ -40,6 +46,11 @@ char	**sanitize_arg_path(char **split_arg_path)
 	return (new_split);
 }
 
+/**
+ * @brief Initializes the shell level (SHLVL) environment variable.
+ *
+ * @param head Pointer to the head of the environment variable linked list.
+ */
 static void	shlvl_init(t_env *head)
 {
 	t_env	*lvl_shell;
@@ -60,6 +71,13 @@ static void	shlvl_init(t_env *head)
 		env_add(&head, env_create("SHLVL", "1"));
 }
 
+/**
+ * @brief Updates the shell path based on the provided argument path.
+ *
+ * @param arg_path The provided shell path argument.
+ * @param env Pointer to the environment variable for the shell path.
+ * @param env_ Pointer to an additional environment variable to be updated.
+ */
 static void	update_shell_path(char *arg_path, t_env *env, t_env *env_)
 {
 	char	**sanitized_arg_path;
@@ -85,6 +103,13 @@ static void	update_shell_path(char *arg_path, t_env *env, t_env *env_)
 	free(final_path);
 }
 
+/**
+ * @brief Initializes the environment variables from the system environment.
+ *
+ * @param argv Command-line arguments.
+ * @param envp System environment variables.
+ * @param data Pointer to the minishell structure.
+ */
 void	env_init(char **argv, char **envp, t_minishell *data)
 {
 	int		i;
@@ -107,6 +132,13 @@ void	env_init(char **argv, char **envp, t_minishell *data)
 	shlvl_init(*head);
 }
 
+/**
+ * @brief Initializes the environment with default values if no system
+ * environment is provided.
+ *
+ * @param argv Command-line arguments.
+ * @param data Pointer to the minishell structure.
+ */
 void	env_init_default(char **argv, t_minishell *data)
 {
 	char	*pwd;

@@ -6,12 +6,20 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:30:24 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/12 13:42:38 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/26 15:56:35 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../inc/minishell.h"
 
+/**
+ * @brief Updates environment variables for PWD and OLDPWD after 
+ * a directory change.
+ *
+ * @param oldpwd Pointer to the OLDPWD environment variable.
+ * @param pwd Pointer to the PWD environment variable.
+ * @return int Returns 1 on error, 0 on success.
+ */
 static int	cd_remainder_aux(t_env **oldpwd, t_env **pwd)
 {
 	char	*pwd_str;
@@ -34,6 +42,14 @@ static int	cd_remainder_aux(t_env **oldpwd, t_env **pwd)
 	return (0);
 }
 
+/**
+ * @brief Handles the 'cd -' command, swapping PWD and OLDPWD.
+ *
+ * @param pwd Pointer to the PWD environment variable.
+ * @param oldpwd Pointer to the OLDPWD environment variable.
+ * @param working_arg Unused argument (reserved for future use).
+ * @return int Returns 1 on error, 0 on success.
+ */
 int	cd_minus(t_env *pwd, t_env *oldpwd, char *working_arg)
 {
 	char	*swap;
@@ -58,6 +74,16 @@ int	cd_minus(t_env *pwd, t_env *oldpwd, char *working_arg)
 	return (exit_code);
 }
 
+/**
+ * @brief Handles the 'cd' command with no arguments or '~', 
+ * changing to the home directory.
+ *
+ * @param pwd Pointer to the PWD environment variable.
+ * @param oldpwd Pointer to the OLDPWD environment variable.
+ * @param home Pointer to the HOME environment variable.
+ * @param working_arg Argument passed to 'cd' (used for error messages).
+ * @return int Returns 1 on error, 0 on success.
+ */
 int	cd_home(t_env **pwd, t_env **oldpwd, t_env **home, char *working_arg)
 {
 	int	exit_code;
@@ -79,6 +105,14 @@ int	cd_home(t_env **pwd, t_env **oldpwd, t_env **home, char *working_arg)
 	return (exit_code);
 }
 
+/**
+ * @brief Handles 'cd' commands with a specific path.
+ *
+ * @param oldpwd Pointer to the OLDPWD environment variable.
+ * @param pwd Pointer to the PWD environment variable.
+ * @param working_arg Directory path provided as an argument.
+ * @return int Returns 1 on error, 0 on success.
+ */
 int	cd_remainder(t_env **oldpwd, t_env **pwd, char *working_arg)
 {
 	if (working_arg[0] == '.' && working_arg[1] != '.')
@@ -97,6 +131,13 @@ int	cd_remainder(t_env **oldpwd, t_env **pwd, char *working_arg)
 	return (0);
 }
 
+/**
+ * @brief Determines the appropriate cd behavior based on the argument.
+ *
+ * @param data Pointer to the shell environment structure.
+ * @param working_arg Directory path or special argument for 'cd'.
+ * @return int Returns 1 on error, 0 on success.
+ */
 int	cd_one_arg(t_minishell *data, char *working_arg)
 {
 	t_env	*oldpwd;

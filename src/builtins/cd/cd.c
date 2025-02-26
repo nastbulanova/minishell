@@ -6,12 +6,20 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:30:01 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/26 15:09:28 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/26 15:56:16 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../inc/minishell.h"
 
+/**
+ * @brief Frees allocated memory for environment variables 
+ * if they are not NULL.
+ * 
+ * @param oldpwd Pointer to the OLDPWD environment variable.
+ * @param pwd Pointer to the PWD environment variable.
+ * @param home Pointer to the HOME environment variable.
+ */
 void	free_partial_envs(t_env *oldpwd, t_env *pwd, t_env *home)
 {
 	if (oldpwd)
@@ -22,6 +30,14 @@ void	free_partial_envs(t_env *oldpwd, t_env *pwd, t_env *home)
 		free(home);
 }
 
+/**
+ * @brief Prints an error message to STDERR when the cd command 
+ * fails.
+ * 
+ * @param path The path that caused the error.
+ * @param _errno The error code to retrieve the corresponding 
+ * error message.
+ */
 void	cd_error_exit(char *path, int _errno)
 {
 	ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
@@ -31,6 +47,13 @@ void	cd_error_exit(char *path, int _errno)
 	ft_putstr_fd("\n", STDERR_FILENO);
 }
 
+/**
+ * @brief Retrieves the PWD environment variable or 
+ * creates one if it doesn't exist.
+ * 
+ * @param data Pointer to the minishell data structure.
+ * @return Pointer to the PWD environment variable.
+ */
 t_env	*get_pwd(t_minishell *data)
 {
 	t_env	*result;
@@ -50,6 +73,12 @@ t_env	*get_pwd(t_minishell *data)
 	return (result);
 }
 
+/**
+ * @brief Handles the cd command when no arguments are provided.
+ * 
+ * @param data Pointer to the minishell data structure.
+ * @return 0 on success, 1 on failure.
+ */
 int	cd_no_args(t_minishell *data)
 {
 	t_env	*home;
@@ -73,6 +102,13 @@ int	cd_no_args(t_minishell *data)
 	return (0);
 }
 
+/**
+ * @brief Handles the cd command execution by determining the 
+ * number of arguments.
+ * 
+ * @param str Array of command arguments.
+ * @return 0 on success, 1 on failure.
+ */
 int	cmd_cd(char **str)
 {
 	t_minishell	*data;
