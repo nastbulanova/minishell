@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 12:39:30 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/26 14:04:19 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/26 15:10:05 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ static void	process_input(t_minishell *data, char *input)
 static void	main_loop(t_minishell *data)
 {
 	char	*input;
-	
+
 	set_state_signal_handlers(MAIN);
 	while (TRUE)
 	{

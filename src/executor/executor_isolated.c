@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:16:38 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/26 13:30:04 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/26 15:11:48 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ void	execute_execve(t_exec_data *cmd, t_minishell *data, t_exec_data *head)
  * @param cmd Pointer to the command structure.
  * @param envp Environment variables array.
  */
-static void	execute_isolated_aux(t_minishell *data, t_exec_data *cmd, int stdin_backup, int stdout_backup)
+static void	execute_isolated_aux(t_minishell *data, t_exec_data *cmd,
+		int stdin_backup, int stdout_backup)
 {
 	pid_t		pid;
 	t_pid_list	*pid_list;

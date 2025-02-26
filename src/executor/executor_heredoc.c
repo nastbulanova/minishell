@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:17:29 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/26 13:03:25 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/26 15:13:24 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,12 @@ static bool	is_last_heredoc(t_redir *redir)
 	return (true);
 }
 
-void heredoc_write(t_redir *current, char **input, int fd)
+void	heredoc_write(t_redir *current, char **input, int fd)
 {
-	char *p;
-	t_minishell *data;
-	char *temp;
-	
+	char		*p;
+	t_minishell	*data;
+	char		*temp;
+
 	if (current->type != HEREDOC_QUOTED)
 	{
 		data = get_shell(false);
