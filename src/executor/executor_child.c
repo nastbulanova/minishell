@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_child.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:17:59 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/24 13:44:02 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/26 18:43:10 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ void	handle_child(t_exec_data *cmd, t_exec_data *previous,
 	if (cmd->is_builtin)
 	{
 		if (command_is_valid(cmd, data))
-			exit_code = execute_builtin(cmd);
+			exit_code = execute_builtin(cmd, -1, -1);
 		data->exit_code = exit_code;
 		minishell_exit(NULL, exit_code, STDERR_FILENO, false);
 	}
