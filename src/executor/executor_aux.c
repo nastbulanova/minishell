@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:22:53 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/11 10:58:20 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/26 13:23:13 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	close_command_fds(t_exec_data *cmd)
  * @param cmd The command structure containing the command name and options.
  * @return The exit code of the executed built-in command.
  */
-int	execute_builtin(t_exec_data *cmd)
+int	execute_builtin(t_exec_data *cmd, int stdin_backup, int stdout_backup)
 {
 	int	exit_code;
 
@@ -120,7 +120,7 @@ int	execute_builtin(t_exec_data *cmd)
 	else if (c_strcmp(cmd->cmd, "export") == 0)
 		exit_code = cmd_export(cmd->opt);
 	else if (c_strcmp(cmd->cmd, "exit") == 0)
-		exit_code = cmd_exit(cmd->opt);
+		exit_code = cmd_exit(cmd->opt, stdin_backup, stdout_backup);
 	else if (c_strcmp(cmd->cmd, "env") == 0)
 		exit_code = cmd_env(cmd->opt);
 	else if (c_strcmp(cmd->cmd, "pwd") == 0)

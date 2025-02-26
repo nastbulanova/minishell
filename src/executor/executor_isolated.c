@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:16:38 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/24 13:38:49 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/26 13:30:04 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	execute_execve(t_exec_data *cmd, t_minishell *data, t_exec_data *head)
  * @param cmd Pointer to the command structure.
  * @param envp Environment variables array.
  */
-static void	execute_isolated_aux(t_minishell *data, t_exec_data *cmd)
+static void	execute_isolated_aux(t_minishell *data, t_exec_data *cmd, int stdin_backup, int stdout_backup)
 {
 	pid_t		pid;
 	t_pid_list	*pid_list;
@@ -64,7 +64,7 @@ static void	execute_isolated_aux(t_minishell *data, t_exec_data *cmd)
 	if (cmd->is_builtin)
 	{
 		update_last_command(data->env, cmd->cmd);
-		data->exit_code = execute_builtin(cmd);
+		data->exit_code = execute_builtin(cmd, stdin_backup, stdout_backup);
 	}
 	else
 	{
@@ -114,7 +114,7 @@ void	execute_non_pipe(t_minishell *data, t_exec_data *cmd)
 			safe_dup_two(cmd->output_fd, STDOUT_FILENO);
 			close_fd(&cmd->output_fd);
 		}
-		execute_isolated_aux(data, cmd);
+		execute_isolated_aux(data, cmd, stdin_backup, stdout_backup);
 		dup2(stdin_backup, STDIN_FILENO);
 		dup2(stdout_backup, STDOUT_FILENO);
 		close_fd(&stdin_backup);

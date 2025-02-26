@@ -57,6 +57,6 @@ char	*first_line_exp(t_minishell *data, char *line)
 		result = append_str_to_str(result, tmp);
 		free(tmp);
 	}
-	printf("after open: %s\n", result);
+
 	return(result);
 }

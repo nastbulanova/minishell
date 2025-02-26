@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:57:16 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/10 13:57:43 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/26 13:28:16 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,12 @@ bool	arg_numeric(char *arg)
 	return (true);
 }
 
-static int	handle_more(char **args)
+static int	handle_more(char **args, int stdin_backup, int stdout_backup)
 {
 	if (!arg_numeric(args[1]))
 	{
+		close_fd(&stdin_backup);
+		close_fd(&stdout_backup);
 		minishell_exit(built_exit_string(args[1]), 2, STDERR_FILENO, false);
 		return (2);
 	}
@@ -45,11 +47,13 @@ static int	handle_more(char **args)
 	}
 }
 
-static void	handle_one(char **args)
+static void	handle_one(char **args, int stdin_backup, int stdout_backup)
 {
 	t_minishell	*data;
 
 	data = get_shell(false);
+	close_fd(&stdin_backup);
+	close_fd(&stdout_backup);
 	if (arg_numeric(args[1]))
 	{
 		ft_putstr_fd("exit\n", STDOUT_FILENO);
@@ -60,7 +64,7 @@ static void	handle_one(char **args)
 		minishell_exit(built_exit_string(args[1]), 2, STDERR_FILENO, false);
 }
 
-int	cmd_exit(char **args)
+int	cmd_exit(char **args, int stdin_backup, int stdout_backup)
 {
 	int	args_size;
 	int	exit_code;
@@ -68,10 +72,14 @@ int	cmd_exit(char **args)
 	exit_code = 0;
 	args_size = array_size(args) - 1;
 	if (args_size == 0)
+	{
+		close_fd(&stdin_backup);
+		close_fd(&stdout_backup);
 		minishell_exit("exit\n", exit_code, STDOUT_FILENO, false);
+	}
 	else if (args_size == 1)
-		handle_one(args);
+		handle_one(args, stdin_backup, stdout_backup);
 	else if (args_size > 1)
-		return (handle_more(args));
+		return (handle_more(args, stdin_backup, stdout_backup));
 	return (0);
 }
