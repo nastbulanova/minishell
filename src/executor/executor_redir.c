@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_redir.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:15:59 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/26 19:01:44 by joao             ###   ########.fr       */
+/*   Updated: 2025/02/27 16:01:11 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,13 +134,6 @@ void	handle_io_redirections(t_exec_data *cmd)
 	current = cmd->redirs;
 	while (current && !error_msg)
 	{
-		//if (current->str[0] == '$')
-		//{
-			//get varialbe expanded
-		//	current->error = get_err_str(current->str, "ambiguous redirect",
-		//			true);
-		//	cmd->exit_status = 1;
-		//}
 		if (current->type == INPUT)
 			process_io_input(cmd, current, &temp_input_fd);
 		else if (current->type == OUTPUT || current->type == OUTPUT_APPEND)

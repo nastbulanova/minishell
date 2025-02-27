@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:17:29 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/26 15:13:24 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/27 16:00:56 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,24 +30,30 @@ static bool	is_last_heredoc(t_redir *redir)
 	return (true);
 }
 
-void	heredoc_write(t_redir *current, char **input, int fd)
+void	heredoc_write(t_redir *current, char *input, int fd)
 {
 	char		*p;
 	t_minishell	*data;
 	char		*temp;
 
+	temp = NULL;
 	if (current->type != HEREDOC_QUOTED)
 	{
 		data = get_shell(false);
-		p = ft_strchr(*input, '$');
+		p = ft_strchr(input, '$');
 		if (p && *(p + 1) != '\0')
 		{
-			temp = first_line_exp(data, *input);
-			*input = temp;
+			temp = first_line_exp(data, input);
+			write(fd, temp, strlen(temp));
+			write(fd, "\n", 1);
+			free(temp);
 		}
 	}
-	write(fd, *input, strlen(*input));
-	write(fd, "\n", 1);
+	else
+	{
+		write(fd, input, strlen(input));
+		write(fd, "\n", 1);
+	}
 }
 
 /**
@@ -73,7 +79,7 @@ static bool	break_loop(t_redir *current, char *input, bool last_input, int fd)
 	if (c_strcmp(input, current->str) == 0)
 		return (true);
 	if (last_input)
-		heredoc_write(current, &input, fd);
+		heredoc_write(current, input, fd);
 	return (false);
 }
 
