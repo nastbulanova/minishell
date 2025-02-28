@@ -6,7 +6,7 @@
 /*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 13:01:13 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/24 16:51:22 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/02/28 11:01:26 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ t_parser_error	redir_check(t_minishell **data, t_token ***token)
 		{
 			free(str);
 			str = ft_substr((*next)->start, 0, (*next)->len);
+			printf("redir name %s", str);
 		}
 		if (!str)
 			return (MALLOC_ERROR);
