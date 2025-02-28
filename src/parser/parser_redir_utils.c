@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_redir_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 13:01:13 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/28 11:01:26 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/02/28 12:54:45 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
