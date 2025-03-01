@@ -6,7 +6,7 @@
 /*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 12:33:37 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/03/01 00:18:17 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/03/01 20:11:22 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,10 @@ int	while_var(char *line, int **i, int *var)
 		len++;
 		(**i)++;
 	}
-	*var = 1;
+	if (len > 1)
+		*var = 1;
+	else
+		return (**i = start, 0);
 	return (len);
 }
 

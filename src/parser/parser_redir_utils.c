@@ -6,7 +6,7 @@
 /*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 13:01:13 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/03/01 00:12:44 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/03/01 21:58:46 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 int	is_redir_ambiguos(char *str, t_token_type next_type)
 {
-	if ((next_type == WORD && ft_strchr(str, ' ')) || (next_type == ENV_VAR
-			&& (ft_strchr(str, ' ') || ft_strchr(str, '$'))))
+	if ((next_type == ENV_VAR && (ft_strchr(str, ' ') || ft_strchr(str, '$'))))
 		return (1);
 	else
 		return (0);
@@ -53,8 +52,6 @@ t_redir	*redir_create(char *str, t_token_type type, t_token_type next_type)
 		tmp->type = HEREDOC_QUOTED;
 	tmp->error = NULL;
 	tmp->next = NULL;
-	printf("redir type %d ", tmp->type);
-	printf("redir str %s ", tmp->str);
 	return (tmp);
 }
 

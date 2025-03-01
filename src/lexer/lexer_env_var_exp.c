@@ -6,7 +6,7 @@
 /*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 17:16:46 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/03/01 00:14:31 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/03/01 21:55:53 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,6 @@ char	*exp_variable(t_minishell *data, const char *input, int **i)
 		return (**i = j, free(var_name), ft_strdup("$"));
 	var_value = env_var_replace(data, var_name);
 	**i = j;
-	if (ft_strlen(var_value) == 0)
-		return (**i = j, free(var_value),
-			ft_substr(input, start - 1, j - start + 1));
 	return (free(var_name), var_value);
 }
 

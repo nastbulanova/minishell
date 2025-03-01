@@ -6,7 +6,7 @@
 /*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 12:39:48 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/03/01 00:18:07 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/03/01 21:40:57 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,19 +120,13 @@ t_parser_error	finish_line_loop(t_minishell *data)
 {
 	t_parser_error	er;
 	char			*new_line;
-	char			*op_line;
 
 	new_line = NULL;
-	op_line = NULL;
 	er = finish_line(data, &new_line);
 	if (new_line && er == OK)
 	{
-		op_line = first_line_exp(data, new_line);
+		er = tokenize_str(&(data->token_head), new_line);
 		free(new_line);
-		if (!op_line)
-			return (MALLOC_ERROR);
-		er = tokenize_str(&(data->token_head), op_line);
-		free(op_line);
 		if (er != OK)
 			return (er);
 	}
@@ -154,15 +148,10 @@ t_parser_error	finish_line_loop(t_minishell *data)
 
 t_parser_error	lexer(t_minishell *data, char *line)
 {
-	char			*op_line;
 	t_parser_error	er;
 
 	er = OK;
-	op_line = NULL;
-	op_line = first_line_exp(data, line);
-	printf("line after $ %s\n", op_line);
-	er = tokenize_str(&(data->token_head), op_line);
-	free(op_line);
+	er = tokenize_str(&(data->token_head), line);
 	if (er != OK)
 		return (lexer_error((data->token_head), er));
 	while (is_last_token_pipe(data->token_head))

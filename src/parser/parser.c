@@ -6,7 +6,7 @@
 /*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 13:02:39 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/26 17:33:15 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/03/01 20:12:48 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_parser_error	parser_loop(t_minishell *data, t_token **token, int *cmd)
 
 	while (*token && (*token)->type != PIPE)
 	{
-		if ((*token)->type == WORD)
+		if ((*token)->type == WORD || (*token)->type == ENV_VAR)
 		{
 			tmp = open_field(data, *token);
 			if (!(data->exec_data->cmd))
