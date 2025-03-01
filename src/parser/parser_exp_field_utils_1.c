@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_exp_field_utils_1.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 12:27:34 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/17 12:06:55 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/28 22:59:17 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

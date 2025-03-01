@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   defines.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:35:15 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/20 14:21:12 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/02/28 21:57:42 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,8 @@ typedef enum s_redir_type
 	OUTPUT_APPEND,
 	INPUT,
 	HEREDOC,
-	HEREDOC_QUOTED
+	HEREDOC_QUOTED,
+	AMBIGUOUS
 }	t_redir_type;
 
 typedef enum s_parser_error
@@ -88,8 +89,8 @@ typedef enum s_parser_error
 typedef enum s_token_type
 {
 	WORD,
+	ENV_VAR,
 	FIELD,
-	EXP_FIELD,
 	REDIR_OUT,
 	REDIR_IN,
 	REDIR_APPEND,

@@ -3,14 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   parser_redir_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 13:01:13 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/28 12:54:45 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/03/01 00:12:44 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+int	is_redir_ambiguos(char *str, t_token_type next_type)
+{
+	if ((next_type == WORD && ft_strchr(str, ' ')) || (next_type == ENV_VAR
+			&& (ft_strchr(str, ' ') || ft_strchr(str, '$'))))
+		return (1);
+	else
+		return (0);
+}
 
 /**
  * @brief Creates a new redirection node.
@@ -22,7 +31,7 @@
  * @param type The token type to decide the redirection type.
  * @return Pointer to the new redirection node, or NULL on failure.
  */
-t_redir	*redir_create(char *str, t_token_type type)
+t_redir	*redir_create(char *str, t_token_type type, t_token_type next_type)
 {
 	t_redir	*tmp;
 
@@ -30,7 +39,9 @@ t_redir	*redir_create(char *str, t_token_type type)
 	if (!tmp)
 		return (free(str), NULL);
 	tmp->str = str;
-	if (type == REDIR_OUT)
+	if (next_type < 2 && is_redir_ambiguos(str, next_type))
+		tmp->type = AMBIGUOUS;
+	else if (type == REDIR_OUT)
 		tmp->type = OUTPUT;
 	else if (type == REDIR_IN)
 		tmp->type = INPUT;
@@ -42,6 +53,8 @@ t_redir	*redir_create(char *str, t_token_type type)
 		tmp->type = HEREDOC_QUOTED;
 	tmp->error = NULL;
 	tmp->next = NULL;
+	printf("redir type %d ", tmp->type);
+	printf("redir str %s ", tmp->str);
 	return (tmp);
 }
 
@@ -55,14 +68,15 @@ t_redir	*redir_create(char *str, t_token_type type)
  * @param type The token type for redirection.
  * @return OK on success, or MALLOC_ERROR on failure.
  */
-t_parser_error	redir_add(t_minishell ***data, char *str, int type)
+t_parser_error	redir_add(t_minishell ***data, char *str, t_token_type type,
+	t_token_type next_type)
 {
 	t_redir	*new;
 	t_redir	*current;
 
 	if (!str)
 		return (MALLOC_ERROR);
-	new = redir_create(str, type);
+	new = redir_create(str, type, next_type);
 	if (!new)
 		return (MALLOC_ERROR);
 	if (!(**data)->exec_data->redirs)
@@ -94,24 +108,22 @@ t_parser_error	redir_check(t_minishell **data, t_token ***token)
 
 	str = NULL;
 	next = NULL;
-	if ((**token)->next && (**token)->next->type == WORD)
+	if ((**token)->next && ((**token)->next->type == WORD
+			|| (**token)->next->type == ENV_VAR))
 	{
 		next = &(**token)->next;
 		str = open_field(*data, *next);
-		if (!str)
-			return (MALLOC_ERROR);
-		if (*str == '\0')
+		if (str && *str == '\0' && (*next)->type == ENV_VAR)
 		{
 			free(str);
 			str = ft_substr((*next)->start, 0, (*next)->len);
-			printf("redir name %s", str);
 		}
 		if (!str)
 			return (MALLOC_ERROR);
 	}
 	else
 		return (SYNTAX_ERROR);
-	if (redir_add(&data, str, (**token)->type) == OK)
+	if (redir_add(&data, str, (**token)->type, (*next)->type) == OK)
 		return ((**token) = (**token)->next, OK);
 	else
 		return (MALLOC_ERROR);

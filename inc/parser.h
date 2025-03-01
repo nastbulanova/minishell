@@ -6,7 +6,7 @@
 /*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:28:47 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/26 17:34:29 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/03/01 00:16:00 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,10 @@ char			*append_char_to_str(char *s, char c);
 char			*append_str_to_str(char *s, const char *t);
 
 //parser_redir_utils
-t_redir			*redir_create(char *str, t_token_type type);
-t_parser_error	redir_add(t_minishell ***data, char *str, int type);
+t_redir			*redir_create(char *str, t_token_type type,
+					t_token_type next_type);
+t_parser_error	redir_add(t_minishell ***data, char *str, t_token_type type,
+					t_token_type next_type);
 t_parser_error	redir_check(t_minishell **data, t_token ***token);
 
 //parser_heredoc_utils

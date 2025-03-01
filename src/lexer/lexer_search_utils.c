@@ -6,7 +6,7 @@
 /*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 12:33:37 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/11 13:38:12 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/03/01 00:18:17 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,46 +81,6 @@ t_parser_error	while_sequence(t_token **token_head, char *line, int **i)
 }
 
 /**
- * @brief Finds a quoted field in the input.
- *
- * Extracts a field enclosed by matching quotes and adds it as a token.
- *
- * @param token_head Pointer to the token list head.
- * @param line The input string.
- * @param func Function pointer to check the quote type.
- * @param i Double pointer to the current index.
- * @return OK on success or SYNTAX_ERROR if no closing quote is found.
- */
-t_parser_error	find_field(t_token **token_head, char *line, int (*func)(int),
-	int **i)
-{
-	int	start;
-	int	len;
-	int	secondquote;
-
-	(**i)++;
-	start = **i;
-	len = 0;
-	secondquote = 0;
-	while (line[**i] != '\0')
-	{
-		if (func(line[**i]))
-		{
-			secondquote = 1;
-			break ;
-		}
-		len++;
-		(**i)++;
-	}
-	if (!secondquote)
-		return (SYNTAX_ERROR);
-	if (func == ft_isquote)
-		return ((**i)++, token_add(token_head, &(line[start]), len, FIELD));
-	else
-		return ((**i)++, token_add(token_head, &(line[start]), len, EXP_FIELD));
-}
-
-/**
  * @brief Finds a redirection token in the input.
  *
  * Determines if the redirection is single or double and adds it as a token.
@@ -153,6 +113,25 @@ t_parser_error	find_redir(t_token **token_head, char *line, char c, int **i)
 	}
 }
 
+int	while_var(char *line, int **i, int *var)
+{
+	int	start;
+	int	len;
+
+	start = **i;
+	(**i)++;
+	len = 1;
+	while (line[**i] != '\0' && !ft_isspace(line[**i]))
+	{
+		if (!(ft_isalnum(line[**i])) && !(line[**i] == '_'))
+			return (**i = start, 0);
+		len++;
+		(**i)++;
+	}
+	*var = 1;
+	return (len);
+}
+
 /**
  * @brief Checks the current character and processes it accordingly.
  *
@@ -165,12 +144,21 @@ t_parser_error	find_redir(t_token **token_head, char *line, char c, int **i)
  */
 t_parser_error	check_char(t_token **token_head, char *line, int *i)
 {
-	if (ft_iswordchar(line[*i]))
+	int	len;
+	int	var;
+	int	start;
+
+	var = 0;
+	len = 0;
+	if (line[*i] == '$' && line[*i + 1] != '?')
+	{
+		start = *i;
+		len = while_var(line, &i, &var);
+		if (var)
+			return (token_add(token_head, &(line[start]), len, ENV_VAR));
+	}
+	if (ft_iswordchar(line[*i]) && var == 0)
 		return (while_sequence(token_head, line, &i));
-	else if (line[*i] == '\'')
-		return (find_field(token_head, line, ft_isquote, &i));
-	else if (line[*i] == '\"')
-		return (find_field(token_head, line, ft_isdblquote, &i));
 	else if (line[*i] == '>')
 		return (find_redir(token_head, line, '>', &i));
 	else if (line[*i] == '<')

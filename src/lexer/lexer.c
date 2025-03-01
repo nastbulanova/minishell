@@ -6,7 +6,7 @@
 /*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 12:39:48 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/26 17:14:45 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/03/01 00:18:07 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,6 +160,7 @@ t_parser_error	lexer(t_minishell *data, char *line)
 	er = OK;
 	op_line = NULL;
 	op_line = first_line_exp(data, line);
+	printf("line after $ %s\n", op_line);
 	er = tokenize_str(&(data->token_head), op_line);
 	free(op_line);
 	if (er != OK)

@@ -6,7 +6,7 @@
 /*   By: akitsenk <akitsenk@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 12:57:05 by akitsenk          #+#    #+#             */
-/*   Updated: 2025/02/11 13:50:02 by akitsenk         ###   ########.fr       */
+/*   Updated: 2025/03/01 00:01:56 by akitsenk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ t_parser_error	heredoc_check(t_minishell **data, t_token ***token)
 			return (MALLOC_ERROR);
 		if (type == NOT_EXIST)
 			type = WORD;
-		if (redir_add(&data, str, type) == OK)
+		if (redir_add(&data, str, type, 2) == OK)
 			return ((**token) = (**token)->next, OK);
 		else
 			return (MALLOC_ERROR);
