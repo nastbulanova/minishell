@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:05:08 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/11 18:09:08 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/03/02 15:58:40 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ char	*get_prompt_right(char *pwd, t_minishell *data)
 		return (ft_strdup(pwd));
 	home_len = strlen(home->value);
 	if (ft_strncmp(pwd, home->value, home_len) == 0 && (pwd[home_len] == '/'
-			|| pwd[home_len] == '\0'))
+			|| pwd[home_len] == '\0' || pwd[home_len] == '$'))
 	{
 		new_pwd_len = strlen(pwd) - home_len + 1;
 		new_pwd = safe_malloc(new_pwd_len + 1);
