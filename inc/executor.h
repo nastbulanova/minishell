@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:36:04 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/26 13:28:49 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/03/02 15:36:49 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ bool		safe_pipe(int pipe_fd[2]);
 bool		safe_dup_two(int fd, int fd_two);
 
 // executor/executor_aux.c
-int			execute_builtin(t_exec_data *cmd, int stdin_backup, int stdout_backup);
+int			execute_builtin(t_exec_data *cmd, int stdin_backup,
+				int stdout_backup);
 void		close_command_fds(t_exec_data *cmd);
 char		*get_err_str(char *filename, char *error_str, bool newline);
 
