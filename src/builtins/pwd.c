@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:23:56 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/11 11:03:50 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/03/03 11:26:33 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,16 @@ int	cmd_pwd(int fd)
 	errno = 0;
 	if (fd < 0)
 		fd = STDOUT_FILENO;
-	if (!pwd)
+	if (!pwd && errno != 0)
 	{
 		ft_putstr_fd("Error: ", STDERR_FILENO);
 		ft_putstr_fd(strerror(errno), STDERR_FILENO);
 		ft_putstr_fd("\n", STDERR_FILENO);
+		return (1);
+	}
+	if (!pwd && errno == 0)
+	{
+		ft_putstr_fd("\n", fd);
 		return (1);
 	}
 	ft_putstr_fd(pwd, fd);

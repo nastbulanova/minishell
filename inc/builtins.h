@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 14:35:02 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/26 13:26:55 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/03/03 18:44:38 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int		cmd_pwd(int fd);
 int		cmd_unset(char **args);
 
 // exit/exit_aux.c
-char	ft_exit_atoi(char *str);
+char	ft_exit_atoi(char *str, int stdin_backup, int stdout_backup);
 char	*built_exit_string(const char *str);
 // exit/exit.c
 int		cmd_exit(char **args, int stdin_backup, int stdout_backup);

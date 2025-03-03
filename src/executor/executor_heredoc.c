@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:17:29 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/27 16:00:56 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/03/03 10:54:16 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,12 @@ static bool	is_last_heredoc(t_redir *redir)
 	return (true);
 }
 
+static void	write_string(char *input, int fd)
+{
+	write(fd, input, strlen(input));
+	write(fd, "\n", 1);
+}
+
 void	heredoc_write(t_redir *current, char *input, int fd)
 {
 	char		*p;
@@ -44,16 +50,14 @@ void	heredoc_write(t_redir *current, char *input, int fd)
 		if (p && *(p + 1) != '\0')
 		{
 			temp = first_line_exp(data, input);
-			write(fd, temp, strlen(temp));
-			write(fd, "\n", 1);
+			write_string(input, fd);
 			free(temp);
 		}
+		else
+			write_string(input, fd);
 	}
 	else
-	{
-		write(fd, input, strlen(input));
-		write(fd, "\n", 1);
-	}
+		write_string(input, fd);
 }
 
 /**
