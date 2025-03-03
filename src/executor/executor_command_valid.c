@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:08:00 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/26 15:14:50 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/03/03 14:03:50 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,8 @@ bool	command_is_valid(t_exec_data *cmd, t_minishell *data)
 
 	final_string = NULL;
 	result = true;
+	if (!cmd->cmd)
+		return (false);
 	if (cmd->exit_status != 0)
 	{
 		data->exit_code = cmd->exit_status;
