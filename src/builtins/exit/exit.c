@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:57:16 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/26 14:21:58 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/03/03 18:43:10 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,38 +30,31 @@ bool	arg_numeric(char *arg)
 	return (true);
 }
 
-static int	handle_more(char **args, int stdin_backup, int stdout_backup)
-{
-	if (!arg_numeric(args[1]))
-	{
-		close_fd(&stdin_backup);
-		close_fd(&stdout_backup);
-		minishell_exit(built_exit_string(args[1]), 2, STDERR_FILENO, true);
-		return (2);
-	}
-	else
-	{
-		ft_putstr_fd("exit\n", STDOUT_FILENO);
-		ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);
-		return (1);
-	}
-}
 
-static void	handle_one(char **args, int stdin_backup, int stdout_backup)
+static void	handle_one(char **args, int stdin_backup, int stdout_backup, int arg_count)
 {
 	t_minishell	*data;
 
 	data = get_shell(false);
-	close_fd(&stdin_backup);
-	close_fd(&stdout_backup);
 	if (arg_numeric(args[1]))
 	{
 		ft_putstr_fd("exit\n", STDOUT_FILENO);
-		data->exit_code = ft_exit_atoi(args[1]);
+		data->exit_code = ft_exit_atoi(args[1], stdin_backup, stdout_backup);
+		if (arg_count > 1)
+		{
+			ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);
+			return;
+		}
+		close_fd(&stdin_backup);
+		close_fd(&stdout_backup);
 		minishell_exit(NULL, data->exit_code, STDOUT_FILENO, false);
 	}
 	else
+	{
+		close_fd(&stdin_backup);
+		close_fd(&stdout_backup);
 		minishell_exit(built_exit_string(args[1]), 2, STDERR_FILENO, true);
+	}
 }
 
 int	cmd_exit(char **args, int stdin_backup, int stdout_backup)
@@ -77,9 +70,7 @@ int	cmd_exit(char **args, int stdin_backup, int stdout_backup)
 		close_fd(&stdout_backup);
 		minishell_exit("exit\n", exit_code, STDOUT_FILENO, false);
 	}
-	else if (args_size == 1)
-		handle_one(args, stdin_backup, stdout_backup);
-	else if (args_size > 1)
-		return (handle_more(args, stdin_backup, stdout_backup));
+	else 
+		handle_one(args, stdin_backup, stdout_backup, args_size);
 	return (0);
 }

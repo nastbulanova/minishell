@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:57:52 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/02/26 14:25:33 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/03/03 18:43:57 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,14 @@ static void	check_sign(const char *str, int *index, int *sign)
 	}
 }
 
-static void	ft_exit_atoi_aux(char *str)
+static void	ft_exit_atoi_aux(char *str, int stdin_backup, int stdout_backup)
 {
+	close_fd(&stdin_backup);
+	close_fd(&stdout_backup);
 	minishell_exit(built_exit_string(str), 2, STDERR_FILENO, true);
 }
 
-char	ft_exit_atoi(char *str)
+char	ft_exit_atoi(char *str, int stdin_backup, int stdout_backup)
 {
 	int			sign;
 	int			digit;
@@ -66,12 +68,12 @@ char	ft_exit_atoi(char *str)
 		digit = str[index] - '0';
 		if (sign < 0 && (INT64_MAX - (value * 10) < digit - 1))
 		{
-			ft_exit_atoi_aux(str);
+			ft_exit_atoi_aux(str, stdin_backup, stdout_backup);
 			return (2);
 		}
 		else if (sign > 0 && (INT64_MAX - (value * 10) < digit))
 		{
-			ft_exit_atoi_aux(str);
+			ft_exit_atoi_aux(str, stdin_backup, stdout_backup);
 			return (2);
 		}
 		value = (value * 10) + (digit);
