@@ -6,7 +6,7 @@
 /*   By: joaomigu <joaomigu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:57:16 by joaomigu          #+#    #+#             */
-/*   Updated: 2025/03/07 09:14:33 by joaomigu         ###   ########.fr       */
+/*   Updated: 2025/03/07 09:23:42 by joaomigu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ bool	arg_numeric(char *arg)
 	return (true);
 }
 
-static int 	handle_one(char **args, int stdin_backup,
+static int	handle_one(char **args, int stdin_backup,
 			int stdout_backup, int arg_count)
 {
 	t_minishell	*data;
@@ -73,6 +73,6 @@ int	cmd_exit(char **args, int stdin_backup, int stdout_backup)
 		minishell_exit("exit\n", exit_code, STDOUT_FILENO, false);
 	}
 	else
-		return(handle_one(args, stdin_backup, stdout_backup, args_size));
+		return (handle_one(args, stdin_backup, stdout_backup, args_size));
 	return (0);
 }
